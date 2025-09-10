@@ -102,7 +102,8 @@
   <div class="field tooltip"><label>遺物額外增加等級</label>
     <input type="number" id="relic_count" placeholder="20 以下">
     <span class="tiptext">額外增加等級總和</span></div>
-
+</div>
+</div>
   <button onclick="calculate()">計算</button>
   <button class="clear-btn" onclick="clearAll()">清除</button>
 </div>
@@ -119,25 +120,143 @@
   <label class="star">🌟 原初之星: <span id="star">0</span></label>
 </div>
 
+<title>星數效果表</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background: #f4f6f9;
+      margin: 20px;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .table-container {
+      max-width: 350px;   /* 限制表格最大寬度 */
+      margin: 0;          /* 靠左 */
+      overflow-x: auto;   /* 超出可橫向滑動 */
+      background: #fff;
+      border-radius: 10px;  /* 卡片圓角 */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 陰影 */
+      padding: 10px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 6px 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .highlight {
+      color: #d63384;
+      font-weight: bold;
+    }
+
+    /* 手機版自動縮小 */
+    @media (max-width: 600px) {
+      .table-container {
+        max-width: 260px;
+      }
+
+      table {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
 <!-- 星數效果表卡片 -->
 <div class="card">
-  <h2>星數效果表</h2>
+  <h2>星數效果表(S1+S2獲得原初之星)</h2>
   <div class="table-container">
     <table>
-      <tr><th>星數</th><th>效果</th><th>星數</th><th>效果</th></tr>
-      <tr><td>48</td><td>攻擊</td><td>505</td><td>攻擊</td></tr>
-      <tr><td>56</td><td>升華3%</td><td>530</td><td>升華3%</td></tr>
-      <tr><td>64</td><td>防禦</td><td>555</td><td>防禦</td></tr>
-      <tr><td>72</td><td>寶石5%</td><td>580</td><td>寶石5%</td></tr>
-      <tr><td>88</td><td class="highlight">翻倍2%</td><td>630</td><td class="highlight">翻倍2%</td></tr>
-      <tr><td>96</td><td>速度</td><td>655</td><td>速度</td></tr>
-      <tr><td>104</td><td class="highlight">經驗2%</td><td>680</td><td class="highlight">經驗2%</td></tr>
-      <tr><td>176</td><td class="highlight">翻倍2%</td><td>860</td><td class="highlight">翻倍2%</td></tr>
-      <tr><td>200</td><td class="highlight">經驗2%</td><td>920</td><td class="highlight">經驗2%</td></tr>
-      <tr><td>290</td><td class="highlight">翻倍2%</td><td>1130</td><td class="highlight">翻倍2%</td></tr>
-      <tr><td>320</td><td class="highlight">經驗2%</td><td>1200</td><td class="highlight">經驗2%</td></tr>
-      <tr><td>440</td><td class="highlight">翻倍2%</td><td>1440</td><td class="highlight">翻倍2%</td></tr>
-      <tr><td>480</td><td class="highlight">經驗2%</td><td>1520</td><td class="highlight">經驗2%</td></tr>
+      <tr><th>星數</th><th>效果</th></tr>
+      <tr><td>48</td><td>攻擊</td></tr>
+      <tr><td>56</td><td>升華3%</td></tr>
+      <tr><td>64</td><td>防禦</td></tr>
+      <tr><td>72</td><td>寶石5%</td></tr>
+      <tr><td>80</td><td>生命</td></tr>
+      <tr><td>88</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>96</td><td>速度</td></tr>
+      <tr><td>104</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>116</td><td>攻擊</td></tr>
+      <tr><td>128</td><td>升華3%</td></tr>
+      <tr><td>140</td><td>防禦</td></tr>
+      <tr><td>152</td><td>寶石5%</td></tr>
+      <tr><td>164</td><td>生命</td></tr>
+      <tr><td>176</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>188</td><td>速度</td></tr>
+      <tr><td>200</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>215</td><td>攻擊</td></tr>
+      <tr><td>230</td><td>升華3%</td></tr>
+      <tr><td>245</td><td>防禦</td></tr>
+      <tr><td>260</td><td>寶石5%</td></tr>
+      <tr><td>275</td><td>生命</td></tr>
+      <tr><td>290</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>305</td><td>速度</td></tr>
+      <tr><td>320</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>340</td><td>攻擊</td></tr>
+      <tr><td>360</td><td>升華3%</td></tr>
+      <tr><td>380</td><td>防禦</td></tr>
+      <tr><td>400</td><td>寶石5%</td></tr>
+      <tr><td>420</td><td>生命</td></tr>
+      <tr><td>440</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>460</td><td>速度</td></tr>
+      <tr><td>480</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>505</td><td>攻擊</td></tr>
+      <tr><td>530</td><td>升華3%</td></tr>
+      <tr><td>555</td><td>防禦</td></tr>
+      <tr><td>580</td><td>寶石5%</td></tr>
+      <tr><td>605</td><td>生命</td></tr>
+      <tr><td>630</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>655</td><td>速度</td></tr>
+      <tr><td>680</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>710</td><td>攻擊</td></tr>
+      <tr><td>740</td><td>升華3%</td></tr>
+      <tr><td>770</td><td>防禦</td></tr>
+      <tr><td>800</td><td>寶石5%</td></tr>
+      <tr><td>830</td><td>生命</td></tr>
+      <tr><td>860</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>890</td><td>速度</td></tr>
+      <tr><td>920</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>955</td><td>攻擊</td></tr>
+      <tr><td>990</td><td>升華3%</td></tr>
+      <tr><td>1025</td><td>防禦</td></tr>
+      <tr><td>1060</td><td>寶石5%</td></tr>
+      <tr><td>1095</td><td>生命</td></tr>
+      <tr><td>1130</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>1165</td><td>速度</td></tr>
+      <tr><td>1200</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>1240</td><td>攻擊</td></tr>
+      <tr><td>1280</td><td>升華3%</td></tr>
+      <tr><td>1320</td><td>防禦</td></tr>
+      <tr><td>1360</td><td>寶石5%</td></tr>
+      <tr><td>1400</td><td>生命</td></tr>
+      <tr><td>1440</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>1480</td><td>速度</td></tr>
+      <tr><td>1520</td><td class="highlight">經驗2%</td></tr>
       <!-- 其餘項目可依需要繼續補上 -->
     </table>
   </div>
