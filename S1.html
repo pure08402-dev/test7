@@ -120,6 +120,10 @@
   <label class="star">🌟 原初之星: <span id="star">0</span></label>
 </div>
 
+
+<!-- 星數效果表卡片 -->
+<div class="card">
+
 <title>星數效果表</title>
   <style>
     body {
@@ -134,7 +138,7 @@
     }
 
     .table-container {
-      max-width: 350px;   /* 限制表格最大寬度 */
+      max-width: 400px;   /* 限制表格最大寬度 */
       margin: 0;          /* 靠左 */
       overflow-x: auto;   /* 超出可橫向滑動 */
       background: #fff;
@@ -145,19 +149,18 @@
 
     table {
       border-collapse: collapse;
-      width: 100%;
-      font-size: 14px;
+      width: 80%;
+      font-size: 8px;
     }
 
     th, td {
-      border: 1px solid #ddd;
+
       padding: 6px 10px;
       text-align: center;
     }
 
     th {
-      background-color: #f0f0f0;
-      font-weight: bold;
+
     }
 
     tr:nth-child(even) {
@@ -170,13 +173,16 @@
     }
 
     /* 手機版自動縮小 */
-    @media (max-width: 600px) {
+    @media (max-width: 320px) {
       .table-container {
-        max-width: 260px;
+        max-width: 300px;
       }
 
       table {
-        font-size: 12px;
+
+      font-size: 7px; /* 手機再縮小 */
+      width: 90%;     /* 手機稍微放寬一點 */
+
       }
     }
   </style>
@@ -185,10 +191,6 @@
 
 
 
-
-
-<!-- 星數效果表卡片 -->
-<div class="card">
   <h2>星數效果表(S1+S2獲得原初之星)</h2>
   <div class="table-container">
     <table>
