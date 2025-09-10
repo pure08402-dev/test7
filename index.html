@@ -120,12 +120,81 @@
   <label class="star">🌟 原初之星: <span id="star">0</span></label>
 </div>
 
+
 <!-- 星數效果表卡片 -->
 <div class="card">
+
+<title>星數效果表</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background: #f4f6f9;
+      margin: 20px;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 12px;
+    }
+
+    .table-container {
+      max-width: 400px;   /* 限制表格最大寬度 */
+      margin: 0;          /* 靠左 */
+      overflow-x: auto;   /* 超出可橫向滑動 */
+      background: #fff;
+      border-radius: 10px;  /* 卡片圓角 */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* 陰影 */
+      padding: 10px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 80%;
+      font-size: 8px;
+    }
+
+    th, td {
+
+      padding: 6px 10px;
+      text-align: center;
+    }
+
+    th {
+
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .highlight {
+      color: #d63384;
+      font-weight: bold;
+    }
+
+    /* 手機版自動縮小 */
+    @media (max-width: 320px) {
+      .table-container {
+        max-width: 300px;
+      }
+
+      table {
+
+      font-size: 7px; /* 手機再縮小 */
+      width: 90%;     /* 手機稍微放寬一點 */
+
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+
   <h2>星數效果表(S1+S2獲得原初之星)</h2>
   <div class="table-container">
     <table>
-      <tr><th>星數</th><th>效果</th></tr>
+      <tr><th>星數</th><th>效果</th><th>星數</th><th>效果</th></tr>
       <tr><td>48</td><td>攻擊</td></tr>
       <tr><td>56</td><td>升華3%</td></tr>
       <tr><td>64</td><td>防禦</td></tr>
