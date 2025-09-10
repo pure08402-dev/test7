@@ -66,6 +66,11 @@
     <input type="number" id="person" placeholder="130 ~ 200">
     <span class="tiptext">建議 130 ~ 200</span>
   </div>
+
+  <div class="field tooltip" style="color: red;"><label>裝備快速填入</label>
+    <input type="number" id="weapon1" placeholder="130 ~ 200">
+    <span class="tiptext">建議 130 ~ 200</span></div>
+
   <div class="field tooltip"><label>武器</label>
     <input type="number" id="weapon" placeholder="130 ~ 200">
     <span class="tiptext">建議 130 ~ 200</span></div>
@@ -84,6 +89,11 @@
   <div class="field tooltip"><label>技能等級</label>
     <input type="number" id="skill" placeholder="130 ~ 200">
     <span class="tiptext">建議 130 ~ 200</span></div>
+
+  <div class="field tooltip" style="color: red;"><label>幻獸快速填入</label>
+    <input type="number" id="illusion5" placeholder="130 ~ 200">
+    <span class="tiptext">建議 130 ~ 200</span></div>
+
   <div class="field tooltip"><label>幻獸1</label>
     <input type="number" id="illusion1" placeholder="130 ~ 200">
     <span class="tiptext">建議 130 ~ 200</span></div>
@@ -100,7 +110,7 @@
     <input type="number" id="relic_level" placeholder="13 ~ 20">
     <span class="tiptext">建議 13 ~ 20</span></div>
   <div class="field tooltip"><label>遺物額外增加等級</label>
-    <input type="number" id="relic_count" placeholder="20 以下">
+    <input type="number" id="relic_count" placeholder="無需填,有額外增加再填 ">
     <span class="tiptext">額外增加等級總和</span></div>
 </div>
 </div>
@@ -189,11 +199,18 @@
 </head>
 <body>
 
+<!-- 輸入區 -->
+<div style="margin-bottom: 20px;">
+  <label for="s1value">請輸入 S1 原初之星：</label>
+  <input type="number" id="s1value" placeholder="例如 200">
+  <button onclick="highlightStar()">計算原初之星總和</button>
+  <span id="totalDisplay" style="margin-left: 10px; font-weight: bold; color: #d63384;"></span>
+</div>
 
 
   <h2>星數效果表(S1+S2獲得原初之星)</h2>
   <div class="table-container">
-    <table>
+    <table id="starTable">
       <tr><th>星數</th><th>效果</th><th>星數</th><th>效果</th></tr>
       <tr><td>48</td><td>攻擊</td></tr>
       <tr><td>56</td><td>升華3%</td></tr>
@@ -265,6 +282,42 @@
 </div>
 
 <script>
+function highlightStar() {
+  const s1 = parseInt(document.getElementById('s1value').value) || 0;
+  const star = parseInt(document.getElementById('star').innerText) || 0;
+
+  const total = s1 + star;
+
+  // 顯示總和
+  document.getElementById('totalDisplay').innerText = "總和: " + total;
+
+  const rows = document.querySelectorAll('#starTable tr');
+  rows.forEach(row => row.style.backgroundColor = ""); // 清除之前標記
+
+  let maxRow = null;
+  let maxValue = -Infinity;
+
+  // 找出小於等於 total 的最大星數紅框
+  for (let row of rows) {
+    const td = row.cells[0]; // 星數欄位
+    if (!td) continue;
+    const value = parseInt(td.textContent);
+    if (!isNaN(value) && value <= total && value > maxValue) {
+      maxValue = value;
+      maxRow = row;
+    }
+  }
+
+  if (maxRow) {
+    maxRow.style.backgroundColor = "#ffd1dc"; // 標紅
+  }
+
+  console.log("S1 + 原初之星總和:", total, "標示星數:", maxValue);
+}
+</script>
+
+
+<script>
 function calculate() {
   try {
     let getVal = id => parseInt(document.getElementById(id).value) || 0;
@@ -306,13 +359,29 @@ function calculate() {
 }
 
 function clearAll() {
-  let ids = ["person","weapon","assistant","headgear","clothes","shoes","skill",
-             "illusion1","illusion2","illusion3","illusion4","relic_level","relic_count"];
+  let ids = ["person","weapon1","weapon","assistant","headgear","clothes","shoes","skill",
+             "illusion5","illusion1","illusion2","illusion3","illusion4","relic_level","relic_count"];
   ids.forEach(id => document.getElementById(id).value = "");
   ["person_score","equip_score","illusion_score","skill_score","relic_score","total_score","star"]
     .forEach(id => document.getElementById(id).innerText = "0");
 }
+
+// 監聽「裝備快速填入」欄位
+document.getElementById("weapon1").addEventListener("input", function() {
+  let val = parseInt(this.value) || "";
+  ["weapon","assistant","headgear","clothes","shoes"].forEach(id => {
+    document.getElementById(id).value = val;
+  });
+});
+
+document.getElementById("illusion5").addEventListener("input", function() {
+  let val = parseInt(this.value) || "";
+  ["illusion1","illusion2","illusion3","illusion4"].forEach(id => {
+    document.getElementById(id).value = val;
+  });
+});
 </script>
+
 
 </body>
 </html>
