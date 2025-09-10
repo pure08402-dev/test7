@@ -199,11 +199,18 @@
 </head>
 <body>
 
+<!-- 輸入區 -->
+<div style="margin-bottom: 20px;">
+  <label for="s1value">請輸入 S1 原初之星：</label>
+  <input type="number" id="s1value" placeholder="例如 200">
+  <button onclick="highlightStar()">計算原初之星總和</button>
+  <span id="totalDisplay" style="margin-left: 10px; font-weight: bold; color: #d63384;"></span>
+</div>
 
 
   <h2>星數效果表(S1+S2獲得原初之星)</h2>
   <div class="table-container">
-    <table>
+    <table id="starTable">
       <tr><th>星數</th><th>效果</th><th>星數</th><th>效果</th></tr>
       <tr><td>48</td><td>攻擊</td></tr>
       <tr><td>56</td><td>升華3%</td></tr>
@@ -273,6 +280,42 @@
     </table>
   </div>
 </div>
+
+<script>
+function highlightStar() {
+  const s1 = parseInt(document.getElementById('s1value').value) || 0;
+  const star = parseInt(document.getElementById('star').innerText) || 0;
+
+  const total = s1 + star;
+
+  // 顯示總和
+  document.getElementById('totalDisplay').innerText = "總和: " + total;
+
+  const rows = document.querySelectorAll('#starTable tr');
+  rows.forEach(row => row.style.backgroundColor = ""); // 清除之前標記
+
+  let maxRow = null;
+  let maxValue = -Infinity;
+
+  // 找出小於等於 total 的最大星數紅框
+  for (let row of rows) {
+    const td = row.cells[0]; // 星數欄位
+    if (!td) continue;
+    const value = parseInt(td.textContent);
+    if (!isNaN(value) && value <= total && value > maxValue) {
+      maxValue = value;
+      maxRow = row;
+    }
+  }
+
+  if (maxRow) {
+    maxRow.style.backgroundColor = "#ffd1dc"; // 標紅
+  }
+
+  console.log("S1 + 原初之星總和:", total, "標示星數:", maxValue);
+}
+</script>
+
 
 <script>
 function calculate() {
