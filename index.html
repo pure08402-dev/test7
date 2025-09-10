@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>杖劍傳說 第二賽季   養成評分計算器</title>
+<title>杖劍傳說 第二賽季 養成評分計算器</title>
 <style>
   body { font-family: "Microsoft JhengHei", sans-serif; margin: 0; padding: 10px; background: #f0f2f5; }
   h1 { text-align: center; margin-bottom: 15px; }
@@ -66,6 +66,11 @@
     <input type="number" id="person" placeholder="130 ~ 200">
     <span class="tiptext">建議 130 ~ 200</span>
   </div>
+
+  <div class="field tooltip"><label>裝備快速填入</label>
+    <input type="number" id="weapon1" placeholder="130 ~ 200">
+    <span class="tiptext">建議 130 ~ 200</span></div>
+
   <div class="field tooltip"><label>武器</label>
     <input type="number" id="weapon" placeholder="130 ~ 200">
     <span class="tiptext">建議 130 ~ 200</span></div>
@@ -84,6 +89,11 @@
   <div class="field tooltip"><label>技能等級</label>
     <input type="number" id="skill" placeholder="130 ~ 200">
     <span class="tiptext">建議 130 ~ 200</span></div>
+
+  <div class="field tooltip"><label>幻獸快速填入</label>
+    <input type="number" id="illusion5" placeholder="130 ~ 200">
+    <span class="tiptext">建議 130 ~ 200</span></div>
+
   <div class="field tooltip"><label>幻獸1</label>
     <input type="number" id="illusion1" placeholder="130 ~ 200">
     <span class="tiptext">建議 130 ~ 200</span></div>
@@ -306,13 +316,29 @@ function calculate() {
 }
 
 function clearAll() {
-  let ids = ["person","weapon","assistant","headgear","clothes","shoes","skill",
-             "illusion1","illusion2","illusion3","illusion4","relic_level","relic_count"];
+  let ids = ["person","weapon1","weapon","assistant","headgear","clothes","shoes","skill",
+             "illusion5","illusion1","illusion2","illusion3","illusion4","relic_level","relic_count"];
   ids.forEach(id => document.getElementById(id).value = "");
   ["person_score","equip_score","illusion_score","skill_score","relic_score","total_score","star"]
     .forEach(id => document.getElementById(id).innerText = "0");
 }
+
+// 監聽「裝備快速填入」欄位
+document.getElementById("weapon1").addEventListener("input", function() {
+  let val = parseInt(this.value) || "";
+  ["weapon","assistant","headgear","clothes","shoes"].forEach(id => {
+    document.getElementById(id).value = val;
+  });
+});
+
+document.getElementById("illusion5").addEventListener("input", function() {
+  let val = parseInt(this.value) || "";
+  ["illusion1","illusion2","illusion3","illusion4"].forEach(id => {
+    document.getElementById(id).value = val;
+  });
+});
 </script>
+
 
 </body>
 </html>
