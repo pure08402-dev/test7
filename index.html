@@ -5,102 +5,111 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>杖劍傳說 第二賽季 養成評分計算器</title>
 <style>
-  body { font-family: "Microsoft JhengHei", sans-serif; padding: 10px; background: #f8f8f8; }
-  h1 { text-align: center; }
-  .frame { background: #fff; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
-  .field { margin-bottom: 8px; }
-  label { display: block; margin-bottom: 4px; }
-  input { width: 100%; padding: 6px; font-size: 14px; }
-  button { padding: 8px 16px; margin: 5px; font-size: 14px; cursor: pointer; }
-  .result label { font-weight: bold; margin-top: 8px; display: block; }
-  .star { color: blue; }
+  body { font-family: "Microsoft JhengHei", sans-serif; margin: 0; padding: 10px; background: #f0f2f5; }
+  h1 { text-align: center; margin-bottom: 15px; }
+
+  .card {
+    background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 16px; margin-bottom: 20px;
+  }
+  .card h2 {
+    margin-top: 0; font-size: 18px; border-left: 5px solid #4a90e2;
+    padding-left: 8px; color: #333;
+  }
+  .field { margin-bottom: 12px; }
+  label { display: block; margin-bottom: 4px; font-size: 14px; font-weight: bold; }
+  input { width: 100%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; }
+  button {
+    padding: 10px 18px; margin: 6px 4px; font-size: 14px; border: none; border-radius: 8px;
+    cursor: pointer; color: #fff; background: #4a90e2; transition: 0.2s;
+  }
+  button:hover { background: #357abd; }
+  .clear-btn { background: #d9534f; }
+  .clear-btn:hover { background: #b52b27; }
+
+  .result label { font-size: 15px; margin-top: 8px; display: block; }
+  .star { color: #007bff; font-weight: bold; }
+
+  /* Tooltip */
   .tooltip { position: relative; display: inline-block; cursor: pointer; }
-  .tooltip .tiptext { 
-    visibility: hidden; width: 140px; background-color: #ffffe0; color: black;
-    text-align: left; border: 1px solid #aaa; border-radius: 4px; padding: 5px;
+  .tooltip .tiptext {
+    visibility: hidden; width: 160px; background-color: #ffffe0; color: black;
+    text-align: left; border: 1px solid #aaa; border-radius: 6px; padding: 6px;
     position: absolute; z-index: 1; top: -5px; left: 105%; font-size: 12px;
   }
   .tooltip:hover .tiptext { visibility: visible; }
+
+  /* 表格樣式 */
+  .table-container {
+    overflow-x: auto;  /* 手機可橫向滑動 */
+  }
+  table {
+    border-collapse: collapse; width: 100%; min-width: 500px;
+  }
+  th, td {
+    border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 14px;
+  }
+  th { background: #4a90e2; color: white; }
+  tr:nth-child(even) { background: #f9f9f9; }
+  .highlight { background: #ffff99; font-weight: bold; }
 </style>
 </head>
 <body>
 
 <h1>杖劍傳說 第二賽季 養成評分計算器</h1>
 
-<div class="frame">
+<!-- 計算器卡片 -->
+<div class="card">
   <h2>輸入數值</h2>
   <div class="field tooltip">
     <label>人物等級</label>
     <input type="number" id="person" placeholder="130 ~ 200">
     <span class="tiptext">建議 130 ~ 200</span>
   </div>
-  <div class="field tooltip">
-    <label>武器</label>
+  <div class="field tooltip"><label>武器</label>
     <input type="number" id="weapon" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>副手</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>副手</label>
     <input type="number" id="assistant" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>頭盔</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>頭盔</label>
     <input type="number" id="headgear" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>衣服</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>衣服</label>
     <input type="number" id="clothes" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>鞋子</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>鞋子</label>
     <input type="number" id="shoes" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>技能等級</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>技能等級</label>
     <input type="number" id="skill" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>幻獸1</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>幻獸1</label>
     <input type="number" id="illusion1" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>幻獸2</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>幻獸2</label>
     <input type="number" id="illusion2" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>幻獸3</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>幻獸3</label>
     <input type="number" id="illusion3" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>幻獸4</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>幻獸4</label>
     <input type="number" id="illusion4" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  <div class="field tooltip">
-    <label>遺物等級</label>
+    <span class="tiptext">建議 130 ~ 200</span></div>
+  <div class="field tooltip"><label>遺物等級</label>
     <input type="number" id="relic_level" placeholder="13 ~ 20">
-    <span class="tiptext">建議 13 ~ 20</span>
-  </div>
-  <div class="field tooltip">
-    <label>遺物額外增加等級</label>
-    <input type="number" id="relic_count" placeholder="0">
-    <span class="tiptext">填寫額外升級的遺物總和</span>
-  </div>
-  </div>
-  </div>
+    <span class="tiptext">建議 13 ~ 20</span></div>
+  <div class="field tooltip"><label>遺物額外增加等級</label>
+    <input type="number" id="relic_count" placeholder="20 以下">
+    <span class="tiptext">額外增加等級總和</span></div>
+</div>
+</div>
   <button onclick="calculate()">計算</button>
-  <button onclick="clearAll()">清除</button>
+  <button class="clear-btn" onclick="clearAll()">清除</button>
 </div>
 
-<div class="frame result">
+<!-- 結果卡片 -->
+<div class="card result">
   <h2>計算結果</h2>
   <label>人物評分: <span id="person_score">0</span></label>
   <label>裝備評分: <span id="equip_score">0</span></label>
@@ -111,22 +120,98 @@
   <label class="star">🌟 原初之星: <span id="star">0</span></label>
 </div>
 
+<!-- 星數效果表卡片 -->
+<div class="card">
+  <h2>星數效果表(S1+S2獲得原初之星)</h2>
+  <div class="table-container">
+    <table>
+      <tr><th>星數</th><th>效果</th></tr>
+      <tr><td>48</td><td>攻擊</td></tr>
+      <tr><td>56</td><td>升華3%</td></tr>
+      <tr><td>64</td><td>防禦</td></tr>
+      <tr><td>72</td><td>寶石5%</td></tr>
+      <tr><td>80</td><td>生命</td></tr>
+      <tr><td>88</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>96</td><td>速度</td></tr>
+      <tr><td>104</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>116</td><td>攻擊</td></tr>
+      <tr><td>128</td><td>升華3%</td></tr>
+      <tr><td>140</td><td>防禦</td></tr>
+      <tr><td>152</td><td>寶石5%</td></tr>
+      <tr><td>164</td><td>生命</td></tr>
+      <tr><td>176</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>188</td><td>速度</td></tr>
+      <tr><td>200</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>215</td><td>攻擊</td></tr>
+      <tr><td>230</td><td>升華3%</td></tr>
+      <tr><td>245</td><td>防禦</td></tr>
+      <tr><td>260</td><td>寶石5%</td></tr>
+      <tr><td>275</td><td>生命</td></tr>
+      <tr><td>290</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>305</td><td>速度</td></tr>
+      <tr><td>320</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>340</td><td>攻擊</td></tr>
+      <tr><td>360</td><td>升華3%</td></tr>
+      <tr><td>380</td><td>防禦</td></tr>
+      <tr><td>400</td><td>寶石5%</td></tr>
+      <tr><td>420</td><td>生命</td></tr>
+      <tr><td>440</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>460</td><td>速度</td></tr>
+      <tr><td>480</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>505</td><td>攻擊</td></tr>
+      <tr><td>530</td><td>升華3%</td></tr>
+      <tr><td>555</td><td>防禦</td></tr>
+      <tr><td>580</td><td>寶石5%</td></tr>
+      <tr><td>605</td><td>生命</td></tr>
+      <tr><td>630</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>655</td><td>速度</td></tr>
+      <tr><td>680</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>710</td><td>攻擊</td></tr>
+      <tr><td>740</td><td>升華3%</td></tr>
+      <tr><td>770</td><td>防禦</td></tr>
+      <tr><td>800</td><td>寶石5%</td></tr>
+      <tr><td>830</td><td>生命</td></tr>
+      <tr><td>860</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>890</td><td>速度</td></tr>
+      <tr><td>920</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>955</td><td>攻擊</td></tr>
+      <tr><td>990</td><td>升華3%</td></tr>
+      <tr><td>1025</td><td>防禦</td></tr>
+      <tr><td>1060</td><td>寶石5%</td></tr>
+      <tr><td>1095</td><td>生命</td></tr>
+      <tr><td>1130</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>1165</td><td>速度</td></tr>
+      <tr><td>1200</td><td class="highlight">經驗2%</td></tr>
+      <tr><td>1240</td><td>攻擊</td></tr>
+      <tr><td>1280</td><td>升華3%</td></tr>
+      <tr><td>1320</td><td>防禦</td></tr>
+      <tr><td>1360</td><td>寶石5%</td></tr>
+      <tr><td>1400</td><td>生命</td></tr>
+      <tr><td>1440</td><td class="highlight">翻倍2%</td></tr>
+      <tr><td>1480</td><td>速度</td></tr>
+      <tr><td>1520</td><td class="highlight">經驗2%</td></tr>
+      <!-- 其餘項目可依需要繼續補上 -->
+    </table>
+  </div>
+</div>
+
 <script>
 function calculate() {
   try {
-    let person = parseInt(document.getElementById("person").value) || 0;
-    let weapon = parseInt(document.getElementById("weapon").value) || 0;
-    let assistant = parseInt(document.getElementById("assistant").value) || 0;
-    let headgear = parseInt(document.getElementById("headgear").value) || 0;
-    let clothes = parseInt(document.getElementById("clothes").value) || 0;
-    let shoes = parseInt(document.getElementById("shoes").value) || 0;
-    let skill = parseInt(document.getElementById("skill").value) || 0;
-    let illusion1 = parseInt(document.getElementById("illusion1").value) || 0;
-    let illusion2 = parseInt(document.getElementById("illusion2").value) || 0;
-    let illusion3 = parseInt(document.getElementById("illusion3").value) || 0;
-    let illusion4 = parseInt(document.getElementById("illusion4").value) || 0;
-    let relic_level = parseInt(document.getElementById("relic_level").value) || 0;
-    let relic_count = parseInt(document.getElementById("relic_count").value) || 0;
+    let getVal = id => parseInt(document.getElementById(id).value) || 0;
+    let person = getVal("person"),
+        weapon = getVal("weapon"),
+        assistant = getVal("assistant"),
+        headgear = getVal("headgear"),
+        clothes = getVal("clothes"),
+        shoes = getVal("shoes"),
+        skill = getVal("skill"),
+        illusion1 = getVal("illusion1"),
+        illusion2 = getVal("illusion2"),
+        illusion3 = getVal("illusion3"),
+        illusion4 = getVal("illusion4"),
+        relic_level = getVal("relic_level"),
+        relic_count = getVal("relic_count");
 
     let person_score = (person - 130) * 100;
     let G = weapon + assistant + headgear + clothes + shoes;
