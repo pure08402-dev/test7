@@ -2,59 +2,86 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>升級計算器</title>
   <style>
     body {
       font-family: "Microsoft JhengHei", sans-serif;
       background: #f5f7fa;
-      padding: 20px;
+      margin: 0;
+      padding: 15px;
     }
     .card {
-      max-width: 600px;
+      max-width: 100%;
       margin: auto;
       background: #fff;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
     }
     h2 {
       text-align: center;
       color: #333;
+      font-size: 20px;
+      margin-bottom: 15px;
     }
     label {
       display: block;
-      margin: 10px 0 5px;
+      margin: 8px 0 4px;
       color: #555;
+      font-size: 14px;
     }
     input {
       width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
+      padding: 10px;
+      margin-bottom: 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
+      font-size: 16px;
     }
     button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       background: #4CAF50;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
+      font-weight: bold;
     }
     button:hover {
       background: #45a049;
     }
     .result {
-      margin-top: 20px;
+      margin-top: 18px;
       padding: 15px;
       background: #f0f9ff;
       border: 1px solid #b6e0fe;
       border-radius: 10px;
       color: #333;
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1.6;
+      word-break: break-word; /* 防止數字太長溢出 */
+    }
+    .section {
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid #eee;
+    }
+    .section b {
+      display: block;
+      margin-bottom: 4px;
+      color: #0077cc;
+    }
+
+    /* 手機螢幕適配 */
+    @media (max-width: 480px) {
+      h2 { font-size: 18px; }
+      input, button { font-size: 14px; }
+      .result { font-size: 14px; }
     }
   </style>
 </head>
@@ -64,7 +91,7 @@
     <label>開始等級：</label>
     <input type="number" id="start" value="130" min="130" max="200">
     <label>結束等級：</label>
-    <input type="number" id="end" value="200" min="130" max="200">
+    <input type="number" id="end" value="150" min="130" max="200">
     <button onclick="calculate()">計算</button>
     <div class="result" id="result">請輸入範圍並按下計算</div>
   </div>
@@ -145,8 +172,6 @@
 	  200: { stone: 28250, gold: 56500 }
 	};
 
-
-
     // 技能精華表
     const skill = {
       131: 12100, 132: 12200, 133: 12300, 134: 12500, 135: 12600,
@@ -208,22 +233,28 @@
       }
 
       document.getElementById("result").innerHTML = `
-        <b>裝備 (單件)</b><br>
+        <div class="section"><b>裝備 (單件)</b>
         粗煉石：${stone.toLocaleString()}<br>
-        金幣：${gold.toLocaleString()}<br><br>
-        <b>裝備 (五件)</b><br>
+        金幣：${gold.toLocaleString()}</div>
+
+        <div class="section"><b>裝備 (五件)</b>
         粗煉石：${(stone*5).toLocaleString()}<br>
-        金幣：${(gold*5).toLocaleString()}<br><br>
-        <b>技能精華 (單技能)</b><br>
-        精華：${skillTotal.toLocaleString()}<br><br>
-        <b>技能精華 (8技能)</b><br>
-        精華：${(skillTotal*8).toLocaleString()}<br><br>
-        <b>幻寵飼料 (單寵)</b><br>
-        飼料：${petTotal.toLocaleString()}<br><br>
-        <b>幻寵飼料 (4隻)</b><br>
-        飼料：${(petTotal*4).toLocaleString()}
+        金幣：${(gold*5).toLocaleString()}</div>
+
+        <div class="section"><b>技能精華 (單技能)</b>
+        精華：${skillTotal.toLocaleString()}</div>
+
+        <div class="section"><b>技能精華 (8技能)</b>
+        精華：${(skillTotal*8).toLocaleString()}</div>
+
+        <div class="section"><b>幻寵飼料 (單寵)</b>
+        飼料：${petTotal.toLocaleString()}</div>
+
+        <div class="section"><b>幻寵飼料 (4隻)</b>
+        飼料：${(petTotal*4).toLocaleString()}</div>
       `;
     }
   </script>
+  <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
 </body>
 </html>
