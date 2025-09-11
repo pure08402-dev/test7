@@ -98,6 +98,7 @@
     <label>結束等級：</label>
     <input type="number" id="end1" value="15" min="13" max="20">
     <button onclick="calculateAll()">計算</button>
+	<button onclick="clearAll()" style="margin-top:8px; background:#f44336;">重新計算</button>
     <div class="result" id="result">請輸入範圍並按下計算</div>
   </div>
 
@@ -324,6 +325,19 @@ function calculate1() {
 	  金幣：${(gold1*20).toLocaleString()}
     </div>
   `;
+  
+  
+}
+
+function clearAll() {
+  // 重置輸入欄位
+  document.getElementById("start").value = 130;
+  document.getElementById("end").value = 150;
+  document.getElementById("start1").value = 13;
+  document.getElementById("end1").value = 15;
+
+  // 清空結果
+  document.getElementById("result").innerHTML = "請輸入範圍並按下計算";
 }
   </script>
   <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
