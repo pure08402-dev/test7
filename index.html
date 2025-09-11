@@ -310,13 +310,12 @@ function highlightStar() {
       maxRow = row;
     }
   }
-
-  if (maxRow) {
+if (maxRow) {
     maxRow.style.backgroundColor = "#ffd1dc"; // 標紅
-  }
 
-  console.log("S1 + 原初之星總和:", total, "標示星數:", maxValue);
-}
+    // 自動滾動到該行
+    maxRow.scrollIntoView({ behavior: "smooth", block: "center" });
+}    
 </script>
 
 
