@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>杖劍傳說 第二賽季 </title>
-     </div>
+<title>杖劍傳說 第二賽季 </title></div>
     <title>養成評分計算器</title>
     <button onclick="window.location.href='https://pure08402-dev.github.io/test7/equip'">升級素材計算</button>
 <style>
@@ -205,7 +204,9 @@
 <!-- 輸入區 -->
 <div style="margin-bottom: 20px;">
   <label for="s1value">請輸入 S1 原初之星：</label>
-  <input type="number" id="s1value" placeholder="例如 200" style="width:80px; padding:5px; font-size:14px;">
+  <input type="number" id="s1value" placeholder="例如 200" 
+  style="width:80px; padding:5px; font-size:14px;"
+  min="0" step="1">
   <button onclick="highlightStar()">計算原初之星總和</button>
     </div>
   <span id="totalDisplay" style="margin-left: 10px; font-weight: bold; color: #d63384;"></span>
