@@ -156,7 +156,7 @@
 	</div>
 	
   <button onclick="calculate()">計算</button>
-  <button class="clear-btn" onclick="clearAll()">清除</button>
+  <button class="clear-btn" onclick="clearAll()">重新計算</button>
 </div>
 
 <!-- 結果卡片 -->
@@ -406,10 +406,17 @@ function calculate() {
 
 function clearAll() {
   let ids = ["person","weapon1","weapon","assistant","headgear","clothes","shoes","skill",
-             "illusion5","illusion1","illusion2","illusion3","illusion4","relic_level","relic_count"];
-  ids.forEach(id => document.getElementById(id).value = "");
+             "illusion5","illusion1","illusion2","illusion3","illusion4"];
+  ids.forEach(id => document.getElementById(id).value = "130");
+  
   ["person_score","equip_score","illusion_score","skill_score","relic_score","total_score","star"]
     .forEach(id => document.getElementById(id).innerText = "0");
+	
+  let ids1 = ["relic_level"];
+  ids1.forEach(id => document.getElementById(id).value = "13");
+  
+  let ids2 = ["relic_count"];
+  ids2.forEach(id => document.getElementById(id).value = " ");
 }
 
 // 監聽「裝備快速填入」欄位
