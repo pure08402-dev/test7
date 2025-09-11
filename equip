@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>升級計算器</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+    .card {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      color: #555;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f9ff;
+      border: 1px solid #b6e0fe;
+      border-radius: 10px;
+      color: #333;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>升級材料計算器</h2>
+    <label>開始等級：</label>
+    <input type="number" id="start" value="130" min="130" max="200">
+    <label>結束等級：</label>
+    <input type="number" id="end" value="200" min="130" max="200">
+    <button onclick="calculate()">計算</button>
+    <div class="result" id="result">請輸入範圍並按下計算</div>
+  </div>
+
+  <script>
+    // 裝備資料
+	const equip = {
+	  130: { stone: 16600, gold: 33200 },
+	  131: { stone: 16750, gold: 33500 },
+	  132: { stone: 17100, gold: 33800 },
+	  133: { stone: 17250, gold: 34500 },
+	  134: { stone: 17250, gold: 34500 },
+	  135: { stone: 17450, gold: 34900 },
+	  136: { stone: 17600, gold: 35200 },
+	  137: { stone: 17750, gold: 35500 },
+	  138: { stone: 17950, gold: 35900 },
+	  139: { stone: 18100, gold: 36200 },
+	  140: { stone: 18250, gold: 36500 },
+	  141: { stone: 18450, gold: 36900 },
+	  142: { stone: 18600, gold: 37200 },
+	  143: { stone: 18750, gold: 37500 },
+	  144: { stone: 18950, gold: 37900 },
+	  145: { stone: 19100, gold: 38200 },
+	  146: { stone: 19250, gold: 38500 },
+	  147: { stone: 19450, gold: 38900 },
+	  148: { stone: 19600, gold: 39200 },
+	  149: { stone: 19750, gold: 39500 },
+	  150: { stone: 19950, gold: 39900 },
+	  151: { stone: 20100, gold: 40200 },
+	  152: { stone: 20250, gold: 40500 },
+	  153: { stone: 20450, gold: 40900 },
+	  154: { stone: 20600, gold: 41200 },
+	  155: { stone: 20750, gold: 41500 },
+	  156: { stone: 20950, gold: 41900 },
+	  157: { stone: 21100, gold: 42200 },
+	  158: { stone: 21250, gold: 42500 },
+	  159: { stone: 21450, gold: 42900 },
+	  160: { stone: 21600, gold: 43200 },
+	  161: { stone: 21750, gold: 43500 },
+	  162: { stone: 21950, gold: 43900 },
+	  163: { stone: 22100, gold: 44200 },
+	  164: { stone: 22250, gold: 44500 },
+	  165: { stone: 22450, gold: 44900 },
+	  166: { stone: 22600, gold: 45200 },
+	  167: { stone: 22750, gold: 45500 },
+	  168: { stone: 22950, gold: 45900 },
+	  169: { stone: 23100, gold: 46200 },
+	  170: { stone: 23250, gold: 46500 },
+	  171: { stone: 23450, gold: 46900 },
+	  172: { stone: 23600, gold: 47200 },
+	  173: { stone: 23750, gold: 47500 },
+	  174: { stone: 23950, gold: 47900 },
+	  175: { stone: 24100, gold: 48200 },
+	  176: { stone: 24250, gold: 48500 },
+	  177: { stone: 24450, gold: 48900 },
+	  178: { stone: 24600, gold: 49200 },
+	  179: { stone: 24750, gold: 49500 },
+	  180: { stone: 24950, gold: 49900 },
+	  181: { stone: 25100, gold: 50200 },
+	  182: { stone: 25250, gold: 50500 },
+	  183: { stone: 25450, gold: 50900 },
+	  184: { stone: 25600, gold: 51200 },
+	  185: { stone: 25750, gold: 51500 },
+	  186: { stone: 25950, gold: 51900 },
+	  187: { stone: 26100, gold: 52200 },
+	  188: { stone: 26250, gold: 52500 },
+	  189: { stone: 26450, gold: 52900 },
+	  190: { stone: 26600, gold: 53200 },
+	  191: { stone: 26750, gold: 53500 },
+	  192: { stone: 26950, gold: 53900 },
+	  193: { stone: 27100, gold: 54200 },
+	  194: { stone: 27250, gold: 54500 },
+	  195: { stone: 27450, gold: 54900 },
+	  196: { stone: 27600, gold: 55200 },
+	  197: { stone: 27750, gold: 55500 },
+	  198: { stone: 27950, gold: 55900 },
+	  199: { stone: 28100, gold: 56200 },
+	  200: { stone: 28250, gold: 56500 }
+	};
+
+
+
+    // 技能精華表
+    const skill = {
+      131: 12100, 132: 12200, 133: 12300, 134: 12500, 135: 12600,
+      136: 12700, 137: 12800, 138: 12900, 139: 13100, 140: 13200,
+      141: 13300, 142: 13400, 143: 13500, 144: 13700, 145: 13800,
+      146: 13900, 147: 14000, 148: 14100, 149: 14300, 150: 14400,
+      151: 14500, 152: 14600, 153: 14700, 154: 14900, 155: 15000,
+      156: 15100, 157: 15200, 158: 15300, 159: 15500, 160: 15600,
+      161: 15700, 162: 15800, 163: 15900, 164: 16100, 165: 16200,
+      166: 16300, 167: 16400, 168: 16500, 169: 16700, 170: 16800,
+      171: 16900, 172: 17000, 173: 17100, 174: 17300, 175: 17400,
+      176: 17500, 177: 17600, 178: 17700, 179: 17900, 180: 18000,
+      181: 18100, 182: 18200, 183: 18300, 184: 18500, 185: 18600,
+      186: 18700, 187: 18800, 188: 18900, 189: 19100, 190: 19200,
+      191: 19300, 192: 19400, 193: 19500, 194: 19700, 195: 19800,
+      196: 19900, 197: 20000, 198: 20100, 199: 20300, 200: 20400
+    };
+
+    // 幻寵飼料表
+    const pet = {
+      131: 58500, 132: 59600, 133: 60800, 134: 61900, 135: 63100,
+      136: 64200, 137: 65400, 138: 66500, 139: 67700, 140: 68800,
+      141: 70000, 142: 71100, 143: 72300, 144: 73400, 145: 74600,
+      146: 75700, 147: 76900, 148: 78000, 149: 79200, 150: 80300,
+      151: 81500, 152: 82600, 153: 83800, 154: 84900, 155: 86100,
+      156: 87200, 157: 88400, 158: 89500, 159: 90700, 160: 91800,
+      161: 93000, 162: 94100, 163: 95300, 164: 96400, 165: 97600,
+      166: 98700, 167: 99900, 168: 101000, 169: 102200, 170: 103300,
+      171: 104500, 172: 105600, 173: 106800, 174: 107900, 175: 109100,
+      176: 110200, 177: 111400, 178: 112500, 179: 113700, 180: 114800,
+      181: 116000, 182: 117100, 183: 118300, 184: 119400, 185: 120600,
+      186: 121700, 187: 122900, 188: 124000, 189: 125200, 190: 126300,
+      191: 127500, 192: 128600, 193: 129800, 194: 130900, 195: 132100,
+      196: 133200, 197: 134400, 198: 135500, 199: 136700, 200: 137800
+    };
+
+    function calculate() {
+      const start = parseInt(document.getElementById("start").value);
+      const end = parseInt(document.getElementById("end").value);
+
+      if (start < 130 || end > 200 || start >= end) {
+        alert("請輸入有效範圍 (130~200)");
+        return;
+      }
+
+      let stone = 0, gold = 0, skillTotal = 0, petTotal = 0;
+
+      for (let lvl = start; lvl <= end; lvl++) {
+        if (equip[lvl]) {
+          stone += equip[lvl].stone;
+          gold += equip[lvl].gold;
+        }
+        if (skill[lvl]) {
+          skillTotal += skill[lvl];
+        }
+        if (pet[lvl]) {
+          petTotal += pet[lvl];
+        }
+      }
+
+      document.getElementById("result").innerHTML = `
+        <b>裝備 (單件)</b><br>
+        粗煉石：${stone.toLocaleString()}<br>
+        金幣：${gold.toLocaleString()}<br><br>
+        <b>裝備 (五件)</b><br>
+        粗煉石：${(stone*5).toLocaleString()}<br>
+        金幣：${(gold*5).toLocaleString()}<br><br>
+        <b>技能精華 (單技能)</b><br>
+        精華：${skillTotal.toLocaleString()}<br><br>
+        <b>技能精華 (8技能)</b><br>
+        精華：${(skillTotal*8).toLocaleString()}<br><br>
+        <b>幻寵飼料 (單寵)</b><br>
+        飼料：${petTotal.toLocaleString()}<br><br>
+        <b>幻寵飼料 (4隻)</b><br>
+        飼料：${(petTotal*4).toLocaleString()}
+      `;
+    }
+  </script>
+</body>
+</html>
