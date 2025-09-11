@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>杖劍傳說 第二賽季 </title></div>
-    <title>養成評分計算器</title>
+<title>杖劍傳說 第二賽季 養成評分計算器</title>
+    
     <button onclick="window.location.href='https://pure08402-dev.github.io/test7/equip'">升級素材計算</button>
 <style>
   body { font-family: "Microsoft JhengHei", sans-serif; margin: 0; padding: 10px; background: #f0f2f5; }
@@ -58,61 +58,62 @@
 </head>
 <body>
 
-<h1>杖劍傳說 第二賽季 養成評分計算器</h1>
+<h1>杖劍傳說 第二賽季 </h1>
+<h1>養成評分計算器</h1>
 
 <!-- 計算器卡片 -->
 <div class="card">
   <h2>輸入數值</h2>
   <div class="field tooltip">
     <label>人物等級</label>
-    <input type="number" id="person" placeholder="130 ~ 200">
+    <input type="number" id="person" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span>
   </div>
 
   <div class="field tooltip" style="color: red;"><label>裝備快速填入</label>
-    <input type="number" id="weapon1" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span></div>
+    <input type="number" id="weapon1" placeholder="130 ~ 200" min="130" step="1">
+    <span class="tiptext">裝備5件 ~ </span></div>
 
   <div class="field tooltip"><label>武器</label>
-    <input type="number" id="weapon" placeholder="130 ~ 200">
+    <input type="number" id="weapon" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
   <div class="field tooltip"><label>副手</label>
-    <input type="number" id="assistant" placeholder="130 ~ 200">
+    <input type="number" id="assistant" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
   <div class="field tooltip"><label>頭盔</label>
-    <input type="number" id="headgear" placeholder="130 ~ 200">
+    <input type="number" id="headgear" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
   <div class="field tooltip"><label>衣服</label>
-    <input type="number" id="clothes" placeholder="130 ~ 200">
+    <input type="number" id="clothes" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
   <div class="field tooltip"><label>鞋子</label>
-    <input type="number" id="shoes" placeholder="130 ~ 200">
+    <input type="number" id="shoes" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
   <div class="field tooltip"><label>技能等級</label>
-    <input type="number" id="skill" placeholder="130 ~ 200">
+    <input type="number" id="skill" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
 
   <div class="field tooltip" style="color: red;"><label>幻獸快速填入</label>
-    <input type="number" id="illusion5" placeholder="130 ~ 200">
-    <span class="tiptext">建議 130 ~ 200</span></div>
+    <input type="number" id="illusion5" placeholder="130 ~ 200" min="130" step="1">
+    <span class="tiptext">幻獸1 ~ 幻獸4</span></div>
 
   <div class="field tooltip"><label>幻獸1</label>
-    <input type="number" id="illusion1" placeholder="130 ~ 200">
+    <input type="number" id="illusion1" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
   <div class="field tooltip"><label>幻獸2</label>
-    <input type="number" id="illusion2" placeholder="130 ~ 200">
+    <input type="number" id="illusion2" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
   <div class="field tooltip"><label>幻獸3</label>
-    <input type="number" id="illusion3" placeholder="130 ~ 200">
+    <input type="number" id="illusion3" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
   <div class="field tooltip"><label>幻獸4</label>
-    <input type="number" id="illusion4" placeholder="130 ~ 200">
+    <input type="number" id="illusion4" placeholder="130 ~ 200" min="130" step="1">
     <span class="tiptext">建議 130 ~ 200</span></div>
   <div class="field tooltip"><label>遺物等級</label>
-    <input type="number" id="relic_level" placeholder="13 ~ 20">
+    <input type="number" id="relic_level" placeholder="13 ~ 20" min="13" step="1">
     <span class="tiptext">建議 13 ~ 20</span></div>
   <div class="field tooltip"><label>遺物額外增加等級</label>
-    <input type="number" id="relic_count" placeholder="無需填,有額外增加再填 ">
+    <input type="number" id="relic_count" placeholder="無需填,有額外增加再填 " min="0" step="1">
     <span class="tiptext">額外增加等級總和</span></div>
 </div>
 </div>
