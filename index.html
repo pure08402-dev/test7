@@ -41,19 +41,48 @@
   }
   .tooltip:hover .tiptext { visibility: visible; }
 
-  /* 表格樣式 */
-  .table-container {
-    overflow-x: auto;  /* 手機可橫向滑動 */
-  }
-  table {
-    border-collapse: collapse; width: 100%; min-width: 500px;
-  }
+/* 表格樣式 */
+.table-container {
+  width: 100%;
+  overflow-x: hidden;  /* 不橫向滑動 */
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;         /* 自動填滿容器 */
+  table-layout: auto;  /* 自動調整欄位寬度 */
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 6px 4px;     /* 手機可縮小 padding */
+  text-align: center;
+  font-size: 12px;      /* 手機可縮小字體 */
+  word-break: break-word; /* 避免文字溢出 */
+}
+
+th {
+  background: #4a90e2;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.highlight {
+  background: #ffff99;
+  font-weight: bold;
+}
+
+/* 手機螢幕適配 */
+@media (max-width: 480px) {
   th, td {
-    border: 1px solid #ddd; padding: 6px 8px; text-align: center; font-size: 14px;
+    padding: 4px 2px;
+    font-size: 10px;
   }
-  th { background: #4a90e2; color: white; }
-  tr:nth-child(even) { background: #f9f9f9; }
-  .highlight { background: #ffff99; font-weight: bold; }
+}
+
 </style>
 </head>
 <body>
@@ -64,8 +93,9 @@
 <div class="card">
 
 <!-- 計算器卡片 -->
-<div class="card">
+
   <h2>輸入數值</h2>
+  <div class="card">
   <div class="field tooltip">
     <label>人物等級</label>
     <input type="number" id="person" value="130" min="130" max="250">
