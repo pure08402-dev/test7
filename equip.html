@@ -511,8 +511,8 @@ const skill = {
   }
 
   let stone = 0, gold = 0, skillTotal = 0, petTotal = 0;
-
-  for (let lvl = start; lvl <= end; lvl++) {
+  // 這裡改成 "< end"
+  for (let lvl = start; lvl < end; lvl++) {
     if (equip[lvl]) {
       stone += equip[lvl].stone;
       gold += equip[lvl].gold;
@@ -539,8 +539,8 @@ function calculate1() {
   }
 
   let stone1 = 0, gold1 = 0, white = 0, blue = 0, purple = 0;
-
-  for (let lvl = start1; lvl <= end1; lvl++) {
+  // 這裡改成 "< end"
+  for (let lvl = start1; lvl < end1; lvl++) {
     if (relics[lvl]) {
       stone1 += relics[lvl].stone1;
       gold1 += relics[lvl].gold1;
