@@ -7,39 +7,116 @@
     
     <button onclick="window.location.href='https://pure08402-dev.github.io/test7/equip'">升級素材計算</button>
 <style>
-  body { font-family: "Microsoft JhengHei", sans-serif; margin: 0; padding: 10px; background: #f0f2f5; }
-  h1 { text-align: center; margin-bottom: 15px; }
+body { 
+  font-family: "Microsoft JhengHei", sans-serif; 
+  margin: 0; 
+  padding: 10px; 
+  background: #f0f2f5; 
+}
 
-  .card {
-    background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    padding: 16px; margin-bottom: 20px;
-  }
-  .card h2 {
-    margin-top: 0; font-size: 18px; border-left: 5px solid #4a90e2;
-    padding-left: 8px; color: #333;
-  }
-  .field { margin-bottom: 12px; }
-  label { display: block; margin-bottom: 4px; font-size: 14px; font-weight: bold; }
-  input { width: 100%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; }
-  button {
-    padding: 10px 18px; margin: 6px 4px; font-size: 14px; border: none; border-radius: 8px;
-    cursor: pointer; color: #fff; background: #4a90e2; transition: 0.2s;
-  }
-  button:hover { background: #357abd; }
-  .clear-btn { background: #d9534f; }
-  .clear-btn:hover { background: #b52b27; }
+h1 { 
+  text-align: center; 
+  margin-bottom: 15px; 
+}
 
-  .result label { font-size: 15px; margin-top: 8px; display: block; }
-  .star { color: #007bff; font-weight: bold; }
+.card {
+  background: #fff; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 16px; 
+  margin-bottom: 20px;
+}
 
-  /* Tooltip */
-  .tooltip { position: relative; display: inline-block; cursor: pointer; }
-  .tooltip .tiptext {
-    visibility: hidden; width: 160px; background-color: #ffffe0; color: black;
-    text-align: left; border: 1px solid #aaa; border-radius: 6px; padding: 6px;
-    position: absolute; z-index: 1; top: -5px; left: 105%; font-size: 12px;
-  }
-  .tooltip:hover .tiptext { visibility: visible; }
+.card h2 {
+  margin-top: 0; 
+  font-size: 18px; 
+  border-left: 5px solid #4a90e2;
+  padding-left: 8px; 
+  color: #333;
+}
+
+.field { 
+  margin-bottom: 12px; 
+}
+
+label { 
+  display: block; 
+  margin-bottom: 4px; 
+  font-size: 14px; 
+  font-weight: bold; 
+}
+
+input { 
+  width: 100%;              /* 佔滿全寬 */
+  padding: 12px;            /* 手機上更好點擊 */
+  font-size: 16px;          /* 字體放大 */
+  border: 1px solid #ccc; 
+  border-radius: 6px; 
+  box-sizing: border-box;   /* 避免超出容器 */
+}
+
+button {
+  width: 100%;              /* 佔滿全寬 */
+  padding: 12px;            /* 提高可點擊範圍 */
+  font-size: 16px;          /* 字體放大 */
+  font-weight: bold;        /* 手機上更清晰 */
+  border: none; 
+  border-radius: 8px;
+  cursor: pointer; 
+  color: #fff; 
+  background: #4a90e2; 
+  transition: 0.2s;
+}
+
+button:hover { 
+  background: #357abd; 
+}
+
+.clear-btn { 
+  background: #d9534f; 
+}
+
+.clear-btn:hover { 
+  background: #b52b27; 
+}
+
+.result label { 
+  font-size: 15px; 
+  margin-top: 8px; 
+  display: block; 
+}
+
+.star { 
+  color: #007bff; 
+  font-weight: bold; 
+}
+
+/* Tooltip */
+.tooltip { 
+  position: relative; 
+  display: inline-block; 
+  cursor: pointer; 
+}
+
+.tooltip .tiptext {
+  visibility: hidden; 
+  width: 160px; 
+  background-color: #ffffe0; 
+  color: black;
+  text-align: left; 
+  border: 1px solid #aaa; 
+  border-radius: 6px; 
+  padding: 6px;
+  position: absolute; 
+  z-index: 1; 
+  top: -5px; 
+  left: 105%; 
+  font-size: 12px;
+}
+
+.tooltip:hover .tiptext { 
+  visibility: visible; 
+}
 
 /* 表格樣式 */
 .table-container {
@@ -55,9 +132,7 @@ table {
 
 th, td {
   border: 1px solid #ddd;
-  //padding: 6px 4px;     /* 手機可縮小 padding */
   text-align: center;
-  //font-size: 12px;      /* 手機可縮小字體 */
   word-break: break-word; /* 避免文字溢出 */
 }
 
@@ -75,12 +150,13 @@ tr:nth-child(even) {
   font-weight: bold;
 }
 
-    /* 手機螢幕適配 */
-    @media (max-width: 480px) {
-      h2 { font-size: 18px; }
-      input, button { font-size: 14px; }
-      .result { font-size: 14px; }
-	}
+/* 手機螢幕適配 */
+@media (max-width: 480px) {
+  h2 { font-size: 18px; }
+  input, button { font-size: 16px; padding: 14px; }
+  .result { font-size: 14px; }
+}
+
 
 </style>
 </head>
