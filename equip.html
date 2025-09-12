@@ -105,127 +105,127 @@
   <script>
     // 裝備資料
 const equip = {
-  130: { stone: 16600, gold: 33200 },
-  131: { stone: 16750, gold: 33500 },
-  132: { stone: 16900, gold: 33800 },
-  133: { stone: 17100, gold: 34200 },
-  134: { stone: 17250, gold: 34500 },
-  135: { stone: 17450, gold: 34900 },
-  136: { stone: 17600, gold: 35200 },
-  137: { stone: 17750, gold: 35500 },
-  138: { stone: 17950, gold: 35900 },
-  139: { stone: 18100, gold: 36200 },
-  140: { stone: 18250, gold: 36500 },
-  141: { stone: 18450, gold: 36900 },
-  142: { stone: 18600, gold: 37200 },
-  143: { stone: 18750, gold: 37500 },
-  144: { stone: 18950, gold: 37900 },
-  145: { stone: 19100, gold: 38200 },
-  146: { stone: 19250, gold: 38500 },
-  147: { stone: 19450, gold: 38900 },
-  148: { stone: 19600, gold: 39200 },
-  149: { stone: 19750, gold: 39500 },
-  150: { stone: 19950, gold: 39900 },
-  151: { stone: 20100, gold: 40200 },
-  152: { stone: 20250, gold: 40500 },
-  153: { stone: 20450, gold: 40900 },
-  154: { stone: 20600, gold: 41200 },
-  155: { stone: 20750, gold: 41500 },
-  156: { stone: 20950, gold: 41900 },
-  157: { stone: 21100, gold: 42200 },
-  158: { stone: 21250, gold: 42500 },
-  159: { stone: 21450, gold: 42900 },
-  160: { stone: 21600, gold: 43200 },
-  161: { stone: 21750, gold: 43500 },
-  162: { stone: 21950, gold: 43900 },
-  163: { stone: 22100, gold: 44200 },
-  164: { stone: 22250, gold: 44500 },
-  165: { stone: 22450, gold: 44900 },
-  166: { stone: 22600, gold: 45200 },
-  167: { stone: 22750, gold: 45500 },
-  168: { stone: 22950, gold: 45900 },
-  169: { stone: 23100, gold: 46200 },
-  170: { stone: 23250, gold: 46500 },
-  171: { stone: 23450, gold: 46900 },
-  172: { stone: 23600, gold: 47200 },
-  173: { stone: 23750, gold: 47500 },
-  174: { stone: 23950, gold: 47900 },
-  175: { stone: 24100, gold: 48200 },
-  176: { stone: 24250, gold: 48500 },
-  177: { stone: 24450, gold: 48900 },
-  178: { stone: 24600, gold: 49200 },
-  179: { stone: 24750, gold: 49500 },
-  180: { stone: 24950, gold: 49900 },
-  181: { stone: 25100, gold: 50200 },
-  182: { stone: 25250, gold: 50500 },
-  183: { stone: 25450, gold: 50900 },
-  184: { stone: 25600, gold: 51200 },
-  185: { stone: 25750, gold: 51500 },
-  186: { stone: 25950, gold: 51900 },
-  187: { stone: 26100, gold: 52200 },
-  188: { stone: 26250, gold: 52500 },
-  189: { stone: 26450, gold: 52900 },
-  190: { stone: 26600, gold: 53200 },
-  191: { stone: 26750, gold: 53500 },
-  192: { stone: 26950, gold: 53900 },
-  193: { stone: 27100, gold: 54200 },
-  194: { stone: 27250, gold: 54500 },
-  195: { stone: 27450, gold: 54900 },
-  196: { stone: 27600, gold: 55200 },
-  197: { stone: 27750, gold: 55500 },
-  198: { stone: 27950, gold: 55900 },
-  199: { stone: 28100, gold: 56200 },
-  200: { stone: 28250, gold: 56500 },
-  201: { stone: 28450, gold: 56900 },
-  202: { stone: 28600, gold: 57200 },
-  203: { stone: 28750, gold: 57500 },
-  204: { stone: 28950, gold: 57900 },
-  205: { stone: 29100, gold: 58200 },
-  206: { stone: 29250, gold: 58500 },
-  207: { stone: 29450, gold: 58900 },
-  208: { stone: 29600, gold: 59200 },
-  209: { stone: 29750, gold: 59500 },
-  210: { stone: 29950, gold: 59900 },
-  211: { stone: 30100, gold: 60200 },
-  212: { stone: 30250, gold: 60500 },
-  213: { stone: 30450, gold: 60900 },
-  214: { stone: 30600, gold: 61200 },
-  215: { stone: 30750, gold: 61500 },
-  216: { stone: 30950, gold: 61900 },
-  217: { stone: 31100, gold: 62200 },
-  218: { stone: 31250, gold: 62500 },
-  219: { stone: 31450, gold: 62900 },
-  220: { stone: 31600, gold: 63200 },
-  221: { stone: 31750, gold: 63500 },
-  222: { stone: 31950, gold: 63900 },
-  223: { stone: 32100, gold: 64200 },
-  224: { stone: 32250, gold: 64500 },
-  225: { stone: 32450, gold: 64900 },
-  226: { stone: 32600, gold: 65200 },
-  227: { stone: 32750, gold: 65500 },
-  228: { stone: 32950, gold: 65900 },
-  229: { stone: 33100, gold: 66200 },
-  230: { stone: 33250, gold: 66500 },
-  231: { stone: 33450, gold: 66900 },
-  232: { stone: 33600, gold: 67200 },
-  233: { stone: 33750, gold: 67500 },
-  234: { stone: 33950, gold: 67900 },
-  235: { stone: 34100, gold: 68200 },
-  236: { stone: 34250, gold: 68500 },
-  237: { stone: 34450, gold: 68900 },
-  238: { stone: 34600, gold: 69200 },
-  239: { stone: 34750, gold: 69500 },
-  240: { stone: 34950, gold: 69900 },
-  241: { stone: 35100, gold: 70200 },
-  242: { stone: 35250, gold: 70500 },
-  243: { stone: 35450, gold: 70900 },
-  244: { stone: 35600, gold: 71200 },
-  245: { stone: 35750, gold: 71500 },
-  246: { stone: 35950, gold: 71900 },
-  247: { stone: 36100, gold: 72200 },
-  248: { stone: 36250, gold: 72500 },
-  249: { stone: 36450, gold: 72900 },
-  250: { stone: 36600, gold: 73200 }
+  130: { stone: 16600, gold: 33200, refine: 0 },
+  131: { stone: 16750, gold: 33500, refine: 0 },
+  132: { stone: 16900, gold: 33800, refine: 0 },
+  133: { stone: 17100, gold: 34200, refine: 0 },
+  134: { stone: 17250, gold: 34500, refine: 510 },
+  135: { stone: 17450, gold: 34900, refine: 0 }, 
+  136: { stone: 17600, gold: 35200, refine: 0 }, 
+  137: { stone: 17750, gold: 35500, refine: 0 }, 
+  138: { stone: 17950, gold: 35900, refine: 0 }, 
+  139: { stone: 18100, gold: 36200, refine: 510 }, 
+  140: { stone: 18250, gold: 36500, refine: 0 }, 
+  141: { stone: 18450, gold: 36900, refine: 0 }, 
+  142: { stone: 18600, gold: 37200, refine: 0 }, 
+  143: { stone: 18750, gold: 37500, refine: 0 }, 
+  144: { stone: 18950, gold: 37900, refine: 510 }, 
+  145: { stone: 19100, gold: 38200, refine: 0 }, 
+  146: { stone: 19250, gold: 38500, refine: 0 }, 
+  147: { stone: 19450, gold: 38900, refine: 0 }, 
+  148: { stone: 19600, gold: 39200, refine: 0 }, 
+  149: { stone: 19750, gold: 39500, refine: 510 }, 
+  150: { stone: 19950, gold: 39900, refine: 0 }, 
+  151: { stone: 20100, gold: 40200, refine: 0 }, 
+  152: { stone: 20250, gold: 40500, refine: 0 }, 
+  153: { stone: 20450, gold: 40900, refine: 0 }, 
+  154: { stone: 20600, gold: 41200, refine: 510 }, 
+  155: { stone: 20750, gold: 41500, refine: 0 }, 
+  156: { stone: 20950, gold: 41900, refine: 0 }, 
+  157: { stone: 21100, gold: 42200, refine: 0 }, 
+  158: { stone: 21250, gold: 42500, refine: 0 }, 
+  159: { stone: 21450, gold: 42900, refine: 510 }, 
+  160: { stone: 21600, gold: 43200, refine: 0 }, 
+  161: { stone: 21750, gold: 43500, refine: 0 }, 
+  162: { stone: 21950, gold: 43900, refine: 0 }, 
+  163: { stone: 22100, gold: 44200, refine: 0 }, 
+  164: { stone: 22250, gold: 44500, refine: 510 }, 
+  165: { stone: 22450, gold: 44900, refine: 0 }, 
+  166: { stone: 22600, gold: 45200, refine: 0 }, 
+  167: { stone: 22750, gold: 45500, refine: 0 }, 
+  168: { stone: 22950, gold: 45900, refine: 0 }, 
+  169: { stone: 23100, gold: 46200, refine: 510 }, 
+  170: { stone: 23250, gold: 46500, refine: 0 }, 
+  171: { stone: 23450, gold: 46900, refine: 0 }, 
+  172: { stone: 23600, gold: 47200, refine: 0 }, 
+  173: { stone: 23750, gold: 47500, refine: 0 }, 
+  174: { stone: 23950, gold: 47900, refine: 510 }, 
+  175: { stone: 24100, gold: 48200, refine: 0 }, 
+  176: { stone: 24250, gold: 48500, refine: 0 }, 
+  177: { stone: 24450, gold: 48900, refine: 0 }, 
+  178: { stone: 24600, gold: 49200, refine: 0 }, 
+  179: { stone: 24750, gold: 49500, refine: 510 }, 
+  180: { stone: 24950, gold: 49900, refine: 0 }, 
+  181: { stone: 25100, gold: 50200, refine: 0 }, 
+  182: { stone: 25250, gold: 50500, refine: 0 }, 
+  183: { stone: 25450, gold: 50900, refine: 0 }, 
+  184: { stone: 25600, gold: 51200, refine: 510 }, 
+  185: { stone: 25750, gold: 51500, refine: 0 }, 
+  186: { stone: 25950, gold: 51900, refine: 0 }, 
+  187: { stone: 26100, gold: 52200, refine: 0 }, 
+  188: { stone: 26250, gold: 52500, refine: 0 }, 
+  189: { stone: 26450, gold: 52900, refine: 510 }, 
+  190: { stone: 26600, gold: 53200, refine: 0 }, 
+  191: { stone: 26750, gold: 53500, refine: 0 }, 
+  192: { stone: 26950, gold: 53900, refine: 0 }, 
+  193: { stone: 27100, gold: 54200, refine: 0 }, 
+  194: { stone: 27250, gold: 54500, refine: 510 }, 
+  195: { stone: 27450, gold: 54900, refine: 0 }, 
+  196: { stone: 27600, gold: 55200, refine: 0 }, 
+  197: { stone: 27750, gold: 55500, refine: 0 }, 
+  198: { stone: 27950, gold: 55900, refine: 0 }, 
+  199: { stone: 28100, gold: 56200, refine: 510 }, 
+  200: { stone: 28250, gold: 56500, refine: 0 }, 
+  201: { stone: 28450, gold: 56900, refine: 0 }, 
+  202: { stone: 28600, gold: 57200, refine: 0 }, 
+  203: { stone: 28750, gold: 57500, refine: 0 }, 
+  204: { stone: 28950, gold: 57900, refine: 510 }, 
+  205: { stone: 29100, gold: 58200, refine: 0 }, 
+  206: { stone: 29250, gold: 58500, refine: 0 }, 
+  207: { stone: 29450, gold: 58900, refine: 0 }, 
+  208: { stone: 29600, gold: 59200, refine: 0 }, 
+  209: { stone: 29750, gold: 59500, refine: 510 }, 
+  210: { stone: 29950, gold: 59900, refine: 0 }, 
+  211: { stone: 30100, gold: 60200, refine: 0 }, 
+  212: { stone: 30250, gold: 60500, refine: 0 }, 
+  213: { stone: 30450, gold: 60900, refine: 0 }, 
+  214: { stone: 30600, gold: 61200, refine: 510 }, 
+  215: { stone: 30750, gold: 61500, refine: 0 }, 
+  216: { stone: 30950, gold: 61900, refine: 0 }, 
+  217: { stone: 31100, gold: 62200, refine: 0 }, 
+  218: { stone: 31250, gold: 62500, refine: 0 }, 
+  219: { stone: 31450, gold: 62900, refine: 510 }, 
+  220: { stone: 31600, gold: 63200, refine: 0 }, 
+  221: { stone: 31750, gold: 63500, refine: 0 }, 
+  222: { stone: 31950, gold: 63900, refine: 0 }, 
+  223: { stone: 32100, gold: 64200, refine: 0 }, 
+  224: { stone: 32250, gold: 64500, refine: 510 }, 
+  225: { stone: 32450, gold: 64900, refine: 0 }, 
+  226: { stone: 32600, gold: 65200, refine: 0 }, 
+  227: { stone: 32750, gold: 65500, refine: 0 }, 
+  228: { stone: 32950, gold: 65900, refine: 0 }, 
+  229: { stone: 33100, gold: 66200, refine: 510 }, 
+  230: { stone: 33250, gold: 66500, refine: 0 }, 
+  231: { stone: 33450, gold: 66900, refine: 0 }, 
+  232: { stone: 33600, gold: 67200, refine: 0 }, 
+  233: { stone: 33750, gold: 67500, refine: 0 }, 
+  234: { stone: 33950, gold: 67900, refine: 510 }, 
+  235: { stone: 34100, gold: 68200, refine: 0 }, 
+  236: { stone: 34250, gold: 68500, refine: 0 }, 
+  237: { stone: 34450, gold: 68900, refine: 0 }, 
+  238: { stone: 34600, gold: 69200, refine: 0 }, 
+  239: { stone: 34750, gold: 69500, refine: 510 }, 
+  240: { stone: 34950, gold: 69900, refine: 0 }, 
+  241: { stone: 35100, gold: 70200, refine: 0 }, 
+  242: { stone: 35250, gold: 70500, refine: 0 }, 
+  243: { stone: 35450, gold: 70900, refine: 0 }, 
+  244: { stone: 35600, gold: 71200, refine: 510 }, 
+  245: { stone: 35750, gold: 71500, refine: 0 }, 
+  246: { stone: 35950, gold: 71900, refine: 0 }, 
+  247: { stone: 36100, gold: 72200, refine: 0 }, 
+  248: { stone: 36250, gold: 72500, refine: 0 }, 
+  249: { stone: 36450, gold: 72900, refine: 510 }, 
+  250: { stone: 36600, gold: 73200, refine: 0 }, 
   };
 
     // 技能精華表
@@ -511,13 +511,14 @@ const skill = {
     return;
   }
 
-  let stone = 0, gold = 0, skillTotal = 0, petTotal = 0;
+  let stone = 0, gold = 0, refine = 0, skillTotal = 0, petTotal = 0;
 
   // 這裡改成 "< end"
   for (let lvl = start; lvl < end; lvl++) {
     if (equip[lvl]) {
       stone += equip[lvl].stone;
       gold += equip[lvl].gold;
+	  refine += equip[lvl].refine;
     }
     if (skill[lvl]) {
       skillTotal += skill[lvl];
@@ -527,7 +528,7 @@ const skill = {
     }
   }
   // 回傳計算結果給 calculate1() 使用
-  return { stone, gold, skillTotal, petTotal };
+  return { stone, gold, refine, skillTotal, petTotal };
 }
 
 function calculate1() {
@@ -557,27 +558,28 @@ function calculate1() {
   // 顯示結果
   document.getElementById("result").innerHTML = `
     <div class="section"><b>裝備 (單件)</b><br>
-      粗煉石：${Math.floor(equipResult.stone / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.stone.toLocaleString()}</span>)<br>
-      金幣：${Math.floor(equipResult.gold / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.gold.toLocaleString()}</span>)</div>
+      粗煉石：${Math.floor(equipResult.stone / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.stone.toLocaleString()}</span>)<br>	  
+      金幣：${Math.floor(equipResult.gold / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.gold.toLocaleString()}</span>)<br>
+	  精鍛石：${Math.floor(equipResult.refine / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.refine.toLocaleString()}</span>)
 	</div>
 
     <div class="section" ><b style="color: red;">裝備 (五件)</b><br>
       粗煉石：${Math.floor((equipResult.stone*5) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.stone*5).toLocaleString()}</span>)<br>
-      金幣：${Math.floor((equipResult.gold*5) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.gold*5).toLocaleString()}</span>)</div>
-
-
+      金幣：${Math.floor((equipResult.gold*5) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.gold*5).toLocaleString()}</span>)<br>
+	  精鍛石：${Math.floor((equipResult.refine*5) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.refine*5).toLocaleString()}</span>)
+	</div>
     <div class="section"><b>技能精華 (單技能)</b><br>
-      精華：${Math.floor(equipResult.skillTotal / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.skillTotal.toLocaleString()}</span>)</div>
-
+      精華：${Math.floor(equipResult.skillTotal / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.skillTotal.toLocaleString()}</span>)
+	</div>
     <div class="section"><b style="color: red;">技能精華 (8技能)</b><br>
-      精華：${Math.floor((equipResult.skillTotal*8) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.skillTotal*8).toLocaleString()}</span>)</div>
-
+      精華：${Math.floor((equipResult.skillTotal*8) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.skillTotal*8).toLocaleString()}</span>)
+	</div>
     <div class="section"><b>幻寵飼料 (單寵)</b><br>
-      飼料：${Math.floor(equipResult.petTotal / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.petTotal.toLocaleString()}</span>)</div>
-
+      飼料：${Math.floor(equipResult.petTotal / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.petTotal.toLocaleString()}</span>)
+    </div>
     <div class="section"><b style="color: red;">幻寵飼料 (4隻)</b><br>
-      飼料：${Math.floor((equipResult.petTotal*4) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.petTotal*4).toLocaleString()}</span>)</div>
-
+      飼料：${Math.floor((equipResult.petTotal*4) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.petTotal*4).toLocaleString()}</span>)
+	</div>
     <div class="section"><b>遺物 (單個)</b><br>
       白砂：${Math.floor(white / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${white.toLocaleString()}</span>)<br>
       藍砂：${Math.floor(blue / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${blue.toLocaleString()}</span>)<br>
