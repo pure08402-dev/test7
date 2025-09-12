@@ -55,9 +55,9 @@ table {
 
 th, td {
   border: 1px solid #ddd;
-  padding: 6px 4px;     /* 手機可縮小 padding */
+  //padding: 6px 4px;     /* 手機可縮小 padding */
   text-align: center;
-  font-size: 12px;      /* 手機可縮小字體 */
+  //font-size: 12px;      /* 手機可縮小字體 */
   word-break: break-word; /* 避免文字溢出 */
 }
 
@@ -75,13 +75,12 @@ tr:nth-child(even) {
   font-weight: bold;
 }
 
-/* 手機螢幕適配 */
-@media (max-width: 480px) {
-  th, td {
-    padding: 4px 2px;
-    font-size: 10px;
-  }
-}
+    /* 手機螢幕適配 */
+    @media (max-width: 480px) {
+      h2 { font-size: 18px; }
+      input, button { font-size: 14px; }
+      .result { font-size: 14px; }
+	}
 
 </style>
 </head>
@@ -252,17 +251,13 @@ tr:nth-child(even) {
     font-weight: bold;
   }
 
-  /* 手機版強制縮放整張表格 */
-  @media (max-width: 480px) {
-    .table-container {
-      transform: scale(0.85);   /* 整體縮小 85% */
-      transform-origin: top left; /* 從左上角縮 */
-      width: 100%;
-    }
-    table {
-      font-size: 10px; /* 再縮小字體 */
-    }
-  }
+    /* 手機螢幕適配 */
+    @media (max-width: 480px) {
+      h2 { font-size: 18px; }
+      input, button { font-size: 14px; }
+      .result { font-size: 14px; }
+	}
+  
 </style>
 
 
