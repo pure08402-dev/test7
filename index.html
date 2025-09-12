@@ -286,55 +286,7 @@ tr:nth-child(even) {
 <div class="card">
 <title>星數效果表</title>
 <h2>S1+S2獲得原初之星</h2>
-<style>
-  body {
-    font-family: "Microsoft JhengHei", sans-serif;
-    background: #f4f6f9;
-    margin: 20px;
-  }
 
-  h2 {
-    color: #333;
-    margin-bottom: 12px;
-  }
-
-  .table-container {
-    margin: 0;          
-    background: #fff;
-    border-radius: 10px;  
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
-    padding: 10px;
-    overflow: hidden; /* 不要出現捲軸 */
-  }
-
-  table {
-    border-collapse: collapse;
-    width: 100%;      
-    font-size: 10px;  
-  }
-
-  th, td {
-    padding: 6px 10px;
-    text-align: center;
-  }
-
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
-  .highlight {
-    color: #d63384;
-    font-weight: bold;
-  }
-
-    /* 手機螢幕適配 */
-    @media (max-width: 480px) {
-      h2 { font-size: 18px; }
-      input, button { font-size: 14px; }
-      .result { font-size: 14px; }
-	}
-  
-</style>
 
 
 </head>
@@ -344,7 +296,7 @@ tr:nth-child(even) {
 <div style="margin-bottom: 20px;">
   <label for="s1value">請輸入 S1 原初之星：</label>
   <input type="number" id="s1value" placeholder="例如 200" 
-  style="width:80px; padding:5px; font-size:14px;"
+  style="width:100px; padding:10px; font-size:16px;"
   min="0" step="1">
   
   <button onclick="highlightStar()">計算原初之星總和</button><br>
