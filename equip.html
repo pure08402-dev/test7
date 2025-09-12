@@ -557,39 +557,39 @@ function calculate1() {
   // 顯示結果
   document.getElementById("result").innerHTML = `
     <div class="section"><b>裝備 (單件)</b><br>
-      粗煉石：${equipResult.stone.toLocaleString()} (${Math.floor(equipResult.stone / 10000*100)/100}萬)<br>
-      金幣：${equipResult.gold.toLocaleString()} (${Math.floor(equipResult.gold / 10000*100)/100}萬)</div>
+      粗煉石：${Math.floor(equipResult.stone / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.stone.toLocaleString()}</span>)<br>
+      金幣：${Math.floor(equipResult.gold / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.gold.toLocaleString()}</span>)</div>
 	</div>
 
     <div class="section" ><b style="color: red;">裝備 (五件)</b><br>
-      粗煉石：${(equipResult.stone*5).toLocaleString()} (${Math.floor((equipResult.stone*5) / 10000*100)/100}萬)<br>
-      金幣：${(equipResult.gold*5).toLocaleString()} (${Math.floor((equipResult.gold*5) / 10000*100)/100}萬)</div>
+      粗煉石：${Math.floor((equipResult.stone*5) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.stone*5).toLocaleString()}</span>)<br>
+      金幣：${Math.floor((equipResult.gold*5) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.gold*5).toLocaleString()}</span>)</div>
 
 
     <div class="section"><b>技能精華 (單技能)</b><br>
-      精華：${equipResult.skillTotal.toLocaleString()} (${Math.floor(equipResult.skillTotal / 10000*100)/100}萬)</div>
+      精華：${Math.floor(equipResult.skillTotal / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.skillTotal.toLocaleString()}</span>)</div>
 
     <div class="section"><b style="color: red;">技能精華 (8技能)</b><br>
-      精華：${(equipResult.skillTotal*8).toLocaleString()} (${Math.floor((equipResult.skillTotal*8) / 10000*100)/100}萬)</div>
+      精華：${Math.floor((equipResult.skillTotal*8) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.skillTotal*8).toLocaleString()}</span>)</div>
 
     <div class="section"><b>幻寵飼料 (單寵)</b><br>
-      飼料：${equipResult.petTotal.toLocaleString()} (${Math.floor(equipResult.petTotal / 10000*100)/100}萬)</div>
+      飼料：${Math.floor(equipResult.petTotal / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.petTotal.toLocaleString()}</span>)</div>
 
     <div class="section"><b style="color: red;">幻寵飼料 (4隻)</b><br>
-      飼料：${(equipResult.petTotal*4).toLocaleString()} (${Math.floor((equipResult.petTotal*4) / 10000*100)/100}萬)</div>
+      飼料：${Math.floor((equipResult.petTotal*4) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.petTotal*4).toLocaleString()}</span>)</div>
 
     <div class="section"><b>遺物 (單個)</b><br>
-      白砂：${white.toLocaleString()} (${Math.floor(white / 10000*100)/100}萬)<br>
-      藍砂：${blue.toLocaleString()} (${Math.floor(blue / 10000*100)/100}萬)<br>
-      紫砂：${purple.toLocaleString()} (${Math.floor(purple / 10000*100)/100}萬)<br>
-      金幣：${gold1.toLocaleString()} (${Math.floor(gold1 / 10000*100)/100}萬)
+      白砂：${Math.floor(white / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${white.toLocaleString()}</span>)<br>
+      藍砂：${Math.floor(blue / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${blue.toLocaleString()}</span>)<br>
+      紫砂：${Math.floor(purple / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${purple.toLocaleString()}</span>)<br>
+      金幣：${Math.floor(gold1 / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${gold1.toLocaleString()}</span>)
     </div>
 
     <div class="section"><b style="color: red;">遺物 (20個)</b><br>
-	  白砂：${(white*20).toLocaleString()}  (${Math.floor((white*20) / 10000*100)/100}萬)<br>
-      藍砂：${(blue*20).toLocaleString()}  (${Math.floor((blue*20) / 10000*100)/100}萬)<br>
-      紫砂：${(purple*20).toLocaleString()}  (${Math.floor((purple*20) / 10000*100)/100}萬)<br>
-	  金幣：${(gold1*20).toLocaleString()}  (${Math.floor((gold1*20) / 10000*100)/100}萬)
+	  白砂：${Math.floor((white*20) / 10000*100)/100}萬&nbsp;  (<span style="color: purple;">${(white*20).toLocaleString()}</span>)<br>
+      藍砂：${Math.floor((blue*20) / 10000*100)/100}萬&nbsp;  (<span style="color: purple;">${(blue*20).toLocaleString()}</span>)<br>
+      紫砂：${Math.floor((purple*20) / 10000*100)/100}萬&nbsp;  (<span style="color: purple;">${(purple*20).toLocaleString()}</span>)<br>
+	  金幣：${Math.floor((gold1*20) / 10000*100)/100}萬&nbsp;  (<span style="color: purple;">${(gold1*20).toLocaleString()}</span>)
     </div>
   `;
   
