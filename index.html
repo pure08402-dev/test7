@@ -89,118 +89,123 @@ tr:nth-child(even) {
 
 <h1>杖劍傳說 第二賽季 </h1>
 <h1>養成評分計算器</h1>
+	<div class="card">
+	<h2>S2原初之星</h2>
 
-<div class="card">
+		
 
-<!-- 計算器卡片 -->
+		<!-- 計算器卡片 -->
 
-  <h2>輸入數值</h2>
-  <div class="card">
-  <div class="field tooltip">
-    <label>人物等級</label>
-    <input type="number" id="person" value="130" min="130" max="250">
-    <span class="tiptext">建議 130 ~ 200</span>
-  </div>
-  </div>
-  <div class="card">
-  <div class="field tooltip" style="color: red;"><label>裝備快速填入</label>
-    <input type="number" id="weapon1" value="130" min="130" max="250">
-    <span class="tiptext">裝備5件 ~ </span></div>
-	<div>
-		<div style="display:flex; gap:20px; flex-wrap: wrap;">
-		<div class="field tooltip">
-		<label>武器</label>
-		<input type="number" id="weapon" value="130" min="130" max="250">
-		<span class="tiptext">建議 130 ~ 200</span>
-		</div>
-		<div class="field tooltip">
-		<label>副手</label>
-		<input type="number" id="assistant" value="130" min="130" max="250">
-		<span class="tiptext">建議 130 ~ 200</span>
-		</div>
-		<div class="field tooltip">
-		<label>頭盔</label>
-		<input type="number" id="headgear" value="130" min="130" max="250">
-		<span class="tiptext">建議 130 ~ 200</span>
-		</div>
-		<div class="field tooltip">
-		<label>衣服</label>
-		<input type="number" id="clothes" value="130" min="130" max="250">
-		<span class="tiptext">建議 130 ~ 200</span>
-		</div>
-		<div class="field tooltip">
-		<label>鞋子</label>
-		<input type="number" id="shoes" value="130" min="130" max="250">
-		<span class="tiptext">建議 130 ~ 200</span>
-		</div>
-		</div>
+		<label for="s1value">輸入數值:</label>
+			<div class="card">
+				<div class="field tooltip">
+				<label>人物等級</label>
+				<input type="number" id="person" value="130" min="130" max="250">
+				<span class="tiptext">建議 130 ~ 200</span>
+				</div>
+			</div>
+			<div class="card">
+				<div class="field tooltip" style="color: red;"><label>裝備快速填入</label>
+				<input type="number" id="weapon1" value="130" min="130" max="250">
+				<span class="tiptext">裝備5件 ~ </span>
+				</div>	
+				<div style="display:flex; gap:20px; flex-wrap: wrap;">
+					<div class="field tooltip">
+					<label>武器</label>
+					<input type="number" id="weapon" value="130" min="130" max="250">
+					<span class="tiptext">建議 130 ~ 200</span>
+					</div>
+					<div class="field tooltip">
+					<label>副手</label>
+					<input type="number" id="assistant" value="130" min="130" max="250">
+					<span class="tiptext">建議 130 ~ 200</span>
+					</div>
+					<div class="field tooltip">
+					<label>頭盔</label>
+					<input type="number" id="headgear" value="130" min="130" max="250">
+					<span class="tiptext">建議 130 ~ 200</span>
+					</div>
+					<div class="field tooltip">
+					<label>衣服</label>
+					<input type="number" id="clothes" value="130" min="130" max="250">
+					<span class="tiptext">建議 130 ~ 200</span>
+					</div>
+					<div class="field tooltip">
+					<label>鞋子</label>
+					<input type="number" id="shoes" value="130" min="130" max="250">
+					<span class="tiptext">建議 130 ~ 200</span>
+					</div>
+				</div>
 
-  </div>
-  </div>
-  <div class="card">	  
-  <div class="field tooltip"><label>技能等級</label>
-    <input type="number" id="skill" value="130" min="130" max="250">
-    <span class="tiptext">建議 130 ~ 200</span></div>
-  </div>
+			</div>
+		
+		
+		
+				<div class="card">	  
+				<div class="field tooltip"><label>技能等級</label>
+				<input type="number" id="skill" value="130" min="130" max="250">
+				<span class="tiptext">建議 130 ~ 200</span></div>
+				</div>
   
-  <div class="card">
-  <div class="field tooltip" style="color: red;"><label>幻獸快速填入</label>
-    <input type="number" id="illusion5" value="130" min="130" max="250">
-    <span class="tiptext">幻獸1 ~ 幻獸4</span></div>
-	<div>
-	<div style="display:flex; gap:20px; flex-wrap: wrap;">
-	<div class="field tooltip">
-    <label>幻獸1</label>
-    <input type="number" id="illusion1" value="130" min="130" max="250">
-    <span class="tiptext">建議 130 ~ 200</span>
-	</div>
-	<div class="field tooltip">
-    <label>幻獸2</label>
-    <input type="number" id="illusion2" value="130" min="130" max="250">
-    <span class="tiptext">建議 130 ~ 200</span>
-	</div>
-	<div class="field tooltip">
-    <label>幻獸3</label>
-    <input type="number" id="illusion3" value="130" min="130" max="250">
-    <span class="tiptext">建議 130 ~ 200</span>
-	</div>
-	<div class="field tooltip">
-    <label>幻獸4</label>
-    <input type="number" id="illusion4" value="130" min="130" max="250">
-    <span class="tiptext">建議 130 ~ 200</span>
-	</div>
-	</div>
-  </div>
-  </div>
+				<div class="card">
+				<div class="field tooltip" style="color: red;"><label>幻獸快速填入</label>
+				<input type="number" id="illusion5" value="130" min="130" max="250">
+				<span class="tiptext">幻獸1 ~ 幻獸4</span></div>
+					<div>
+					<div style="display:flex; gap:20px; flex-wrap: wrap;">
+					<div class="field tooltip">
+					<label>幻獸1</label>
+					<input type="number" id="illusion1" value="130" min="130" max="250">
+					<span class="tiptext">建議 130 ~ 200</span>
+					</div>
+					<div class="field tooltip">
+					<label>幻獸2</label>
+					<input type="number" id="illusion2" value="130" min="130" max="250">
+					<span class="tiptext">建議 130 ~ 200</span>
+					</div>
+					<div class="field tooltip">
+					<label>幻獸3</label>
+					<input type="number" id="illusion3" value="130" min="130" max="250">
+					<span class="tiptext">建議 130 ~ 200</span>
+					</div>
+					<div class="field tooltip">
+					<label>幻獸4</label>
+					<input type="number" id="illusion4" value="130" min="130" max="250">
+					<span class="tiptext">建議 130 ~ 200</span>
+					</div>
+					</div>
+					</div>
+				</div>
 
-	<div class="card">  
-	<div class="field tooltip"><label>遺物等級</label>
-    <input type="number" id="relic_level" value="13" min="13" max="25">
-    <span class="tiptext">建議 13 ~ 20</span></div>
-		<div>
-	<div class="field tooltip"><label>遺物額外增加等級</label>
-    <input type="number" id="relic_count" placeholder="無需填,有額外增加再填 " min="0" step="1">
-    <span class="tiptext">額外增加等級總和</span></div>
-
-	</div>
-	</div>
+				<div class="card">  
+					<div class="field tooltip"><label>遺物等級</label>
+					<input type="number" id="relic_level" value="13" min="13" max="25">
+					<span class="tiptext">建議 13 ~ 20</span>
+					</div>
+					<div>
+					<div class="field tooltip"><label>遺物額外增加等級</label>
+					<input type="number" id="relic_count" placeholder="無需填,有額外增加再填 " min="0" step="1">
+					<span class="tiptext">額外增加等級總和</span></div>
+					</div>
+				</div>
 	
-  <button onclick="calculate()">計算</button>
-  <button class="clear-btn" onclick="clearAll()">重新計算</button>
-</div>
+		<button onclick="calculate()">計算</button>
+		<button class="clear-btn" onclick="clearAll()">重新計算</button>
+		
+	
 
-<!-- 結果卡片 -->
-<div class="card result">
-  <h2>計算結果</h2>
-  <label>人物評分: <span id="person_score">0</span></label>
-  <label>裝備評分: <span id="equip_score">0</span></label>
-  <label>幻獸評分: <span id="illusion_score">0</span></label>
-  <label>技能評分: <span id="skill_score">0</span></label>
-  <label>遺物評分: <span id="relic_score">0</span></label>
-  <label>總評分: <span id="total_score">0</span></label>
-  <label class="star">🌟 原初之星: <span id="star">0</span></label>
-</div>
-
+		<!-- 結果卡片 -->
+		<div class="card result">
+		<h2>計算結果</h2>
+		<label>人物評分: <span id="person_score">0</span></label>
+		<label>裝備評分: <span id="equip_score">0</span></label>
+		<label>幻獸評分: <span id="illusion_score">0</span></label>
+		<label>技能評分: <span id="skill_score">0</span></label>
+		<label>遺物評分: <span id="relic_score">0</span></label>
+		<label>總評分: <span id="total_score">0</span></label>
+		<label class="star">🌟 原初之星: <span id="star">0</span></label>
+		</div>
+	</div>
 
 <!-- 星數效果表卡片 -->
 <div class="card">
@@ -255,7 +260,7 @@ tr:nth-child(even) {
       width: 100%;
     }
     table {
-      font-size: 8px; /* 再縮小字體 */
+      font-size: 10px; /* 再縮小字體 */
     }
   }
 </style>
@@ -271,7 +276,7 @@ tr:nth-child(even) {
   style="width:80px; padding:5px; font-size:14px;"
   min="0" step="1">
   
-  <button onclick="highlightStar()">計算原初之星總和</button>
+  <button onclick="highlightStar()">計算原初之星總和</button><br>
     
   <span id="totalDisplay" style="margin-left: 10px; font-weight: bold; color: #d63384;"></span>
 
