@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>小推車運算程式</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 15px;
+    }
+    .card {
+      max-width: 100%;
+      margin: auto;
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin: 8px 0 4px;
+      color: #555;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .result {
+      margin-top: 18px;
+      padding: 15px;
+      background: #f0f9ff;
+      border: 1px solid #b6e0fe;
+      border-radius: 10px;
+      color: #333;
+      font-size: 15px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+    th, td {
+      padding: 8px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background: #f2f2f2;
+    }
+    @media (max-width: 480px) {
+      h2 { font-size: 18px; }
+      input, button { font-size: 14px; }
+      .result { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <h2>手推車運算程式</h2>
+  <table>
+    <tr>
+      <th>資源</th>
+      <th>期望值</th>
+      <th>目前有的</th>
+      <th>每小時產出</th>
+    </tr>
+    <tr>
+      <td>金幣</td>
+      <td><input type="number" id="target_gold"></td>
+      <td><input type="number" id="current_gold"></td>
+      <td><input type="number" id="hour_gold"></td>
+    </tr>
+    <tr>
+      <td>砂</td>
+      <td><input type="number" id="target_sand"></td>
+      <td><input type="number" id="current_sand"></td>
+      <td><input type="number" id="hour_sand"></td>
+    </tr>
+    <tr>
+      <td>粗煉石</td>
+      <td><input type="number" id="target_stone"></td>
+      <td><input type="number" id="current_stone"></td>
+      <td><input type="number" id="hour_stone"></td>
+    </tr>
+    <tr>
+      <td>精華</td>
+      <td><input type="number" id="target_essence"></td>
+      <td><input type="number" id="current_essence"></td>
+      <td><input type="number" id="hour_essence"></td>
+    </tr>
+  </table>
+  <div style="text-align:center;">
+    <button onclick="calculate()">計算</button>
+    <button onclick="clearAll()" style="margin-top:8px; background:#f44336;">重新計算</button>
+  </div>
+  <div class="result" id="result">請輸入資料並按下計算</div>
+
+  <script>
+    function calculate() {
+      const resources = [
+        { name: "金幣", target: "target_gold", current: "current_gold", hour: "hour_gold" },
+        { name: "砂", target: "target_sand", current: "current_sand", hour: "hour_sand" },
+        { name: "粗煉石", target: "target_stone", current: "current_stone", hour: "hour_stone" },
+        { name: "精華", target: "target_essence", current: "current_essence", hour: "hour_essence" }
+      ];
+      
+      let output = "<h3>手推車達成天數</h3><table><tr><th>資源</th><th>還需要</th><th>天數</th></tr>";
+      
+      resources.forEach(r => {
+        const target = parseInt(document.getElementById(r.target).value) || 0;
+        const current = parseInt(document.getElementById(r.current).value) || 0;
+        const perHour = parseInt(document.getElementById(r.hour).value) || 0;
+
+        const need = Math.max(target - current, 0);
+        const perDay = perHour * 24;
+        const days = perDay > 0 ? (need / perDay).toFixed(2) : "∞";
+        
+        output += `<tr>
+          <td>${r.name}</td>
+          <td>${need.toLocaleString()}</td>
+          <td>${days} 天</td>
+        </tr>`;
+      });
+
+      output += "</table>";
+      document.getElementById("result").innerHTML = output;
+    }
+    
+    function clearAll() {
+      // 清空所有輸入欄位
+      document.querySelectorAll("input").forEach(input => input.value = "");
+      // 顯示提示文字
+      document.getElementById("result").innerHTML = "請輸入資料並按下計算";
+    }
+  </script>
+  <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
+</body>
+</html>
