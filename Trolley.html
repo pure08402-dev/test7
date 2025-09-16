@@ -10,17 +10,33 @@
       margin: 0;
       padding: 15px;
     }
+    .card {
+      max-width: 100%;
+      margin: auto;
+      background: #fff;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
     h2 {
       text-align: center;
       color: #333;
       font-size: 20px;
       margin-bottom: 15px;
     }
-    input {
-      width: 80px;
-      padding: 5px;
+    label {
+      display: block;
+      margin: 8px 0 4px;
+      color: #555;
       font-size: 14px;
-      margin: 2px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
     }
     button {
       width: 100%;
@@ -45,8 +61,9 @@
       color: #333;
       font-size: 15px;
       line-height: 1.6;
+      word-break: break-word; /* 防止數字太長溢出 */
     }
-    table {
+	    table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 10px;
@@ -59,6 +76,20 @@
     th {
       background: #f2f2f2;
     }
+    .section {
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid #eee;
+    }
+    .section b {
+      display: block;
+      margin-bottom: 4px;
+      color: #0077cc;
+    }
+
+    /* 手機螢幕適配 */
     @media (max-width: 480px) {
       h2 { font-size: 18px; }
       input, button { font-size: 14px; }
@@ -77,27 +108,27 @@
     </tr>
     <tr>
       <td>金幣</td>
-      <td><input type="number" id="target_gold"></td>
-      <td><input type="number" id="current_gold"></td>
-      <td><input type="number" id="hour_gold"></td>
+      <td><input type="number" id="target_gold" style="width:100px; padding:10px; font-size:14px;"></td>
+      <td><input type="number" id="current_gold" style="width:100px; padding:10px; font-size:14px;"></td>
+      <td><input type="number" id="hour_gold" style="width:100px; padding:10px; font-size:14px;"></td>
     </tr>
     <tr>
       <td>砂</td>
-      <td><input type="number" id="target_sand"></td>
-      <td><input type="number" id="current_sand"></td>
-      <td><input type="number" id="hour_sand"></td>
+      <td><input type="number" id="target_sand" style="width:100px; padding:10px; font-size:14px;"></td>
+      <td><input type="number" id="current_sand" style="width:100px; padding:10px; font-size:14px;"></td>
+      <td><input type="number" id="hour_sand" style="width:100px; padding:10px; font-size:14px;"></td>
     </tr>
     <tr>
       <td>粗煉石</td>
-      <td><input type="number" id="target_stone"></td>
-      <td><input type="number" id="current_stone"></td>
-      <td><input type="number" id="hour_stone"></td>
+      <td><input type="number" id="target_stone" style="width:100px; padding:10px; font-size:14px;"></td>
+      <td><input type="number" id="current_stone" style="width:100px; padding:10px; font-size:14px;"></td>
+      <td><input type="number" id="hour_stone" style="width:100px; padding:10px; font-size:14px;"></td>
     </tr>
     <tr>
       <td>精華</td>
-      <td><input type="number" id="target_essence"></td>
-      <td><input type="number" id="current_essence"></td>
-      <td><input type="number" id="hour_essence"></td>
+      <td><input type="number" id="target_essence" style="width:100px; padding:10px; font-size:14px;"></td>
+      <td><input type="number" id="current_essence" style="width:100px; padding:10px; font-size:14px;"></td>
+      <td><input type="number" id="hour_essence" style="width:100px; padding:10px; font-size:14px;"></td>
     </tr>
   </table>
   <div style="text-align:center;">
