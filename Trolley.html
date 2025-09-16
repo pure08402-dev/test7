@@ -10,33 +10,17 @@
       margin: 0;
       padding: 15px;
     }
-    .card {
-      max-width: 100%;
-      margin: auto;
-      background: #fff;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    }
     h2 {
       text-align: center;
       color: #333;
       font-size: 20px;
       margin-bottom: 15px;
     }
-    label {
-      display: block;
-      margin: 8px 0 4px;
-      color: #555;
-      font-size: 14px;
-    }
     input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
+      width: 80px;
+      padding: 5px;
+      font-size: 14px;
+      margin: 2px;
     }
     button {
       width: 100%;
@@ -61,7 +45,6 @@
       color: #333;
       font-size: 15px;
       line-height: 1.6;
-      word-break: break-word;
     }
     table {
       width: 100%;
@@ -132,7 +115,7 @@
         { name: "精華", target: "target_essence", current: "current_essence", hour: "hour_essence" }
       ];
       
-      let output = "<h3>手推車達成天數</h3><table><tr><th>資源</th><th>還需要</th><th>天數</th></tr>";
+      let output = "<h3>手推車達成時間</h3><table><tr><th>資源</th><th>還需要</th><th>小時數</th><th>天數</th></tr>";
       
       resources.forEach(r => {
         const target = parseInt(document.getElementById(r.target).value) || 0;
@@ -140,12 +123,13 @@
         const perHour = parseInt(document.getElementById(r.hour).value) || 0;
 
         const need = Math.max(target - current, 0);
-        const perDay = perHour * 24;
-        const days = perDay > 0 ? (need / perDay).toFixed(2) : "∞";
+        const hours = perHour > 0 ? (need / perHour).toFixed(2) : "∞";
+        const days = perHour > 0 ? (hours / 24).toFixed(2) : "∞";
         
         output += `<tr>
           <td>${r.name}</td>
           <td>${need.toLocaleString()}</td>
+          <td>${hours}</td>
           <td>${days} 天</td>
         </tr>`;
       });
@@ -155,9 +139,7 @@
     }
     
     function clearAll() {
-      // 清空所有輸入欄位
       document.querySelectorAll("input").forEach(input => input.value = "");
-      // 顯示提示文字
       document.getElementById("result").innerHTML = "請輸入資料並按下計算";
     }
   </script>
