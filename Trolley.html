@@ -64,7 +64,7 @@
       word-break: break-word; /* 防止數字太長溢出 */
     }
 		table {
-		width: 50%;               /* 表格寬度撐滿容器 */
+		width: 100%;               /* 表格寬度撐滿容器 */
 		border-collapse: collapse; /* 合併邊框，避免雙線 */
 		margin-bottom: 10px;       /* 表格底部留空10px */
 	}
@@ -99,38 +99,102 @@
 </head>
 <body>
   <h2>手推車運算程式</h2>
-  <table>
-    <tr>
+	<div class="card">
+		<table>
+    <tr>	  
       <th>資源</th>
       <th>期望值</th>
-      <th>目前有的</th>
-      <th>每小時產出</th>
     </tr>
+	
     <tr>
       <td>金幣</td>
       <td><input type="number" id="target_gold" style="width:100px; padding:10px; font-size:14px;"></td>
-      <td><input type="number" id="current_gold" style="width:100px; padding:10px; font-size:14px;"></td>
-      <td><input type="number" id="hour_gold" style="width:100px; padding:10px; font-size:14px;"></td>
+
     </tr>
     <tr>
       <td>砂</td>
       <td><input type="number" id="target_sand" style="width:100px; padding:10px; font-size:14px;"></td>
-      <td><input type="number" id="current_sand" style="width:100px; padding:10px; font-size:14px;"></td>
-      <td><input type="number" id="hour_sand" style="width:100px; padding:10px; font-size:14px;"></td>
+
     </tr>
     <tr>
       <td>粗煉石</td>
       <td><input type="number" id="target_stone" style="width:100px; padding:10px; font-size:14px;"></td>
-      <td><input type="number" id="current_stone" style="width:100px; padding:10px; font-size:14px;"></td>
-      <td><input type="number" id="hour_stone" style="width:100px; padding:10px; font-size:14px;"></td>
+
     </tr>
     <tr>
       <td>精華</td>
       <td><input type="number" id="target_essence" style="width:100px; padding:10px; font-size:14px;"></td>
+
+    </tr>
+	</table>
+  	</div>
+	
+	<div class="card">
+		<table>
+	<tr>
+	  <th>資源</th>
+  	  <th>目前有的</th>
+	</tr>
+	
+    <tr>
+      <td>金幣</td>
+
+      <td><input type="number" id="current_gold" style="width:100px; padding:10px; font-size:14px;"></td>
+
+    </tr>
+    <tr>
+      <td>砂</td>
+
+      <td><input type="number" id="current_sand" style="width:100px; padding:10px; font-size:14px;"></td>
+
+    </tr>
+    <tr>
+      <td>粗煉石</td>
+   
+      <td><input type="number" id="current_stone" style="width:100px; padding:10px; font-size:14px;"></td>
+
+    </tr>
+    <tr>
+      <td>精華</td>
+   
       <td><input type="number" id="current_essence" style="width:100px; padding:10px; font-size:14px;"></td>
+      
+    </tr>
+		</table>
+  	</div>	  
+	  
+	<div class="card">
+		<table>
+	<tr>
+	  <th>資源</th>
+  	  <th>每小時產出</th>
+	</tr>
+	
+     <tr>
+      <td>金幣</td>
+
+      <td><input type="number" id="hour_gold" style="width:100px; padding:10px; font-size:14px;"></td>
+    </tr>
+    <tr>
+      <td>砂</td>
+ 
+      <td><input type="number" id="hour_sand" style="width:100px; padding:10px; font-size:14px;"></td>
+    </tr>
+    <tr>
+      <td>粗煉石</td>
+
+      <td><input type="number" id="hour_stone" style="width:100px; padding:10px; font-size:14px;"></td>
+    </tr>
+    <tr>
+      <td>精華</td>
+
       <td><input type="number" id="hour_essence" style="width:100px; padding:10px; font-size:14px;"></td>
     </tr>
-  </table>
+		</table>
+  	</div>		  
+	  
+	  
+
   <div style="text-align:center;">
     <button onclick="calculate()">計算</button>
     <button onclick="clearAll()" style="margin-top:8px; background:#f44336;">重新計算</button>
