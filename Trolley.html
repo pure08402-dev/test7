@@ -17,11 +17,12 @@
       padding: 15px;
       border-radius: 12px;
       box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      margin-bottom: 12px;
     }
     h2 {
       text-align: center;
       color: #333;
-      font-size: 20px;
+      font-size: 22px;
       margin-bottom: 15px;
     }
     label {
@@ -32,16 +33,16 @@
     }
     input {
       width: 100%;
-	  box-sizing: border-box; /* 確保 padding 不會超出 */
-      padding: 10px;
+      padding: 12px;
       margin-bottom: 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 16px;
+      box-sizing: border-box;
     }
     button {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       background: #4CAF50;
       color: white;
       border: none;
@@ -49,6 +50,7 @@
       cursor: pointer;
       font-size: 16px;
       font-weight: bold;
+      margin-top: 8px;
     }
     button:hover {
       background: #45a049;
@@ -62,147 +64,132 @@
       color: #333;
       font-size: 15px;
       line-height: 1.6;
-      word-break: break-word; /* 防止數字太長溢出 */
-    }
-		table {
-		width: 100%;               /* 表格寬度撐滿容器 */
-		table-layout: auto;  /* 自動調整欄位寬度 */
-		border-collapse: collapse; /* 合併邊框，避免雙線 */
-		margin-bottom: 10px;       /* 表格底部留空10px */
-		
-	}
-	th, td {
-		padding: 8px;              /* 單元格內距 */
-		border: 1px solid #ddd;    /* 單元格邊框 */
-		text-align: center;        /* 文字置中 */
-	}
-	th {
-		background: #f2f2f2;       /* 標題列灰色背景 */
-	}
-    .section {
-      margin-bottom: 12px;
-      padding: 10px;
-      border-radius: 8px;
-      background: #fff;
-      border: 1px solid #eee;
-    }
-    .section b {
-      display: block;
-      margin-bottom: 4px;
-      color: #0077cc;
+      word-break: break-word;
     }
 
-	/* 手機適配 */
-	@media (max-width: 480px) {
-	 h2 { font-size: 20px; }
-	 .result { font-size: 15px; }
-	 button { font-size: 16px; padding: 14px; }
-	 table input { font-size: 16px; padding: 12px; }
-	}
+    /* 表格樣式 */
+    .table-container {
+      overflow-x: auto; /* 手機橫向滑動 */
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: auto;
+      margin-bottom: 10px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background: #f2f2f2;
+    }
+
+    /* 手機螢幕適配 */
+    @media (max-width: 480px) {
+      h2 { font-size: 20px; }
+      .result { font-size: 14px; }
+      button { font-size: 16px; padding: 14px; }
+      input { font-size: 16px; padding: 12px; }
+    }
   </style>
 </head>
 <body>
   <h2>手推車運算程式</h2>
-	<div class="card">
-		<table>
-    <tr>	  
-      <th>資源</th>
-      <th>期望值</th>
-    </tr>
-	
-    <tr>
-      <td>金幣</td>
-      <td><input type="number" id="target_gold" style="width:100px; padding:10px; font-size:14px;"></td>
 
-    </tr>
-    <tr>
-      <td>砂</td>
-      <td><input type="number" id="target_sand" style="width:100px; padding:10px; font-size:14px;"></td>
+  <!-- 目標資源 -->
+  <div class="card">
+    <div class="table-container">
+      <table>
+        <tr>	  
+          <th>資源</th>
+          <th>期望值</th>
+        </tr>
+        <tr>
+          <td>金幣</td>
+          <td><input type="number" id="target_gold"></td>
+        </tr>
+        <tr>
+          <td>砂</td>
+          <td><input type="number" id="target_sand"></td>
+        </tr>
+        <tr>
+          <td>粗煉石</td>
+          <td><input type="number" id="target_stone"></td>
+        </tr>
+        <tr>
+          <td>精華</td>
+          <td><input type="number" id="target_essence"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
-    </tr>
-    <tr>
-      <td>粗煉石</td>
-      <td><input type="number" id="target_stone" style="width:100px; padding:10px; font-size:14px;"></td>
+  <!-- 目前資源 -->
+  <div class="card">
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>資源</th>
+          <th>目前有的</th>
+        </tr>
+        <tr>
+          <td>金幣</td>
+          <td><input type="number" id="current_gold"></td>
+        </tr>
+        <tr>
+          <td>砂</td>
+          <td><input type="number" id="current_sand"></td>
+        </tr>
+        <tr>
+          <td>粗煉石</td>
+          <td><input type="number" id="current_stone"></td>
+        </tr>
+        <tr>
+          <td>精華</td>
+          <td><input type="number" id="current_essence"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
-    </tr>
-    <tr>
-      <td>精華</td>
-      <td><input type="number" id="target_essence" style="width:100px; padding:10px; font-size:14px;"></td>
+  <!-- 每小時產出 -->
+  <div class="card">
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>資源</th>
+          <th>每小時產出</th>
+        </tr>
+        <tr>
+          <td>金幣</td>
+          <td><input type="number" id="hour_gold"></td>
+        </tr>
+        <tr>
+          <td>砂</td>
+          <td><input type="number" id="hour_sand"></td>
+        </tr>
+        <tr>
+          <td>粗煉石</td>
+          <td><input type="number" id="hour_stone"></td>
+        </tr>
+        <tr>
+          <td>精華</td>
+          <td><input type="number" id="hour_essence"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
-    </tr>
-	</table>
-  	</div>
-	<br></br>
-	<div class="card">
-		<table>
-	<tr>
-	  <th>資源</th>
-  	  <th>目前有的</th>
-	</tr>
-	
-    <tr>
-      <td>金幣</td>
-
-      <td><input type="number" id="current_gold" style="width:100px; padding:10px; font-size:14px;"></td>
-
-    </tr>
-    <tr>
-      <td>砂</td>
-
-      <td><input type="number" id="current_sand" style="width:100px; padding:10px; font-size:14px;"></td>
-
-    </tr>
-    <tr>
-      <td>粗煉石</td>
-   
-      <td><input type="number" id="current_stone" style="width:100px; padding:10px; font-size:14px;"></td>
-
-    </tr>
-    <tr>
-      <td>精華</td>
-   
-      <td><input type="number" id="current_essence" style="width:100px; padding:10px; font-size:14px;"></td>
-      
-    </tr>
-		</table>
-  	</div>	  
-	<br></br>  
-	<div class="card">
-		<table>
-	<tr>
-	  <th>資源</th>
-  	  <th>每小時產出</th>
-	</tr>
-	
-     <tr>
-      <td>金幣</td>
-
-      <td><input type="number" id="hour_gold" style="width:100px; padding:10px; font-size:14px;"></td>
-    </tr>
-    <tr>
-      <td>砂</td>
- 
-      <td><input type="number" id="hour_sand" style="width:100px; padding:10px; font-size:14px;"></td>
-    </tr>
-    <tr>
-      <td>粗煉石</td>
-
-      <td><input type="number" id="hour_stone" style="width:100px; padding:10px; font-size:14px;"></td>
-    </tr>
-    <tr>
-      <td>精華</td>
-
-      <td><input type="number" id="hour_essence" style="width:100px; padding:10px; font-size:14px;"></td>
-    </tr>
-		</table>
-  	</div>		  
-	<br></br>  
-	  
-
+  <!-- 按鈕 -->
   <div style="text-align:center;">
     <button onclick="calculate()">計算</button>
-    <button onclick="clearAll()" style="margin-top:8px; background:#f44336;">重新計算</button>
+    <button onclick="clearAll()" style="background:#f44336;">重新計算</button>
+    <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
   </div>
+
+  <!-- 結果區 -->
   <div class="result" id="result">請輸入資料並按下計算</div>
 
   <script>
@@ -214,7 +201,7 @@
         { name: "精華", target: "target_essence", current: "current_essence", hour: "hour_essence" }
       ];
       
-      let output = "<h3>手推車達成時間</h3><table><tr><th>資源</th><th>還需要</th><th>小時數</th><th>天數</th></tr>";
+      let output = "<h3>手推車達成時間</h3><div class='table-container'><table><tr><th>資源</th><th>還需要</th><th>小時數</th><th>天數</th></tr>";
       
       resources.forEach(r => {
         const target = parseInt(document.getElementById(r.target).value) || 0;
@@ -233,7 +220,7 @@
         </tr>`;
       });
 
-      output += "</table>";
+      output += "</table></div>";
       document.getElementById("result").innerHTML = output;
     }
     
@@ -242,6 +229,5 @@
       document.getElementById("result").innerHTML = "請輸入資料並按下計算";
     }
   </script>
-  <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
 </body>
 </html>
