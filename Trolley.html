@@ -32,6 +32,7 @@
     }
     input {
       width: 100%;
+	  box-sizing: border-box; /* 確保 padding 不會超出 */
       padding: 10px;
       margin-bottom: 12px;
       border: 1px solid #ccc;
@@ -68,6 +69,7 @@
 		table-layout: auto;  /* 自動調整欄位寬度 */
 		border-collapse: collapse; /* 合併邊框，避免雙線 */
 		margin-bottom: 10px;       /* 表格底部留空10px */
+		
 	}
 	th, td {
 		padding: 8px;              /* 單元格內距 */
@@ -90,12 +92,13 @@
       color: #0077cc;
     }
 
-    /* 手機螢幕適配 */
-    @media (max-width: 480px) {
-      h2 { font-size: 18px; }
-      input, button { font-size: 14px; }
-      .result { font-size: 14px; }
-    }
+	/* 手機適配 */
+	@media (max-width: 480px) {
+	 h2 { font-size: 20px; }
+	 .result { font-size: 15px; }
+	 button { font-size: 16px; padding: 14px; }
+	 table input { font-size: 16px; padding: 12px; }
+	}
   </style>
 </head>
 <body>
@@ -129,7 +132,7 @@
     </tr>
 	</table>
   	</div>
-	
+	<br></br>
 	<div class="card">
 		<table>
 	<tr>
@@ -163,7 +166,7 @@
     </tr>
 		</table>
   	</div>	  
-	  
+	<br></br>  
 	<div class="card">
 		<table>
 	<tr>
@@ -193,7 +196,7 @@
     </tr>
 		</table>
   	</div>		  
-	  
+	<br></br>  
 	  
 
   <div style="text-align:center;">
