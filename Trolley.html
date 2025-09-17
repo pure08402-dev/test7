@@ -66,10 +66,8 @@
       line-height: 1.6;
       word-break: break-word;
     }
-
-    /* 表格樣式 */
     .table-container {
-      overflow-x: auto; /* 手機橫向滑動 */
+      overflow-x: auto;
     }
     table {
       width: 100%;
@@ -85,8 +83,6 @@
     th {
       background: #f2f2f2;
     }
-
-    /* 手機螢幕適配 */
     @media (max-width: 480px) {
       h2 { font-size: 20px; }
       .result { font-size: 14px; }
@@ -182,14 +178,32 @@
     </div>
   </div>
 
-  <!-- 按鈕 -->
+  <!-- 計算按鈕 -->
   <div style="text-align:center;">
-    <button onclick="calculate()">計算</button>
+    <button onclick="calculate()">計算資源達成時間</button>
     <button onclick="clearAll()" style="background:#f44336;">重新計算</button>
     <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
   </div>
 
-  <!-- 結果區 -->
+  <!-- 天數計算 -->
+  <div class="card">
+    <h3 style="text-align:center;">依天數計算材料需求</h3>
+    <label for="days">輸入天數：</label>
+    <input type="number" id="days" value=" " oninput="calcMaterials()">
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>材料</th>
+            <th>數量</th>
+          </tr>
+        </thead>
+        <tbody id="day_result"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 結果 -->
   <div class="result" id="result">請輸入資料並按下計算</div>
 
   <script>
@@ -227,7 +241,32 @@
     function clearAll() {
       document.querySelectorAll("input").forEach(input => input.value = "");
       document.getElementById("result").innerHTML = "請輸入資料並按下計算";
+      document.getElementById("day_result").innerHTML = "";
     }
+
+    // 天數計算功能 (每小時產出 × 24 × 天數)
+    const baseValues = {
+      "金幣": "hour_gold",
+      "砂": "hour_sand",
+      "粗煉石": "hour_stone",
+      "精華": "hour_essence"
+    };
+
+    function calcMaterials() {
+      const days = parseInt(document.getElementById("days").value) || 0;
+      let html = "";
+
+      for (let item in baseValues) {
+        const perHour = parseInt(document.getElementById(baseValues[item]).value) || 0;
+        const value = perHour * 24 * days;
+        html += `<tr><td>${item}</td><td>${value.toLocaleString()}</td></tr>`;
+      }
+
+      document.getElementById("day_result").innerHTML = html;
+    }
+
+    // 預設顯示 54 天
+    calcMaterials();
   </script>
 </body>
 </html>
