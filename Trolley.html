@@ -33,6 +33,7 @@
     }
     input {
       width: 100%;
+	  min-width: 0;   /* 避免被內容撐大 */
       padding: 12px;
       margin-bottom: 12px;
       border: 1px solid #ccc;
@@ -56,7 +57,7 @@
       background: #45a049;
     }
     .result {
-      width: 100%;
+	  width: 100%;
       margin-top: 18px;
       padding: 15px;
       background: #f0f9ff;
@@ -65,7 +66,7 @@
       color: #333;
       font-size: 15px;
       line-height: 1.6;
-      word-break: break-word;
+      //word-break: break-word;
     }
     .table-container {
       overflow-x: auto;
@@ -73,22 +74,24 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      table-layout: auto;
+      //table-layout: auto;
+	    table-layout: fixed;
       margin-bottom: 10px;
     }
     th, td {
       padding: 10px;
       border: 1px solid #ddd;
       text-align: center;
+	  word-wrap: break-word;
     }
     th {
       background: #f2f2f2;
     }
-    /* 手機螢幕適配 */
-    @media (max-width: 480px) {
-      h2 { font-size: 18px; }
-      input, button { font-size: 14px; }
+    @media (max-width: 240px) {
+      h2 { font-size: 20px; }
       .result { font-size: 14px; }
+      button { font-size: 16px; padding: 14px; }
+      input { font-size: 16px; padding: 12px; }
     }
   </style>
 </head>
