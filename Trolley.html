@@ -99,63 +99,16 @@
 <body>
   <h2>手推車運算程式</h2>
 
-  <!-- 目標資源 -->
-  <div class="card">
-    <div class="table-container">
-      <table>
-        <tr>	  
-          <th>資源</th>
-          <th>期望值</th>
-        </tr>
-        <tr>
-          <td>金幣</td>
-          <td><input type="number" id="target_gold"></td>
-        </tr>
-        <tr>
-          <td>砂</td>
-          <td><input type="number" id="target_sand"></td>
-        </tr>
-        <tr>
-          <td>粗煉石</td>
-          <td><input type="number" id="target_stone"></td>
-        </tr>
-        <tr>
-          <td>精華</td>
-          <td><input type="number" id="target_essence"></td>
-        </tr>
-      </table>
-    </div>
-  </div>
 
-  <!-- 目前資源 -->
-  <div class="card">
-    <div class="table-container">
-      <table>
-        <tr>
-          <th>資源</th>
-          <th>目前有的</th>
-        </tr>
-        <tr>
-          <td>金幣</td>
-          <td><input type="number" id="current_gold"></td>
-        </tr>
-        <tr>
-          <td>砂</td>
-          <td><input type="number" id="current_sand"></td>
-        </tr>
-        <tr>
-          <td>粗煉石</td>
-          <td><input type="number" id="current_stone"></td>
-        </tr>
-        <tr>
-          <td>精華</td>
-          <td><input type="number" id="current_essence"></td>
-        </tr>
-      </table>
-    </div>
-  </div>
 
-  <!-- 每小時產出 -->
+
+
+  
+
+  <!-- 天數計算 -->
+  <div class="card">
+    <h3 style="text-align:center;">依天數計算小推車產量</h3>
+	<!-- 每小時產出 -->
   <div class="card">
     <div class="table-container">
       <table>
@@ -165,39 +118,31 @@
         </tr>
         <tr>
           <td>金幣</td>
-          <td><input type="number" id="hour_gold"></td>
+          <td><input type="number" id="hour_gold" oninput="handleDaysInput()"></td>
         </tr>
         <tr>
           <td>砂</td>
-          <td><input type="number" id="hour_sand"></td>
+          <td><input type="number" id="hour_sand" oninput="handleDaysInput()"></td>
         </tr>
         <tr>
           <td>粗煉石</td>
-          <td><input type="number" id="hour_stone"></td>
+          <td><input type="number" id="hour_stone" oninput="handleDaysInput()"></td>
         </tr>
         <tr>
           <td>精華</td>
-          <td><input type="number" id="hour_essence"></td>
+          <td><input type="number" id="hour_essence" oninput="handleDaysInput()"></td>
         </tr>
       </table>
     </div>
   </div>
-
-  <!-- 計算按鈕 -->
-  <div style="text-align:center;">
-    <button onclick="calculate()">計算資源達成時間</button>
-    <button onclick="clearAll()" style="background:#f44336;">重新計算</button>
-    <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
-  </div>
-
-  <!-- 天數計算 -->
-  <div class="card">
-    <h3 style="text-align:center;">依天數計算小推車產量</h3>
     <label for="days">輸入天數：</label>
-    <input type="number" id="days" value=" " oninput="calcMaterials()">
+	<input type="number" id="days" value=" " oninput="handleDaysInput()">
+
     <div class="table-container">
       <table>
         <thead>
+		<h3>小推車總產量:</h3>
+		<label>每小時 x 24 x 天數</label>
           <tr>
             <th>材料</th>
             <th>數量</th>
@@ -206,8 +151,127 @@
         <tbody id="day_result"></tbody>
       </table>
     </div>
+			<h3>差額數量:</h3>
+		<label>期望值 - 總產量 - 目前有的</label>
+		  <!-- 目標資源 -->
+  <div class="card">
+    <div class="table-container">
+      <table>
+        <tr>	  
+          <th>資源</th>
+          <th>期望值</th>
+        </tr>
+        <tr>
+          <td>金幣</td>
+          <td><input type="number" id="target_gold" oninput="handleDaysInput()"></td>
+        </tr>
+        <tr>
+          <td>砂</td>
+          <td><input type="number" id="target_sand" oninput="handleDaysInput()"></td>
+        </tr>
+        <tr>
+          <td>粗煉石</td>
+          <td><input type="number" id="target_stone" oninput="handleDaysInput()"></td>
+        </tr>
+        <tr>
+          <td>精華</td>
+          <td><input type="number" id="target_essence" oninput="handleDaysInput()"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+			<!-- 目前資源 -->
+  <div class="card">
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>資源</th>
+          <th>目前有的</th>
+        </tr>
+        <tr>
+          <td>金幣</td>
+          <td><input type="number" id="current_gold" oninput="handleDaysInput()"></td>
+        </tr>
+        <tr>
+          <td>砂</td>
+          <td><input type="number" id="current_sand" oninput="handleDaysInput()"></td>
+        </tr>
+        <tr>
+          <td>粗煉石</td>
+          <td><input type="number" id="current_stone" oninput="handleDaysInput()"></td>
+        </tr>
+        <tr>
+          <td>精華</td>
+          <td><input type="number" id="current_essence" oninput="handleDaysInput()"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+    <div class="table-container">
+      <table>
+        <thead>
+
+
+          <tr>
+            <th>材料</th>
+            <th>數量</th>
+          </tr>
+        </thead>
+        <tbody id="day_result1"></tbody>
+      </table>
+    </div>
+			<h3>秘境差額需要次數:</h3>
+		<label>差額數量 / 秘境單次挖出數量預測</label>
+					<!-- 秘境單次挖出數量預測 -->
+  <div class="card">
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>資源</th>
+          <th>秘境單次挖出數量預測</th>
+        </tr>
+        <tr>
+          <td>金幣</td>
+          <td><input type="number" id="current1_gold" oninput="handleDaysInput()"></td>
+        </tr>
+        <tr>
+          <td>砂</td>
+          <td><input type="number" id="current1_sand" oninput="handleDaysInput()"></td>
+        </tr>
+        <tr>
+          <td>粗煉石</td>
+          <td><input type="number" id="current1_stone" oninput="handleDaysInput()"></td>
+        </tr>
+        <tr>
+          <td>精華</td>
+          <td><input type="number" id="current1_essence" oninput="handleDaysInput()"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+    <div class="table-container">
+      <table>
+        <thead>
+
+          <tr>
+            <th>材料</th>
+            <th>秘境需要次數</th>
+          </tr>
+        </thead>
+        <tbody id="day_result2"></tbody>
+      </table>
+    </div>
   </div>
 
+
+  
+
+  <!-- 計算按鈕 -->
+  <div style="text-align:center;">
+    <button onclick="calculate()">計算資源達成時間</button>
+    <button onclick="clearAll()" style="background:#f44336;">重新計算</button>
+    <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
+  </div>
   <!-- 結果 -->
   <div class="result" id="result">請輸入資料並按下計算</div>
 
@@ -247,6 +311,8 @@
       document.querySelectorAll("input").forEach(input => input.value = "");
       document.getElementById("result").innerHTML = "請輸入資料並按下計算";
       document.getElementById("day_result").innerHTML = "";
+	  document.getElementById("day_result1").innerHTML = "";
+	  document.getElementById("day_result2").innerHTML = "";
     }
 
     // 天數計算功能 (每小時產出 × 24 × 天數)
@@ -257,21 +323,53 @@
       "精華": "hour_essence"
     };
 
-    function calcMaterials() {
-      const days = parseInt(document.getElementById("days").value) || 0;
-      let html = "";
 
-      for (let item in baseValues) {
-        const perHour = parseInt(document.getElementById(baseValues[item]).value) || 0;
-        const value = perHour * 24 * days;
-        html += `<tr><td>${item}</td><td>${value.toLocaleString()}</td></tr>`;
-      }
+function handleDaysInput() {
+  const days = parseInt(document.getElementById("days").value) || 0;
 
-      document.getElementById("day_result").innerHTML = html;
-    }
+  let htmlTotal = "";   // 總產量
+  let htmlDiff = "";    // 差額
+  let htmlTimes = "";   // 秘境次數
 
-    // 預設顯示 54 天
-    calcMaterials();
+  // 格式化數字成「萬 + 完整數字」
+  function formatNumberWithWan(num) {
+    const n = parseInt(num) || 0;
+    const wan = (n / 10000).toFixed(2);
+    return `${wan}萬 (${n.toLocaleString()})`;
+  }
+
+  for (let item in baseValues) {
+    const perHour = parseInt(document.getElementById(baseValues[item]).value) || 0;
+    const current = parseInt(document.getElementById("current_" + baseValues[item].split("_")[1]).value) || 0;
+    const dungeon = parseInt(document.getElementById("current1_" + baseValues[item].split("_")[1]).value) || 0;
+    const target = parseInt(document.getElementById("target_" + baseValues[item].split("_")[1]).value) || 0;
+
+    // 小推車總產量
+    const total = perHour * 24 * days;
+
+    // 差額 = 期望值 - 總產量 - 目前有的
+    const diff = target - total - current;
+    const diffDisplay = diff < 0 ? `<span style="color:red">${formatNumberWithWan(diff)}</span>` : formatNumberWithWan(diff);
+
+    // 秘境需要次數
+    const times = dungeon > 0 ? Math.ceil(Math.max(diff,0) / dungeon) : "∞";
+
+    htmlTotal += `<tr><td>${item}</td><td>${formatNumberWithWan(total)}</td></tr>`;
+    htmlDiff  += `<tr><td>${item}</td><td>${diffDisplay}</td></tr>`;
+    htmlTimes += `<tr><td>${item}</td><td>${times}</td></tr>`;
+  }
+
+  document.getElementById("day_result").innerHTML = htmlTotal;
+  document.getElementById("day_result1").innerHTML = htmlDiff;
+  document.getElementById("day_result2").innerHTML = htmlTimes;
+}
+
+
+
+
+// 預設顯示 54 天
+document.getElementById("days").value = "";
+handleDaysInput();
   </script>
 </body>
 </html>
