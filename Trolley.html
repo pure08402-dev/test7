@@ -186,6 +186,13 @@
         <tbody id="day_result2"></tbody>
       </table>
     </div>
+	
+	<label for="times">輸入每日挖礦次數：</label>
+    <input type="number" id="times" value="" oninput="calculateResult()">
+	<br>
+	<p id="result">總挖掘：</p>
+	
+
   </div>
 
   <!-- 計算按鈕 -->
@@ -284,7 +291,17 @@
     }
 
     document.getElementById("days").value = "";
-    handleDaysInput();
+	
+	
+    handleDaysInput();	
+		function calculateResult() {
+		const days = parseInt(document.getElementById("days").value) || 0;
+		const times = parseInt(document.getElementById("times").value) || 0;
+
+		const result = days * 5 * times;
+
+		document.getElementById("result").textContent = "總挖掘：" + result + " 次";
+}
   </script>
 </body>
 </html>
