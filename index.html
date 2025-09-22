@@ -72,6 +72,29 @@ button:hover {
   background: #357abd; 
 }
 
+    .arrow {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    .rotate {
+      transform: rotate(180deg);
+    }
+    /* 卡片收合動畫 */
+    #multiplierCard {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      background: #fff;
+      border-radius: 12px;
+      margin-top: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 0 15px;
+    }
+    #multiplierCard.show {
+      max-height: 1000px; /* 足夠展開 */
+      padding: 15px;
+    }
+
 .clear-btn { 
   background: #d9534f; 
 }
@@ -177,6 +200,48 @@ tr:nth-child(even) {
 		<!-- 計算器卡片 -->
 
 		<label for="s1value">輸入數值:</label>
+		
+		  <!-- 收合按鈕 -->
+  <button type="button" id="toggleBtn" onclick="toggleMultiplier()">
+    <span id="arrow" class="arrow">▼</span>
+    <span id="btnText">展開倍率設定</span>
+  </button>
+
+  <!-- 倍率設定卡片 -->
+  <div class="card" id="multiplierCard">
+    <h2>倍率設定</h2>
+    <div class="field">
+      <label>人物倍率</label>
+      <input type="number" id="mul_person" value="100">
+    </div>
+    <div class="field">
+      <label>裝備倍率</label>
+      <input type="number" id="mul_equip" value="18">
+    </div>
+    <div class="field">
+      <label>幻獸倍率</label>
+      <input type="number" id="mul_illusion" value="8">
+    </div>
+    <div class="field">
+      <label>技能倍率</label>
+      <input type="number" id="mul_skill" value="7">
+    </div>
+    <div class="field">
+      <label>遺物倍率</label>
+      <input type="number" id="mul_relic" value="33">
+    </div>
+    <div class="field">
+      <label>星數除數</label>
+      <input type="number" id="mul_star_div" value="27">
+    </div>
+    <div class="field">
+      <label>星數基底</label>
+      <input type="number" id="mul_star_base" value="45">
+    </div>
+  </div>
+		
+		
+		
 			<div class="card">
 				<div class="field tooltip">
 				<label>人物等級</label>
@@ -424,6 +489,8 @@ if (maxRow) {
 function calculate() {
   try {
     let getVal = id => parseInt(document.getElementById(id).value) || 0;
+
+    // 原始數值
     let person = getVal("person"),
         weapon = getVal("weapon"),
         assistant = getVal("assistant"),
@@ -438,16 +505,27 @@ function calculate() {
         relic_level = getVal("relic_level"),
         relic_count = getVal("relic_count");
 
-    let person_score = (person - 130) * 100;
-    let G = weapon + assistant + headgear + clothes + shoes;
-    let equip_score = (G - 650) * 18;
-    let H = illusion1 + illusion2 + illusion3 + illusion4;
-    let illusion_score = (H - 520) * 8;
-    let skill_score = (skill - 130) * 8 * 7;
-    let relic_score = ((relic_level - 13) * 20 + relic_count) * 33;
-    let total_score = person_score + equip_score + illusion_score + skill_score + relic_score;
-    let star = Math.floor(total_score / 27 + 45);
+    // 倍率數值
+    let mul_person   = getVal("mul_person"),
+        mul_equip    = getVal("mul_equip"),
+        mul_illusion = getVal("mul_illusion"),
+        mul_skill    = getVal("mul_skill"),
+        mul_relic    = getVal("mul_relic"),
+        mul_star_div = getVal("mul_star_div"),
+        mul_star_base= getVal("mul_star_base");
 
+    // 計算公式
+    let person_score = (person - 130) * mul_person;
+    let G = weapon + assistant + headgear + clothes + shoes;
+    let equip_score = (G - 650) * mul_equip;
+    let H = illusion1 + illusion2 + illusion3 + illusion4;
+    let illusion_score = (H - 520) * mul_illusion;
+    let skill_score = (skill - 130) * 8 * mul_skill;
+    let relic_score = ((relic_level - 13) * 20 + relic_count) * mul_relic;
+    let total_score = person_score + equip_score + illusion_score + skill_score + relic_score;
+    let star = Math.floor(total_score / mul_star_div + mul_star_base);
+
+    // 顯示
     document.getElementById("person_score").innerText = person_score;
     document.getElementById("equip_score").innerText = equip_score;
     document.getElementById("illusion_score").innerText = illusion_score;
@@ -460,6 +538,7 @@ function calculate() {
     document.getElementById("total_score").innerText = "輸入錯誤";
   }
 }
+
 
 function clearAll() {
   let ids = ["person","weapon1","weapon","assistant","headgear","clothes","shoes","skill",
@@ -490,6 +569,21 @@ document.getElementById("illusion5").addEventListener("input", function() {
     document.getElementById(id).value = val;
   });
 });
+
+    function toggleMultiplier() {
+      const card = document.getElementById("multiplierCard");
+      const btnText = document.getElementById("btnText");
+      const arrow = document.getElementById("arrow");
+
+      card.classList.toggle("show");
+      arrow.classList.toggle("rotate");
+
+      if (card.classList.contains("show")) {
+        btnText.textContent = "收起倍率設定";
+      } else {
+        btnText.textContent = "展開倍率設定";
+      }
+    }
 </script>
 
 
