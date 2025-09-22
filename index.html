@@ -94,6 +94,24 @@ button:hover {
       max-height: 1000px; /* 足夠展開 */
       padding: 15px;
     }
+    .btn-group {
+      margin-top: 15px;
+      text-align: right;
+    }
+    .btn-group button:nth-child(2) {
+      background-color: #28a745; /* 綠色 恢復 */
+    }
+    .btn-group button:nth-child(2):hover {
+      background-color: #1e7e34;
+    }
+    .btn-group button:nth-child(3) {
+      background-color: #dc3545; /* 紅色 清除 */
+    }
+    .btn-group button:nth-child(3):hover {
+      background-color: #a71d2a;
+    }	
+	
+	
 
 .clear-btn { 
   background: #d9534f; 
@@ -201,7 +219,7 @@ tr:nth-child(even) {
 
 		<label for="s1value">輸入數值:</label>
 		
-		  <!-- 收合按鈕 -->
+  <!-- 收合按鈕 -->
   <button type="button" id="toggleBtn" onclick="toggleMultiplier()">
     <span id="arrow" class="arrow">▼</span>
     <span id="btnText">展開倍率設定</span>
@@ -237,6 +255,13 @@ tr:nth-child(even) {
     <div class="field">
       <label>星數基底</label>
       <input type="number" id="mul_star_base" value="45">
+    </div>
+
+    <!-- 按鈕群組 -->
+    <div class="btn-group">
+      <button type="button" onclick="saveMultiplier()">💾 儲存倍率</button>
+      <button type="button" onclick="resetMultiplier()">♻️ 恢復預設</button>
+      <button type="button" onclick="clearMultiplier()">🗑️ 清除儲存</button>
     </div>
   </div>
 		
@@ -584,6 +609,61 @@ document.getElementById("illusion5").addEventListener("input", function() {
         btnText.textContent = "展開倍率設定";
       }
     }
+
+    // 儲存倍率
+    function saveMultiplier() {
+      const data = {
+        person: document.getElementById("mul_person").value,
+        equip: document.getElementById("mul_equip").value,
+        illusion: document.getElementById("mul_illusion").value,
+        skill: document.getElementById("mul_skill").value,
+        relic: document.getElementById("mul_relic").value,
+        star_div: document.getElementById("mul_star_div").value,
+        star_base: document.getElementById("mul_star_base").value,
+      };
+
+      localStorage.setItem("multiplierData", JSON.stringify(data));
+      alert("倍率已儲存 ✅");
+    }
+
+    // 載入倍率
+    function loadMultiplier() {
+      const saved = localStorage.getItem("multiplierData");
+      if (saved) {
+        const data = JSON.parse(saved);
+        document.getElementById("mul_person").value = data.person;
+        document.getElementById("mul_equip").value = data.equip;
+        document.getElementById("mul_illusion").value = data.illusion;
+        document.getElementById("mul_skill").value = data.skill;
+        document.getElementById("mul_relic").value = data.relic;
+        document.getElementById("mul_star_div").value = data.star_div;
+        document.getElementById("mul_star_base").value = data.star_base;
+      }
+    }
+
+    // 恢復預設倍率
+    function resetMultiplier() {
+      document.getElementById("mul_person").value = 100;
+      document.getElementById("mul_equip").value = 18;
+      document.getElementById("mul_illusion").value = 8;
+      document.getElementById("mul_skill").value = 7;
+      document.getElementById("mul_relic").value = 33;
+      document.getElementById("mul_star_div").value = 27;
+      document.getElementById("mul_star_base").value = 45;
+
+      saveMultiplier();
+      alert("倍率已恢復預設 ✅");
+    }
+
+    // 清除儲存
+    function clearMultiplier() {
+      localStorage.removeItem("multiplierData");
+      resetMultiplier();
+      alert("已清除儲存，倍率回到預設值 ✅");
+    }
+
+    // 頁面載入時自動執行
+    window.onload = loadMultiplier;
 </script>
 
 
