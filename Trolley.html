@@ -98,35 +98,31 @@
     </div>
 
     <label for="days">輸入天數：</label>
-    <input type="number" id="days" value="" oninput="handleDaysInput() ; calculateResult()">
+    <input type="number" id="days" value="" oninput="handleDaysInput()">
 
     <!-- 小推車總產量 -->
     <div class="table-container">
       <table>
         <thead>
-          <tr>  <th>資源</th>
-		  <th style="color:purple;">總產量</th></tr>
+          <tr><th>資源</th><th style="color:purple;">總產量</th></tr>
         </thead>
         <tbody id="day_result"></tbody>
       </table>
     </div>
 
-
-
     <!-- 差額數量 -->
     <h3>差額數量:</h3>
-	<label>
-		<span style="color:green;">期望值</span> - 
-		<span style="color:purple;">總產量</span> - 
-		<span style="color:orange;">目前有的</span>
-	</label>
-	
-	<!-- 目標資源 -->
+    <label>
+      <span style="color:green;">期望值</span> - 
+      <span style="color:purple;">總產量</span> - 
+      <span style="color:orange;">目前有的</span>
+    </label>
+    
+    <!-- 目標資源 -->
     <div class="card">
       <div class="table-container">
         <table>
-          <tr><th>資源</th>
-		  <th style="color:green;">期望值</th></tr>
+          <tr><th>資源</th><th style="color:green;">期望值</th></tr>
           <tr><td>金幣</td><td><input type="number" id="target_gold" oninput="handleDaysInput()"></td></tr>
           <tr><td>砂</td><td><input type="number" id="target_sand" oninput="handleDaysInput()"></td></tr>
           <tr><td>粗煉石</td><td><input type="number" id="target_stone" oninput="handleDaysInput()"></td></tr>
@@ -140,8 +136,7 @@
     <div class="card">
       <div class="table-container">
         <table>
-          <tr><th>資源</th>
-		  <th style="color:orange;">目前有的</th></tr>
+          <tr><th>資源</th><th style="color:orange;">目前有的</th></tr>
           <tr><td>金幣</td><td><input type="number" id="current_gold" oninput="handleDaysInput()"></td></tr>
           <tr><td>砂</td><td><input type="number" id="current_sand" oninput="handleDaysInput()"></td></tr>
           <tr><td>粗煉石</td><td><input type="number" id="current_stone" oninput="handleDaysInput()"></td></tr>
@@ -151,7 +146,6 @@
       </div>
     </div>
 
-
     <div class="table-container">
       <table>
         <thead>
@@ -160,8 +154,6 @@
         <tbody id="day_result1"></tbody>
       </table>
     </div>
-
-   
 
     <!-- 秘境差額需要次數 -->
     <h3>秘境差額需要次數:</h3>
@@ -186,19 +178,19 @@
         <tbody id="day_result2"></tbody>
       </table>
     </div>
-	
-	<label for="times">輸入每日購買次數：( 購買次數 x 5 ) x 天數</label>
+    
+    <label for="times">輸入每日購買次數：( 購買次數 x 5 ) x 天數</label>
     <input type="number" id="times" value="" oninput="calculateResult()">
-	<br>
-	<p id="result">總挖掘：</p>
-	
-
+    <br>
+    <p id="total_result">總挖掘：</p>
   </div>
 
   <!-- 計算按鈕 -->
   <div style="text-align:center;">
     <button onclick="calculate()">計算資源達成時間</button>
     <button onclick="clearAll()" style="background:#f44336;">重新計算</button>
+    <button onclick="saveData()" style="background:#2196F3;">💾 儲存數據</button>
+    <button onclick="resetData()" style="background:#FF9800;">♻️ 恢復預設</button>
     <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
   </div>
 
@@ -244,6 +236,7 @@
       document.getElementById("day_result").innerHTML = "";
       document.getElementById("day_result1").innerHTML = "";
       document.getElementById("day_result2").innerHTML = "";
+      document.getElementById("total_result").textContent = "總挖掘：";
     }
 
     const baseValues = {
@@ -290,18 +283,47 @@
       document.getElementById("day_result2").innerHTML = htmlTimes;
     }
 
-    document.getElementById("days").value = "";
-	
-	
-    handleDaysInput();	
-		function calculateResult() {
-		const days = parseInt(document.getElementById("days").value) || 0;
-		const times = parseInt(document.getElementById("times").value) || 0;
+    function calculateResult() {
+      const days = parseInt(document.getElementById("days").value) || 0;
+      const times = parseInt(document.getElementById("times").value) || 0;
+      const result = days * 5 * times;
+      document.getElementById("total_result").textContent = "總挖掘：" + result + " 次";
+    }
 
-		const result = days * 5 * times;
+    // 儲存數據
+    function saveData() {
+      let inputs = {};
+      document.querySelectorAll("input").forEach(input => {
+        inputs[input.id] = input.value;
+      });
+      localStorage.setItem("cartData", JSON.stringify(inputs));
+      alert("✅ 資料已儲存！");
+    }
 
-		document.getElementById("result").textContent = "總挖掘：" + result + " 次";
-}
+    // 載入數據
+    function loadData() {
+      const saved = localStorage.getItem("cartData");
+      if (saved) {
+        const inputs = JSON.parse(saved);
+        Object.keys(inputs).forEach(id => {
+          if (document.getElementById(id)) {
+            document.getElementById(id).value = inputs[id];
+          }
+        });
+      }
+      handleDaysInput();
+      calculateResult();
+    }
+
+    // 恢復預設
+    function resetData() {
+      localStorage.removeItem("cartData");
+      clearAll();
+      alert("♻️ 已恢復預設，並清除儲存的資料！");
+    }
+
+    // 頁面載入時自動載入
+    window.onload = loadData;
   </script>
 </body>
 </html>
