@@ -56,6 +56,23 @@
       font-size: 15px;
       line-height: 1.6;
     }
+	
+	 /* 卡片收合動畫 */
+    #multiplierCard {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      background: #fff;
+      border-radius: 12px;
+      margin-top: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 0 15px;
+    }
+    #multiplierCard.show {
+      max-height: 10000px; /* 足夠展開 */
+      padding: 15px;
+    }
+	
     .table-container { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 10px; }
     th, td {
@@ -81,7 +98,17 @@
     <h3 style="text-align:center;">依天數計算小推車產量</h3>
 
     <!-- 每小時產出 -->
-    <div class="card">
+	<label for="days">輸入天數：</label>
+    <input type="number" id="days" value="" oninput="handleDaysInput();calculateResult()">
+	
+	  <!-- 收合按鈕 -->
+  <button type="button" id="toggleBtn" onclick="toggleMultiplier()">
+    <span id="arrow" class="arrow">▼</span>
+    <span id="btnText">展開小推車設定</span>
+  </button>
+  
+	<div class="card" id="multiplierCard">
+    
       <div class="table-container">
         <table>
           <tr>
@@ -95,10 +122,9 @@
           <tr><td>飼料</td><td><input type="number" id="hour_feed" oninput="handleDaysInput()"></td></tr>
         </table>
       </div>
-    </div>
+    
 
-    <label for="days">輸入天數：</label>
-    <input type="number" id="days" value="" oninput="handleDaysInput()">
+  
 
     <!-- 小推車總產量 -->
     <div class="table-container">
@@ -178,6 +204,7 @@
         <tbody id="day_result2"></tbody>
       </table>
     </div>
+	</div>
     
     <label for="times">輸入每日購買次數：( 購買次數 x 5 ) x 天數</label>
     <input type="number" id="times" value="" oninput="calculateResult()">
@@ -288,6 +315,22 @@
       const times = parseInt(document.getElementById("times").value) || 0;
       const result = days * 5 * times;
       document.getElementById("total_result").textContent = "總挖掘：" + result + " 次";
+    }
+	
+	// 展開
+	function toggleMultiplier() {
+      const card = document.getElementById("multiplierCard");
+      const btnText = document.getElementById("btnText");
+      const arrow = document.getElementById("arrow");
+
+      card.classList.toggle("show");
+      arrow.classList.toggle("rotate");
+
+      if (card.classList.contains("show")) {
+        btnText.textContent = "收起小推車設定";
+      } else {
+        btnText.textContent = "展開小推車設定";
+      }
     }
 
     // 儲存數據
