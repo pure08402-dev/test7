@@ -115,10 +115,10 @@
             <th>資源</th>
             <th>每小時產出</th>
           </tr>
-          <tr><td>金幣</td><td><input type="number" id="hour_gold" oninput="handleDaysInput()"></td></tr>
-          <tr><td>砂</td><td><input type="number" id="hour_sand" oninput="handleDaysInput()"></td></tr>
+          <tr><td>金幣</td><td><input type="number" id="hour_gold" oninput="handleDaysInput()"></td></tr>          
           <tr><td>粗煉石</td><td><input type="number" id="hour_stone" oninput="handleDaysInput()"></td></tr>
           <tr><td>精華</td><td><input type="number" id="hour_essence" oninput="handleDaysInput()"></td></tr>
+		  <tr><td>砂</td><td><input type="number" id="hour_sand" oninput="handleDaysInput()"></td></tr>
           <tr><td>飼料</td><td><input type="number" id="hour_feed" oninput="handleDaysInput()"></td></tr>
         </table>
       </div>
@@ -149,10 +149,10 @@
       <div class="table-container">
         <table>
           <tr><th>資源</th><th style="color:green;">期望值</th></tr>
-          <tr><td>金幣</td><td><input type="number" id="target_gold" oninput="handleDaysInput()"></td></tr>
-          <tr><td>砂</td><td><input type="number" id="target_sand" oninput="handleDaysInput()"></td></tr>
+          <tr><td>金幣</td><td><input type="number" id="target_gold" oninput="handleDaysInput()"></td></tr>          
           <tr><td>粗煉石</td><td><input type="number" id="target_stone" oninput="handleDaysInput()"></td></tr>
           <tr><td>精華</td><td><input type="number" id="target_essence" oninput="handleDaysInput()"></td></tr>
+		  <tr><td>砂</td><td><input type="number" id="target_sand" oninput="handleDaysInput()"></td></tr>
           <tr><td>飼料</td><td><input type="number" id="target_feed" oninput="handleDaysInput()"></td></tr>
         </table>
       </div>
@@ -163,10 +163,10 @@
       <div class="table-container">
         <table>
           <tr><th>資源</th><th style="color:orange;">目前有的</th></tr>
-          <tr><td>金幣</td><td><input type="number" id="current_gold" oninput="handleDaysInput()"></td></tr>
-          <tr><td>砂</td><td><input type="number" id="current_sand" oninput="handleDaysInput()"></td></tr>
+          <tr><td>金幣</td><td><input type="number" id="current_gold" oninput="handleDaysInput()"></td></tr>          
           <tr><td>粗煉石</td><td><input type="number" id="current_stone" oninput="handleDaysInput()"></td></tr>
           <tr><td>精華</td><td><input type="number" id="current_essence" oninput="handleDaysInput()"></td></tr>
+		  <tr><td>砂</td><td><input type="number" id="current_sand" oninput="handleDaysInput()"></td></tr>
           <tr><td>飼料</td><td><input type="number" id="current_feed" oninput="handleDaysInput()"></td></tr>
         </table>
       </div>
@@ -188,10 +188,10 @@
       <div class="table-container">
         <table>
           <tr><th>資源</th><th>秘境單次挖出數量預測</th></tr>
-          <tr><td>金幣</td><td><input type="number" id="current1_gold" oninput="handleDaysInput()"></td></tr>
-          <tr><td>砂</td><td><input type="number" id="current1_sand" oninput="handleDaysInput()"></td></tr>
+          <tr><td>金幣</td><td><input type="number" id="current1_gold" oninput="handleDaysInput()"></td></tr>          
           <tr><td>粗煉石</td><td><input type="number" id="current1_stone" oninput="handleDaysInput()"></td></tr>
           <tr><td>精華</td><td><input type="number" id="current1_essence" oninput="handleDaysInput()"></td></tr>
+		  <tr><td>砂</td><td><input type="number" id="current1_sand" oninput="handleDaysInput()"></td></tr>
         </table>
       </div>
     </div>
@@ -228,9 +228,9 @@
     function calculate() {
       const resources = [
         { name: "金幣", target: "target_gold", current: "current_gold", hour: "hour_gold" },
-        { name: "砂", target: "target_sand", current: "current_sand", hour: "hour_sand" },
         { name: "粗煉石", target: "target_stone", current: "current_stone", hour: "hour_stone" },
         { name: "精華", target: "target_essence", current: "current_essence", hour: "hour_essence" },
+		{ name: "砂", target: "target_sand", current: "current_sand", hour: "hour_sand" },
         { name: "飼料", target: "target_feed", current: "current_feed", hour: "hour_feed" }
       ];
       
@@ -267,10 +267,10 @@
     }
 
     const baseValues = {
-      "金幣": "hour_gold",
-      "砂": "hour_sand",
+      "金幣": "hour_gold",      
       "粗煉石": "hour_stone",
       "精華": "hour_essence",
+	  "砂": "hour_sand",
       "飼料": "hour_feed"
     };
 
