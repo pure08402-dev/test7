@@ -97,9 +97,24 @@
   <div class="card">
     <h3 style="text-align:center;">依天數計算小推車產量</h3>
 
+
+	
+	
+	
+	
+<h3>選擇來源</h3>
+
+  <label><input type="radio" name="option" value="S1" onchange="setDays();calculateResult()"> S1: 持續至 2025/08/30</label><br>
+  <label><input type="radio" name="option" value="S2" onchange="setDays();calculateResult()"> S2: 持續至 2025/11/05</label><br>
+  <label><input type="radio" name="option" value="manual" onchange="setDays();calculateResult()"> S3: 手動輸入</label><br><br>
+
     <!-- 每小時產出 -->
 	<label for="days">輸入天數：</label>
-    <input type="number" id="days" value="" oninput="handleDaysInput();calculateResult()">
+    <input type="number" id="days" value="" oninput="handleDaysInput();calculateResult();calculateResult1()">
+
+  <p id="today">今天日期：</p>
+  <p id="result">目前天數：0</p>
+  
 	
 	  <!-- 收合按鈕 -->
   <button type="button" id="toggleBtn" onclick="toggleMultiplier()">
@@ -367,6 +382,49 @@
 
     // 頁面載入時自動載入
     window.onload = loadData;
+	
+	
+    // 顯示今天日期
+    function showToday() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+      document.getElementById("today").textContent = 
+        "今天日期：" + year + "/" + month + "/" + day;
+    }
+
+    function setDays() {
+      const selected = document.querySelector("input[name='option']:checked").value;
+      const daysInput = document.getElementById("days");
+
+      if (selected === "manual") {
+        daysInput.value = "";
+        daysInput.disabled = false; // 開放輸入
+      } else {
+        let endDate;
+        if (selected === "S1") {
+          endDate = new Date("2025-08-30");
+        } else if (selected === "S2") {
+          endDate = new Date("2025-11-05");
+        }
+
+        const today = new Date();
+        const diffTime = endDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        daysInput.value = diffDays > 0 ? diffDays : 0; // 過期顯示 0
+        daysInput.disabled = true;
+      }
+      calculateResult1();
+    }
+
+    function calculateResult1() {
+      const days = parseInt(document.getElementById("days").value) || 0;
+      document.getElementById("result").textContent = "目前天數：" + days;
+    }
+
+    // 載入時顯示今天日期
+    showToday();
   </script>
 </body>
 </html>
