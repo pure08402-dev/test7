@@ -4,201 +4,39 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>杖劍傳說 第二賽季 養成評分計算器</title>
-    
-
 <style>
-body { 
-  font-family: "Microsoft JhengHei", sans-serif; 
-  margin: 0; 
-  padding: 10px; 
-  background: #f0f2f5; 
-}
-
-h1 { 
-  text-align: center; 
-  margin-bottom: 15px; 
-}
-
-.card {
-  background: #fff; 
-  border-radius: 12px; 
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  padding: 16px; 
-  margin-bottom: 20px;
-}
-
-.card h2 {
-  margin-top: 0; 
-  font-size: 18px; 
-  border-left: 5px solid #4a90e2;
-  padding-left: 8px; 
-  color: #333;
-}
-
-.field { 
-  margin-bottom: 12px; 
-}
-
-label { 
-  display: block; 
-  margin-bottom: 4px; 
-  font-size: 14px; 
-  font-weight: bold; 
-}
-
-input { 
-  width: 100%;              /* 佔滿全寬 */
-  padding: 12px;            /* 手機上更好點擊 */
-  font-size: 16px;          /* 字體放大 */
-  border: 1px solid #ccc; 
-  border-radius: 6px; 
-  box-sizing: border-box;   /* 避免超出容器 */
-}
-
-button {
-  width: 100%;              /* 佔滿全寬 */
-  padding: 12px;            /* 提高可點擊範圍 */
-  font-size: 16px;          /* 字體放大 */
-  font-weight: bold;        /* 手機上更清晰 */
-  border: none; 
-  border-radius: 8px;
-  cursor: pointer; 
-  color: #fff; 
-  background: #4a90e2; 
-  transition: 0.2s;
-}
-
-button:hover { 
-  background: #357abd; 
-}
-
-    .arrow {
-      display: inline-block;
-      transition: transform 0.3s ease;
-    }
-    .rotate {
-      transform: rotate(180deg);
-    }
-    /* 卡片收合動畫 */
-    #multiplierCard {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease, padding 0.3s ease;
-      background: #fff;
-      border-radius: 12px;
-      margin-top: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 0 15px;
-    }
-    #multiplierCard.show {
-      max-height: 1000px; /* 足夠展開 */
-      padding: 15px;
-    }
-    .btn-group {
-      margin-top: 15px;
-      text-align: right;
-    }
-    .btn-group button:nth-child(2) {
-      background-color: #28a745; /* 綠色 恢復 */
-    }
-    .btn-group button:nth-child(2):hover {
-      background-color: #1e7e34;
-    }
-    .btn-group button:nth-child(3) {
-      background-color: #dc3545; /* 紅色 清除 */
-    }
-    .btn-group button:nth-child(3):hover {
-      background-color: #a71d2a;
-    }	
-	
-	
-
-.clear-btn { 
-  background: #d9534f; 
-}
-
-.clear-btn:hover { 
-  background: #b52b27; 
-}
-
-.result label { 
-  font-size: 15px; 
-  margin-top: 8px; 
-  display: block; 
-}
-
-.star { 
-  color: #007bff; 
-  font-weight: bold; 
-}
-
-/* Tooltip */
-.tooltip { 
-  position: relative; 
-  display: inline-block; 
-  cursor: pointer; 
-}
-
-.tooltip .tiptext {
-  visibility: hidden; 
-  width: 160px; 
-  background-color: #ffffe0; 
-  color: black;
-  text-align: left; 
-  border: 1px solid #aaa; 
-  border-radius: 6px; 
-  padding: 6px;
-  position: absolute; 
-  z-index: 1; 
-  top: -5px; 
-  left: 105%; 
-  font-size: 12px;
-}
-
-.tooltip:hover .tiptext { 
-  visibility: visible; 
-}
-
-/* 表格樣式 */
-.table-container {
-  width: 100%;
-  overflow-x: hidden;  /* 不橫向滑動 */
-}
-
-table {
-  border-collapse: collapse;
-  width: 100%;         /* 自動填滿容器 */
-  table-layout: auto;  /* 自動調整欄位寬度 */
-}
-
-th, td {
-  border: 1px solid #ddd;
-  text-align: center;
-  word-break: break-word; /* 避免文字溢出 */
-}
-
-th {
-  background: #4a90e2;
-  color: white;
-}
-
-tr:nth-child(even) {
-  background: #f9f9f9;
-}
-
-.highlight {
-  background: #ffff99;
-  font-weight: bold;
-}
-
-/* 手機螢幕適配 */
-@media (max-width: 480px) {
-  h2 { font-size: 18px; }
-  input, button { font-size: 16px; padding: 14px; }
-  .result { font-size: 14px; }
-}
-
-
+body { font-family: "Microsoft JhengHei", sans-serif; margin: 0; padding: 10px; background: #f0f2f5; }
+h1 { text-align: center; margin-bottom: 15px; }
+.card { background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 16px; margin-bottom: 20px; }
+.card h2 { margin-top: 0; font-size: 18px; border-left: 5px solid #4a90e2; padding-left: 8px; color: #333; }
+.field { margin-bottom: 12px; }
+label { display: block; margin-bottom: 4px; font-size: 14px; font-weight: bold; }
+input { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+button { width: 100%; padding: 12px; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; color: #fff; background: #4a90e2; transition: 0.2s; }
+button:hover { background: #357abd; }
+.arrow { display: inline-block; transition: transform 0.3s ease; }
+.rotate { transform: rotate(180deg); }
+#multiplierCard { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; background: #fff; border-radius: 12px; margin-top: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 0 15px; }
+#multiplierCard.show { max-height: 1000px; padding: 15px; }
+.btn-group { margin-top: 15px; text-align: right; }
+.btn-group button:nth-child(2) { background-color: #28a745; }
+.btn-group button:nth-child(2):hover { background-color: #1e7e34; }
+.btn-group button:nth-child(3) { background-color: #dc3545; }
+.btn-group button:nth-child(3):hover { background-color: #a71d2a; }
+.clear-btn { background: #d9534f; }
+.clear-btn:hover { background: #b52b27; }
+.result label { font-size: 15px; margin-top: 8px; display: block; }
+.star { color: #007bff; font-weight: bold; }
+.tooltip { position: relative; display: inline-block; cursor: pointer; }
+.tooltip .tiptext { visibility: hidden; width: 160px; background-color: #ffffe0; color: black; text-align: left; border: 1px solid #aaa; border-radius: 6px; padding: 6px; position: absolute; z-index: 1; top: -5px; left: 105%; font-size: 12px; }
+.tooltip:hover .tiptext { visibility: visible; }
+.table-container { width: 100%; overflow-x: hidden; }
+table { border-collapse: collapse; width: 100%; table-layout: auto; }
+th, td { border: 1px solid #ddd; text-align: center; word-break: break-word; }
+th { background: #4a90e2; color: white; }
+tr:nth-child(even) { background: #f9f9f9; }
+.highlight { background: #ffff99; font-weight: bold; }
+@media (max-width: 480px) { h2 { font-size: 18px; } input, button { font-size: 16px; padding: 14px; } .result { font-size: 14px; } }
 </style>
 </head>
 <body>
@@ -206,31 +44,24 @@ tr:nth-child(even) {
 <h1>杖劍傳說 第二賽季 </h1>
 <h1>養成評分計算器</h1>
 
-    <button onclick="window.location.href='https://pure08402-dev.github.io/test7/equip'">⭐&nbsp;&nbsp;&nbsp;&nbsp;升級素材計算</button>
-	<br></br>
-	<button onclick="window.location.href='https://pure08402-dev.github.io/test7/Trolley'">⭐&nbsp;&nbsp;&nbsp;&nbsp;手推車天數計算</button>
-	<br></br>
-	<div class="card">
-	<h2>S2原初之星</h2>
-	
-	
-	<div class="field">
-	<label><input type="checkbox" id="mul_s2"> S2 選項</label>
-	</div>
-	<div class="field">
-	<label><input type="checkbox" id="mul_s3"> S3 選項</label>
-	</div>
-		<!-- 計算器卡片 -->
+<button onclick="window.location.href='https://pure08402-dev.github.io/test7/equip'">⭐&nbsp;&nbsp;&nbsp;&nbsp;升級素材計算</button>
+<br><br>
+<button onclick="window.location.href='https://pure08402-dev.github.io/test7/Trolley'">⭐&nbsp;&nbsp;&nbsp;&nbsp;手推車天數計算</button>
 
-		<label for="s1value">輸入數值:</label>
-		
-  <!-- 收合按鈕 -->
-  <button type="button" id="toggleBtn" onclick="toggleMultiplier()">
-    <span id="arrow" class="arrow">▼</span>
-    <span id="btnText">展開倍率設定</span>
-  </button>
+<div class="card">
+<h2>S2原初之星</h2>
+<div class="field">
+<label><input type="checkbox" id="mul_s2"> S2 選項</label>
+</div>
+<div class="field">
+<label><input type="checkbox" id="mul_s3"> S3 選項</label>
+</div>
 
-  <!-- 倍率設定卡片 -->
+<button type="button" id="toggleBtn" onclick="toggleMultiplier()">
+<span id="arrow" class="arrow">▼</span>
+<span id="btnText">展開倍率設定</span>
+</button>
+
 <div class="card" id="multiplierCard">
 <h2>倍率設定</h2>
 <div class="field"><label>人物倍率</label><input type="number" id="mul_person" value="100"></div>
@@ -248,9 +79,11 @@ tr:nth-child(even) {
 </div>
 </div>
 </div>
-		
-		
-		
+
+<div class="card">
+<div class="field tooltip"><label>人物等級</label><input type="number" id="person" value="130" min="130" max="250"><span class="tiptext">建議 130 ~ 200</span></div>
+</div>
+
 <div class="card">
 <div class="field tooltip" style="color: red;"><label>裝備快速填入</label><input type="number" id="weapon1" value="130" min="130" max="250"><span class="tiptext">裝備5件 ~ </span></div>
 <button type="button" id="toggleEquipBtn" onclick="toggleEquip()"><span id="equipArrow" class="arrow">▼</span><span id="equipBtnText">展開裝備設定</span></button>
@@ -294,30 +127,17 @@ tr:nth-child(even) {
 </div>
 
 
-<!-- 星數效果表卡片 -->
+<!-- 星數表 -->
 <div class="card">
-<title>星數效果表</title>
 <h2>S1+S2獲得原初之星</h2>
-
-
-
-</head>
-<body>
-<div class="card result">
-<!-- 輸入區 -->
 <div style="margin-bottom: 20px;">
   <label for="s1value">請輸入 S1 原初之星：</label>
-  <input type="number" id="s1value" placeholder="例如 200" 
-  style="width:100px; padding:10px; font-size:16px;"
-  min="0" step="1">
-  <br></br>
-  <button onclick="highlightStar()">計算原初之星總和</button><br></br>
-    
+  <input type="number" id="s1value" placeholder="例如 200" style="width:100px; padding:10px; font-size:16px;" min="0" step="1">
+  <br><br>
+  <button onclick="highlightStar()">計算原初之星總和</button><br><br>
   <span id="totalDisplay" style="margin-left: 10px; font-weight: bold; color: #d63384;"></span>
+</div>
 
-</div>
-</div>
-  
   <div class="table-container">
     <table id="starTable">
       <tr><th>星數</th><th>效果</th></tr>
@@ -386,49 +206,12 @@ tr:nth-child(even) {
       <tr><td>1480</td><td>速度</td></tr>
       <tr><td>1520</td><td class="highlight">經驗2%</td></tr>
       <!-- 其餘項目可依需要繼續補上 -->
-    </table>
-  </div>
+</table>
+</div>
 </div>
 
-<script>
-function highlightStar() {
-  const s1 = parseInt(document.getElementById('s1value').value) || 0;
-  const star = parseInt(document.getElementById('star').innerText) || 0;
-
-  const total = s1 + star;
-
-  // 顯示總和
-  document.getElementById('totalDisplay').innerText = "總和: " + total;
-
-  const rows = document.querySelectorAll('#starTable tr');
-  rows.forEach(row => row.style.backgroundColor = ""); // 清除之前標記
-
-  let maxRow = null;
-  let maxValue = -Infinity;
-
-  // 找出小於等於 total 的最大星數紅框
-  for (let row of rows) {
-    const td = row.cells[0]; // 星數欄位
-    if (!td) continue;
-    const value = parseInt(td.textContent);
-    if (!isNaN(value) && value <= total && value > maxValue) {
-      maxValue = value;
-      maxRow = row;
-    }
-  }
-if (maxRow) {
-    maxRow.style.backgroundColor = "#ffd1dc"; // 標紅
-  }
-  console.log("S1 + 原初之星總和:", total, "標示星數:", maxValue);
-    
-  // 自動滾動到該行
-  maxRow.scrollIntoView({ behavior: "smooth", block: "center" });
-}    
-</script>
-
 
 <script>
-
 let basePersonLevel = 130;
 let baseRelicLevel = 13;
 
@@ -467,6 +250,12 @@ function onCheckboxChange(option){
 s2Checkbox.addEventListener('change', ()=>onCheckboxChange('S2'));
 s3Checkbox.addEventListener('change', ()=>onCheckboxChange('S3'));
 
+function toggleMultiplier(){
+  let card = document.getElementById('multiplierCard');
+  let arrow = document.getElementById('arrow');
+  if(card.classList.contains('show')){ card.classList.remove('show'); arrow.classList.remove('rotate'); } 
+  else{ card.classList.add('show'); arrow.classList.add('rotate'); }
+}
 
 function saveMultiplier(){ alert("倍率已儲存 (暫存功能)"); }
 function resetMultiplier(){ applyValues(defaultValues); }
@@ -494,55 +283,49 @@ function calculate(){
 
 function clearAll(){ location.reload(); }
 
+function toggleEquip(){
+  let card=document.getElementById('equipCard');
+  let arrow=document.getElementById('equipArrow');
+  let text=document.getElementById('equipBtnText');
+  if(card.style.display==='none'){ card.style.display='block'; arrow.classList.add('rotate'); text.innerText='收起裝備設定'; }
+  else{ card.style.display='none'; arrow.classList.remove('rotate'); text.innerText='展開裝備設定'; }
+}
 
-// 監聽「裝備快速填入」欄位
-document.getElementById("weapon1").addEventListener("input", function() {
-  let val = parseInt(this.value) || "";
-  ["weapon","assistant","headgear","clothes","shoes"].forEach(id => {
-    document.getElementById(id).value = val;
-  });
-});
 
-document.getElementById("illusion5").addEventListener("input", function() {
-  let val = parseInt(this.value) || "";
-  ["illusion1","illusion2","illusion3","illusion4"].forEach(id => {
-    document.getElementById(id).value = val;
-  });
-});
+function highlightStar() {
+  const s1 = parseInt(document.getElementById('s1value').value) || 0;
+  const star = parseInt(document.getElementById('star').innerText) || 0;
 
-    function toggleMultiplier() {
-      const card = document.getElementById("multiplierCard");
-      const btnText = document.getElementById("btnText");
-      const arrow = document.getElementById("arrow");
+  const total = s1 + star;
 
-      card.classList.toggle("show");
-      arrow.classList.toggle("rotate");
+  // 顯示總和
+  document.getElementById('totalDisplay').innerText = "總和: " + total;
 
-      if (card.classList.contains("show")) {
-        btnText.textContent = "收起倍率設定";
-      } else {
-        btnText.textContent = "展開倍率設定";
-      }
-    }
-	
-	
-	function toggleEquip() {
-    const card = document.getElementById("equipCard");
-    const btnText = document.getElementById("equipBtnText");
-    const arrow = document.getElementById("equipArrow");
+  const rows = document.querySelectorAll('#starTable tr');
+  rows.forEach(row => row.style.backgroundColor = ""); // 清除之前標記
 
-    if (card.style.display === "none") {
-      card.style.display = "block";
-      btnText.textContent = "收起裝備設定";
-      arrow.textContent = "▲";
-    } else {
-      card.style.display = "none";
-      btnText.textContent = "展開裝備設定";
-      arrow.textContent = "▼";
+  let maxRow = null;
+  let maxValue = -Infinity;
+
+  // 找出小於等於 total 的最大星數紅框
+  for (let row of rows) {
+    const td = row.cells[0]; // 星數欄位
+    if (!td) continue;
+    const value = parseInt(td.textContent);
+    if (!isNaN(value) && value <= total && value > maxValue) {
+      maxValue = value;
+      maxRow = row;
     }
   }
+if (maxRow) {
+    maxRow.style.backgroundColor = "#ffd1dc"; // 標紅
+  }
+  console.log("S1 + 原初之星總和:", total, "標示星數:", maxValue);
+    
+  // 自動滾動到該行
+  maxRow.scrollIntoView({ behavior: "smooth", block: "center" });
+}    
 </script>
-
 
 </body>
 </html>
