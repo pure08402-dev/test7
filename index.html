@@ -51,10 +51,10 @@ tr:nth-child(even) { background: #f9f9f9; }
 <div class="card">
 <h2>S2原初之星</h2>
 <div class="field">
-<label><input type="checkbox" id="mul_s2"> S2 選項</label>
+<label><input type="checkbox" id="mul_s2"> S2 選項(基底45)</label>
 </div>
 <div class="field">
-<label><input type="checkbox" id="mul_s3"> S3 選項</label>
+<label><input type="checkbox" id="mul_s3"> S3 選項(基底67)</label>
 </div>
 
 <button type="button" id="toggleBtn" onclick="toggleMultiplier()">
@@ -217,7 +217,7 @@ let baseRelicLevel = 13;
 
 const defaultValues = { basePersonLevel:130, baseRelicLevel:13, person:100, equip:18, illusion:8, skill:7, relic:33, star_div:27, star_base:45 };
 const s2Values = {...defaultValues};
-const s3Values = { basePersonLevel:160, baseRelicLevel:16, person:100, equip:14, illusion:5, skill:6, relic:26, star_div:13, star_base:0 };
+const s3Values = { basePersonLevel:160, baseRelicLevel:16, person:100, equip:14, illusion:5, skill:6, relic:26, star_div:13, star_base:67 };
 
 const inputs = {
   person: document.getElementById('mul_person'),
