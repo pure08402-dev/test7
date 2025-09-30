@@ -229,32 +229,72 @@ const inputs = {
   star_base: document.getElementById('mul_star_base')
 };
 
-const s2Checkbox = document.getElementById('mul_s2');
-const s3Checkbox = document.getElementById('mul_s3');
+const s2Checkbox = document.getElementById("mul_s2");
+const s3Checkbox = document.getElementById("mul_s3");
 
+// 需要同步調整的輸入框
+const levelInputs = [
+  "person","weapon1","weapon","assistant","headgear","clothes","shoes",
+  "skill","illusion5","illusion1","illusion2","illusion3","illusion4"
+].map(id => document.getElementById(id));
+
+const relicLevel = document.getElementById("relic_level");
+
+// 套用倍率
 function applyValues(values){
   for(let key in values){ if(inputs[key]) inputs[key].value = values[key]; }
   basePersonLevel = values.basePersonLevel;
   baseRelicLevel = values.baseRelicLevel;
 }
 
-function onCheckboxChange(option){
-  if(option==='S2'){
-    if(s2Checkbox.checked){ s3Checkbox.checked=false; applyValues(s2Values); } 
-    else applyValues(defaultValues);
-  } else if(option==='S3'){
-    if(s3Checkbox.checked){ s2Checkbox.checked=false; applyValues(s3Values); }
-    else applyValues(defaultValues);
+// 套用等級
+function applyDefaultLevel(mode){
+  if(mode === "S2"){
+    levelInputs.forEach(input => input.value = 130);
+    relicLevel.value = 13;
+  }else if(mode === "S3"){
+    levelInputs.forEach(input => input.value = 160);
+    relicLevel.value = 16;
+  }else{
+    levelInputs.forEach(input => input.value = 130);
+    relicLevel.value = 13;
   }
 }
-s2Checkbox.addEventListener('change', ()=>onCheckboxChange('S2'));
-s3Checkbox.addEventListener('change', ()=>onCheckboxChange('S3'));
+
+// 勾選切換
+function onCheckboxChange(option){
+  if(option === "S2"){
+    if(s2Checkbox.checked){
+      s3Checkbox.checked = false;
+      applyValues(s2Values);
+      applyDefaultLevel("S2");
+    }else{
+      applyValues(defaultValues);
+      applyDefaultLevel("default");
+    }
+  }else if(option === "S3"){
+    if(s3Checkbox.checked){
+      s2Checkbox.checked = false;
+      applyValues(s3Values);
+      applyDefaultLevel("S3");
+    }else{
+      applyValues(defaultValues);
+      applyDefaultLevel("default");
+    }
+  }
+}
+
+s2Checkbox.addEventListener("change", ()=>onCheckboxChange("S2"));
+s3Checkbox.addEventListener("change", ()=>onCheckboxChange("S3"));
 
 function toggleMultiplier(){
   let card = document.getElementById('multiplierCard');
   let arrow = document.getElementById('arrow');
-  if(card.classList.contains('show')){ card.classList.remove('show'); arrow.classList.remove('rotate'); } 
-  else{ card.classList.add('show'); arrow.classList.add('rotate'); }
+  if(card.classList.contains('show')){
+    card.classList.remove('show'); arrow.classList.remove('rotate');
+  }else{
+    card.classList.add('show'); arrow.classList.add('rotate');
+  }
 }
 
 function saveMultiplier(){ alert("倍率已儲存 (暫存功能)"); }
@@ -283,8 +323,7 @@ function calculate(){
 
 function clearAll(){ location.reload(); }
 
-
-// 監聽「裝備快速填入」欄位
+// 快速填入
 document.getElementById("weapon1").addEventListener("input", function() {
   let val = parseInt(this.value) || "";
   ["weapon","assistant","headgear","clothes","shoes"].forEach(id => {
@@ -299,34 +338,30 @@ document.getElementById("illusion5").addEventListener("input", function() {
   });
 });
 
-
 function toggleEquip(){
   let card=document.getElementById('equipCard');
   let arrow=document.getElementById('equipArrow');
   let text=document.getElementById('equipBtnText');
-  if(card.style.display==='none'){ card.style.display='block'; arrow.classList.add('rotate'); text.innerText='收起裝備設定'; }
-  else{ card.style.display='none'; arrow.classList.remove('rotate'); text.innerText='展開裝備設定'; }
+  if(card.style.display==='none'){
+    card.style.display='block'; arrow.classList.add('rotate'); text.innerText='收起裝備設定';
+  }else{
+    card.style.display='none'; arrow.classList.remove('rotate'); text.innerText='展開裝備設定';
+  }
 }
-
 
 function highlightStar() {
   const s1 = parseInt(document.getElementById('s1value').value) || 0;
   const star = parseInt(document.getElementById('star').innerText) || 0;
-
   const total = s1 + star;
-
-  // 顯示總和
   document.getElementById('totalDisplay').innerText = "總和: " + total;
 
   const rows = document.querySelectorAll('#starTable tr');
-  rows.forEach(row => row.style.backgroundColor = ""); // 清除之前標記
+  rows.forEach(row => row.style.backgroundColor = "");
 
   let maxRow = null;
   let maxValue = -Infinity;
-
-  // 找出小於等於 total 的最大星數紅框
   for (let row of rows) {
-    const td = row.cells[0]; // 星數欄位
+    const td = row.cells[0];
     if (!td) continue;
     const value = parseInt(td.textContent);
     if (!isNaN(value) && value <= total && value > maxValue) {
@@ -334,15 +369,19 @@ function highlightStar() {
       maxRow = row;
     }
   }
-if (maxRow) {
-    maxRow.style.backgroundColor = "#ffd1dc"; // 標紅
+  if (maxRow) {
+    maxRow.style.backgroundColor = "#ffd1dc";
+    maxRow.scrollIntoView({ behavior: "smooth", block: "center" });
   }
   console.log("S1 + 原初之星總和:", total, "標示星數:", maxValue);
-    
-  // 自動滾動到該行
-  maxRow.scrollIntoView({ behavior: "smooth", block: "center" });
-}    
+}
+
+  window.addEventListener("DOMContentLoaded", () => {
+    s2Checkbox.checked = true;
+    onCheckboxChange("S2");
+  });
 </script>
+
 
 </body>
 </html>
