@@ -4,39 +4,201 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>杖劍傳說 第二賽季 養成評分計算器</title>
+    
+
 <style>
-body { font-family: "Microsoft JhengHei", sans-serif; margin: 0; padding: 10px; background: #f0f2f5; }
-h1 { text-align: center; margin-bottom: 15px; }
-.card { background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 16px; margin-bottom: 20px; }
-.card h2 { margin-top: 0; font-size: 18px; border-left: 5px solid #4a90e2; padding-left: 8px; color: #333; }
-.field { margin-bottom: 12px; }
-label { display: block; margin-bottom: 4px; font-size: 14px; font-weight: bold; }
-input { width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-button { width: 100%; padding: 12px; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; color: #fff; background: #4a90e2; transition: 0.2s; }
-button:hover { background: #357abd; }
-.arrow { display: inline-block; transition: transform 0.3s ease; }
-.rotate { transform: rotate(180deg); }
-#multiplierCard { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s ease; background: #fff; border-radius: 12px; margin-top: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 0 15px; }
-#multiplierCard.show { max-height: 1000px; padding: 15px; }
-.btn-group { margin-top: 15px; text-align: right; }
-.btn-group button:nth-child(2) { background-color: #28a745; }
-.btn-group button:nth-child(2):hover { background-color: #1e7e34; }
-.btn-group button:nth-child(3) { background-color: #dc3545; }
-.btn-group button:nth-child(3):hover { background-color: #a71d2a; }
-.clear-btn { background: #d9534f; }
-.clear-btn:hover { background: #b52b27; }
-.result label { font-size: 15px; margin-top: 8px; display: block; }
-.star { color: #007bff; font-weight: bold; }
-.tooltip { position: relative; display: inline-block; cursor: pointer; }
-.tooltip .tiptext { visibility: hidden; width: 160px; background-color: #ffffe0; color: black; text-align: left; border: 1px solid #aaa; border-radius: 6px; padding: 6px; position: absolute; z-index: 1; top: -5px; left: 105%; font-size: 12px; }
-.tooltip:hover .tiptext { visibility: visible; }
-.table-container { width: 100%; overflow-x: hidden; }
-table { border-collapse: collapse; width: 100%; table-layout: auto; }
-th, td { border: 1px solid #ddd; text-align: center; word-break: break-word; }
-th { background: #4a90e2; color: white; }
-tr:nth-child(even) { background: #f9f9f9; }
-.highlight { background: #ffff99; font-weight: bold; }
-@media (max-width: 480px) { h2 { font-size: 18px; } input, button { font-size: 16px; padding: 14px; } .result { font-size: 14px; } }
+body { 
+  font-family: "Microsoft JhengHei", sans-serif; 
+  margin: 0; 
+  padding: 10px; 
+  background: #f0f2f5; 
+}
+
+h1 { 
+  text-align: center; 
+  margin-bottom: 15px; 
+}
+
+.card {
+  background: #fff; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 16px; 
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  margin-top: 0; 
+  font-size: 18px; 
+  border-left: 5px solid #4a90e2;
+  padding-left: 8px; 
+  color: #333;
+}
+
+.field { 
+  margin-bottom: 12px; 
+}
+
+label { 
+  display: block; 
+  margin-bottom: 4px; 
+  font-size: 14px; 
+  font-weight: bold; 
+}
+
+input { 
+  width: 100%;              /* 佔滿全寬 */
+  padding: 12px;            /* 手機上更好點擊 */
+  font-size: 16px;          /* 字體放大 */
+  border: 1px solid #ccc; 
+  border-radius: 6px; 
+  box-sizing: border-box;   /* 避免超出容器 */
+}
+
+button {
+  width: 100%;              /* 佔滿全寬 */
+  padding: 12px;            /* 提高可點擊範圍 */
+  font-size: 16px;          /* 字體放大 */
+  font-weight: bold;        /* 手機上更清晰 */
+  border: none; 
+  border-radius: 8px;
+  cursor: pointer; 
+  color: #fff; 
+  background: #4a90e2; 
+  transition: 0.2s;
+}
+
+button:hover { 
+  background: #357abd; 
+}
+
+    .arrow {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    .rotate {
+      transform: rotate(180deg);
+    }
+    /* 卡片收合動畫 */
+    #multiplierCard {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      background: #fff;
+      border-radius: 12px;
+      margin-top: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 0 15px;
+    }
+    #multiplierCard.show {
+      max-height: 1000px; /* 足夠展開 */
+      padding: 15px;
+    }
+    .btn-group {
+      margin-top: 15px;
+      text-align: right;
+    }
+    .btn-group button:nth-child(2) {
+      background-color: #28a745; /* 綠色 恢復 */
+    }
+    .btn-group button:nth-child(2):hover {
+      background-color: #1e7e34;
+    }
+    .btn-group button:nth-child(3) {
+      background-color: #dc3545; /* 紅色 清除 */
+    }
+    .btn-group button:nth-child(3):hover {
+      background-color: #a71d2a;
+    }	
+	
+	
+
+.clear-btn { 
+  background: #d9534f; 
+}
+
+.clear-btn:hover { 
+  background: #b52b27; 
+}
+
+.result label { 
+  font-size: 15px; 
+  margin-top: 8px; 
+  display: block; 
+}
+
+.star { 
+  color: #007bff; 
+  font-weight: bold; 
+}
+
+/* Tooltip */
+.tooltip { 
+  position: relative; 
+  display: inline-block; 
+  cursor: pointer; 
+}
+
+.tooltip .tiptext {
+  visibility: hidden; 
+  width: 160px; 
+  background-color: #ffffe0; 
+  color: black;
+  text-align: left; 
+  border: 1px solid #aaa; 
+  border-radius: 6px; 
+  padding: 6px;
+  position: absolute; 
+  z-index: 1; 
+  top: -5px; 
+  left: 105%; 
+  font-size: 12px;
+}
+
+.tooltip:hover .tiptext { 
+  visibility: visible; 
+}
+
+/* 表格樣式 */
+.table-container {
+  width: 100%;
+  overflow-x: hidden;  /* 不橫向滑動 */
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;         /* 自動填滿容器 */
+  table-layout: auto;  /* 自動調整欄位寬度 */
+}
+
+th, td {
+  border: 1px solid #ddd;
+  text-align: center;
+  word-break: break-word; /* 避免文字溢出 */
+}
+
+th {
+  background: #4a90e2;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.highlight {
+  background: #ffff99;
+  font-weight: bold;
+}
+
+/* 手機螢幕適配 */
+@media (max-width: 480px) {
+  h2 { font-size: 18px; }
+  input, button { font-size: 16px; padding: 14px; }
+  .result { font-size: 14px; }
+}
+
+
 </style>
 </head>
 <body>
@@ -54,7 +216,7 @@ tr:nth-child(even) { background: #f9f9f9; }
 <label><input type="checkbox" id="mul_s2"> S2 選項(基底45)</label>
 </div>
 <div class="field">
-<label><input type="checkbox" id="mul_s3"> S3 選項(基底67)</label>
+<label><input type="checkbox" id="mul_s3"> S3 選項(基底65)</label>
 </div>
 
 <button type="button" id="toggleBtn" onclick="toggleMultiplier()">
@@ -266,7 +428,7 @@ let baseRelicLevel = 13;
 
 const defaultValues = { basePersonLevel:130, baseRelicLevel:13, person:100, equip:18, illusion:8, skill:7, relic:33, star_div:27, star_base:45 };
 const s2Values = {...defaultValues};
-const s3Values = { basePersonLevel:160, baseRelicLevel:16, person:100, equip:14, illusion:5, skill:6, relic:26, star_div:13, star_base:67 };
+const s3Values = { basePersonLevel:160, baseRelicLevel:16, person:100, equip:14, illusion:5, skill:6, relic:26, star_div:13, star_base:65 };
 
 const inputs = {
   person: document.getElementById('mul_person'),
