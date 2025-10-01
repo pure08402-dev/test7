@@ -81,12 +81,26 @@ tr:nth-child(even) { background: #f9f9f9; }
 </div>
 
 <div class="card">
-<div class="field tooltip"><label>人物等級</label><input type="number" id="person" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div>
+<div class="field tooltip">
+<label>人物等級
+<span style="color:#007bff; font-weight:bold;">(倍率: <span id="personMulDisplay">100</span>)</span>
+</label>
+<input type="number" id="person" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div>
 </div>
 
+
 <div class="card">
-<div class="field tooltip" style="color: red;"><label>裝備快速填入</label><input type="number" id="weapon1" value="130" min="130" max="250"><span class="tiptext">裝備5件 ~ </span></div>
-<button type="button" id="toggleEquipBtn" onclick="toggleEquip()"><span id="equipArrow" class="arrow">▼</span><span id="equipBtnText">展開裝備設定</span></button>
+<div class="field tooltip" style="color: red;">
+<label>裝備等級
+<span style="color:#28a745; font-weight:bold;">(倍率: <span id="equipMulDisplay">18</span>)</span>
+</label>
+<input type="number" id="weapon1" value="130" min="130" max="250"><span class="tiptext">裝備5件 ~ </span>
+</div>
+
+<button type="button" onclick="toggleSection('equipCard','equipArrow','equipBtnText','展開裝備細項','收合裝備細項')">
+  <span id="equipArrow" class="arrow">▼</span>
+  <span id="equipBtnText">展開裝備細項</span>
+</button>
 <div id="equipCard" style="display:none; margin-top:10px;">
 <div style="display:flex; gap:20px; flex-wrap: wrap;">
 <div class="field tooltip"><label>武器</label><input type="number" id="weapon" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div>
@@ -96,26 +110,55 @@ tr:nth-child(even) { background: #f9f9f9; }
 <div class="field tooltip"><label>鞋子</label><input type="number" id="shoes" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div>
 </div></div></div>
 
-<div class="card"><div class="field tooltip"><label>技能等級</label><input type="number" id="skill" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div></div>
+
 
 <div class="card">
-<div class="field tooltip" style="color: red;"><label>幻獸快速填入</label><input type="number" id="illusion5" value="130" min="130" max="250"><span class="tiptext">幻獸1 ~ 幻獸4</span></div>
+<div class="field tooltip" style="color: red;">
+<label>幻獸等級
+<span style="color:#ff9800; font-weight:bold;">(倍率: <span id="illusionMulDisplay">8</span>)</span>
+</label>
+<input type="number" id="illusion5" value="130" min="130" max="250"><span class="tiptext">幻獸1 ~ 幻獸4</span>
+</div>
+<button type="button" onclick="toggleSection('equipCard1','equipArrow1','equipBtnText1','展開幻獸1 ~ 4','收合幻獸1 ~ 4')">
+  <span id="equipArrow1" class="arrow">▼</span>
+  <span id="equipBtnText1">展開幻獸1 ~ 4</span>
+</button>
+<div id="equipCard1" style="display:none; margin-top:10px;">
 <div style="display:flex; gap:20px; flex-wrap: wrap;">
 <div class="field tooltip"><label>幻獸1</label><input type="number" id="illusion1" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div>
 <div class="field tooltip"><label>幻獸2</label><input type="number" id="illusion2" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div>
 <div class="field tooltip"><label>幻獸3</label><input type="number" id="illusion3" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div>
 <div class="field tooltip"><label>幻獸4</label><input type="number" id="illusion4" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div>
-</div></div>
+</div></div></div>
+
 
 <div class="card">
-<div class="field tooltip"><label>遺物等級</label><input type="number" id="relic_level" value="13" min="13" max="25"><span class="tiptext">S2建議:13 ~ ,S3建議:16 ~ </span></div>
+<div class="field tooltip">
+<label>技能等級(8個)
+<span style="color:#9c27b0; font-weight:bold;">(倍率: <span id="skillMulDisplay">7</span>)</span>
+</label>
+<input type="number" id="skill" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span>
+</div>
++
+<div class="field tooltip"><label>技能額外增加等級</label><input type="number" id="skill_count" placeholder="無需填,有額外增加再填 " min="0" step="1"><span class="tiptext">額外增加等級總和</span></div>
+</div>
+
+<div class="card">
+<div class="field tooltip">
+<label>遺物等級(20個)
+<span style="color:#e91e63; font-weight:bold;">(倍率: <span id="relicMulDisplay">33</span>)</span>
+</label>
+<input type="number" id="relic_level" value="13" min="13" max="25"><span class="tiptext">S2建議:13 ~ ,S3建議:16 ~ </span>
+</div>
++
 <div class="field tooltip"><label>遺物額外增加等級</label><input type="number" id="relic_count" placeholder="無需填,有額外增加再填 " min="0" step="1"><span class="tiptext">額外增加等級總和</span></div>
 </div>
 
-<button onclick="calculate()">計算</button>
-<button class="clear-btn" onclick="clearAll()">重新計算</button>
 
 <div class="card result">
+<button onclick="calculate()">計算</button><br></br>
+<button class="clear-btn" onclick="clearAll()">重新計算</button>
+<div class="card">
 <h2>計算結果</h2>
 <label>人物評分: <span id="person_score">0</span></label>
 <label>裝備評分: <span id="equip_score">0</span></label>
@@ -124,7 +167,7 @@ tr:nth-child(even) { background: #f9f9f9; }
 <label>遺物評分: <span id="relic_score">0</span></label>
 <label>總評分: <span id="total_score">0</span></label>
 <label class="star">🌟 原初之星: <span id="star">0</span></label>
-</div>
+</div></div>
 
 
 <!-- 星數表 -->
@@ -303,11 +346,12 @@ function clearMultiplier(){ applyValues(defaultValues); s2Checkbox.checked=false
 
 function getVal(id){ return parseInt(document.getElementById(id).value)||0; }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 function calculate(){
   let person_score=(getVal("person")-basePersonLevel)*getVal("mul_person");
   let equip_score=((getVal("weapon")+getVal("assistant")+getVal("headgear")+getVal("clothes")+getVal("shoes")-(basePersonLevel*5))*getVal("mul_equip"));
   let illusion_score=((getVal("illusion1")+getVal("illusion2")+getVal("illusion3")+getVal("illusion4")-(basePersonLevel*4))*getVal("mul_illusion"));
-  let skill_score=((getVal("skill")-basePersonLevel)*8)*getVal("mul_skill");
+  let skill_score=((getVal("skill")-basePersonLevel)*8+getVal("skill_count"))*getVal("mul_skill");
   let relic_score=((getVal("relic_level")-baseRelicLevel)*20+getVal("relic_count"))*getVal("mul_relic");
   let total_score=person_score+equip_score+illusion_score+skill_score+relic_score;
   let star=Math.floor(total_score/getVal("mul_star_div")+getVal("mul_star_base"));
@@ -323,6 +367,7 @@ function calculate(){
 
 function clearAll(){ location.reload(); }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 // 快速填入
 document.getElementById("weapon1").addEventListener("input", function() {
   let val = parseInt(this.value) || "";
@@ -338,17 +383,26 @@ document.getElementById("illusion5").addEventListener("input", function() {
   });
 });
 
-function toggleEquip(){
-  let card=document.getElementById('equipCard');
-  let arrow=document.getElementById('equipArrow');
-  let text=document.getElementById('equipBtnText');
-  if(card.style.display==='none'){
-    card.style.display='block'; arrow.classList.add('rotate'); text.innerText='收起裝備設定';
-  }else{
-    card.style.display='none'; arrow.classList.remove('rotate'); text.innerText='展開裝備設定';
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+function toggleSection(sectionId, arrowId, btnTextId, expandText, collapseText) {
+  const section = document.getElementById(sectionId);
+  const arrow = document.getElementById(arrowId);
+  const btnText = document.getElementById(btnTextId);
+
+  if (section.style.display === "none") {
+    section.style.display = "block";
+    arrow.textContent = "▲";
+    btnText.textContent = collapseText;
+  } else {
+    section.style.display = "none";
+    arrow.textContent = "▼";
+    btnText.textContent = expandText;
   }
 }
 
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 function highlightStar() {
   const s1 = parseInt(document.getElementById('s1value').value) || 0;
   const star = parseInt(document.getElementById('star').innerText) || 0;
@@ -380,6 +434,41 @@ function highlightStar() {
     s2Checkbox.checked = true;
     onCheckboxChange("S2");
   });
+  
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+function applyValues(values){
+  for(let key in values){ 
+    if(inputs[key]) inputs[key].value = values[key]; 
+  }
+  basePersonLevel = values.basePersonLevel;
+  baseRelicLevel = values.baseRelicLevel;
+
+  // 更新倍率顯示
+  document.getElementById("personMulDisplay").innerText   = values.person;
+  document.getElementById("equipMulDisplay").innerText    = values.equip;
+  document.getElementById("illusionMulDisplay").innerText = values.illusion;
+  document.getElementById("skillMulDisplay").innerText    = values.skill;
+  document.getElementById("relicMulDisplay").innerText    = values.relic;
+}
+
+inputs.person.addEventListener("input", () => {
+  document.getElementById("personMulDisplay").innerText = inputs.person.value;
+});
+inputs.equip.addEventListener("input", () => {
+  document.getElementById("equipMulDisplay").innerText = inputs.equip.value;
+});
+inputs.illusion.addEventListener("input", () => {
+  document.getElementById("illusionMulDisplay").innerText = inputs.illusion.value;
+});
+inputs.skill.addEventListener("input", () => {
+  document.getElementById("skillMulDisplay").innerText = inputs.skill.value;
+});
+inputs.relic.addEventListener("input", () => {
+  document.getElementById("relicMulDisplay").innerText = inputs.relic.value;
+});
+
+  
+  
 </script>
 
 
