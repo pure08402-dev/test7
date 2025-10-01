@@ -86,7 +86,7 @@ tr:nth-child(even) { background: #f9f9f9; }
 <span style="color:#007bff; font-weight:bold;">(倍率: <span id="personMulDisplay">100</span>)</span>
 </label>
 <input type="number" id="person" value="130" min="130" max="250"><span class="tiptext">S2建議:130 ~ ,S3建議:160 ~ </span></div>
-<span style="color: gray; margin-left:10px;">#(人物等級 - 130) × 倍率</span>
+<span id="personFormula" style="color: gray; margin-left:10px;">#(人物等級 - 130) × 倍率</span>
 </div>
 
 
@@ -98,7 +98,7 @@ tr:nth-child(even) { background: #f9f9f9; }
 
 <input type="number" id="weapon1" value="130" min="130" max="250"><span class="tiptext">裝備5件 ~ </span>
 </div>
-<span style="color: gray; margin-left:10px;">#(5件總和 - 650) × 倍率</span>
+<span id="equipFormula" style="color: gray; margin-left:10px;">#(5件總和 - 650) × 倍率</span>
 <button type="button" onclick="toggleSection('equipCard','equipArrow','equipBtnText','展開裝備細項','收合裝備細項')">
   <span id="equipArrow" class="arrow">▼</span>
   <span id="equipBtnText">展開裝備細項</span>
@@ -121,7 +121,7 @@ tr:nth-child(even) { background: #f9f9f9; }
 </label>
 <input type="number" id="illusion5" value="130" min="130" max="250"><span class="tiptext">幻獸1 ~ 幻獸4</span>
 </div>
-<span style="color: gray; margin-left:10px;">#(4個總和 - 520) × 倍率</span>
+<span id="illusionFormula" style="color: gray; margin-left:10px;">#(4個總和 - 520) × 倍率</span>
 <button type="button" onclick="toggleSection('equipCard1','equipArrow1','equipBtnText1','展開幻獸1 ~ 4','收合幻獸1 ~ 4')">
   <span id="equipArrow1" class="arrow">▼</span>
   <span id="equipBtnText1">展開幻獸1 ~ 4</span>
@@ -144,7 +144,7 @@ tr:nth-child(even) { background: #f9f9f9; }
 </div>
 +
 <div class="field tooltip"><label>技能額外增加等級</label><input type="number" id="skill_count" placeholder="無需填,有額外增加再填 " min="0" step="1"><span class="tiptext">額外增加等級總和</span></div>
-<br></br><span style="color: gray; margin-left:10px;">#(8個總和 - 1040) × 倍率</span>
+<br></br><span id="skillFormula" style="color: gray; margin-left:10px;">#(8個總和 - 1040) × 倍率</span>
 </div>
 
 
@@ -157,7 +157,7 @@ tr:nth-child(even) { background: #f9f9f9; }
 </div>
 +
 <div class="field tooltip"><label>遺物額外增加等級</label><input type="number" id="relic_count" placeholder="無需填,有額外增加再填 " min="0" step="1"><span class="tiptext">額外增加等級總和</span></div>
-<br></br><span style="color: gray; margin-left:10px;">#(20個總和 - 260) × 倍率</span>
+<br></br><span id="relicFormula" style="color: gray; margin-left:10px;">#(20個總和 - 260) × 倍率</span>
 </div>
 
 
@@ -473,6 +473,38 @@ inputs.relic.addEventListener("input", () => {
   document.getElementById("relicMulDisplay").innerText = inputs.relic.value;
 });
 
+
+function updateFormulas() {
+  document.getElementById("personFormula").innerText   = `#(人物等級 - ${basePersonLevel}) × 倍率`;
+  document.getElementById("equipFormula").innerText    = `#(5件總和 - ${basePersonLevel*5}) × 倍率`;
+  document.getElementById("illusionFormula").innerText = `#(4個總和 - ${basePersonLevel*4}) × 倍率`;
+  document.getElementById("skillFormula").innerText    = `#(8個總和 - ${basePersonLevel*8}) × 倍率`;
+  document.getElementById("relicFormula").innerText    = `#(20個總和 - ${baseRelicLevel*20}) × 倍率`;
+}
+
+
+function onCheckboxChange(option){
+  if(option === "S2"){
+    if(s2Checkbox.checked){
+      s3Checkbox.checked = false;
+      applyValues(s2Values);
+      applyDefaultLevel("S2");
+    }else{
+      applyValues(defaultValues);
+      applyDefaultLevel("default");
+    }
+  }else if(option === "S3"){
+    if(s3Checkbox.checked){
+      s2Checkbox.checked = false;
+      applyValues(s3Values);
+      applyDefaultLevel("S3");
+    }else{
+      applyValues(defaultValues);
+      applyDefaultLevel("default");
+    }
+  }
+  updateFormulas(); // ✅ 更新灰色公式
+}
   
   
 </script>
