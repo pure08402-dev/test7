@@ -291,7 +291,7 @@
 	document.getElementById("day_result1").innerHTML = "";
 	document.getElementById("day_result2").innerHTML = "";
 	document.getElementById("total_result").textContent = "總挖掘：";
-	document.getElementById("day_status").textContent = "目前天數：0"; 
+	document.getElementById("day_status").textContent = "剩餘天數：0"; 
 	}
 
 
@@ -434,7 +434,7 @@
 	
     function calculateResult1() {
       const days = parseInt(document.getElementById("days").value) || 0;
-      document.getElementById("day_status").textContent = "目前天數：" + days;
+      document.getElementById("day_status").textContent = "剩餘天數：" + days;
     }
 
     // 載入時顯示今天日期
