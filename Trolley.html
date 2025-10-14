@@ -91,7 +91,7 @@
   </style>
 </head>
 <body>
-  <h2>手推車運算程式</h2>
+  <h2>小推車運算程式</h2>
 
   <!-- 天數計算 -->
   <div class="card">
@@ -249,7 +249,7 @@
         { name: "飼料", target: "target_feed", current: "current_feed", hour: "hour_feed" }
       ];
       
-      let output = "<h3>手推車達成時間</h3><div class='table-container'><table><tr><th>資源</th><th>還需要</th><th>小時數</th><th>天數</th></tr>";
+      let output = "<h3>小推車達成時間</h3><div class='table-container'><table><tr><th>資源</th><th>還需要</th><th>小時數</th><th>天數</th></tr>";
       
       resources.forEach(r => {
         const target = parseInt(document.getElementById(r.target).value) || 0;
