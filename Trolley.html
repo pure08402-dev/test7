@@ -88,6 +88,17 @@
       button { font-size: 16px; padding: 14px; }
       input { font-size: 16px; padding: 12px; }
     }
+	
+	
+	.arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.arrow.rotate {
+  transform: rotate(180deg);
+}
+
+
   </style>
 </head>
 <body>
@@ -239,206 +250,231 @@
   <!-- 結果 -->
   <div class="result" id="result">請輸入資料並按下計算</div>
 
-  <script>
-    function calculate() {
-      const resources = [
-        { name: "金幣", target: "target_gold", current: "current_gold", hour: "hour_gold" },
-        { name: "粗煉石", target: "target_stone", current: "current_stone", hour: "hour_stone" },
-        { name: "精華", target: "target_essence", current: "current_essence", hour: "hour_essence" },
-		{ name: "砂", target: "target_sand", current: "current_sand", hour: "hour_sand" },
-        { name: "飼料", target: "target_feed", current: "current_feed", hour: "hour_feed" }
-      ];
-      
-      let output = "<h3>小推車達成時間</h3><div class='table-container'><table><tr><th>資源</th><th>還需要</th><th>小時數</th><th>天數</th></tr>";
-      
-      resources.forEach(r => {
-        const target = parseInt(document.getElementById(r.target).value) || 0;
-        const current = parseInt(document.getElementById(r.current).value) || 0;
-        const perHour = parseInt(document.getElementById(r.hour).value) || 0;
+<script>
+let countdownTimer; // 🔹 全域變數：倒數計時器
 
-        const need = Math.max(target - current, 0);
-        const hours = perHour > 0 ? (need / perHour).toFixed(2) : "∞";
-        const days = perHour > 0 ? (hours / 24).toFixed(2) : "∞";
-        
-        output += `<tr>
-          <td>${r.name}</td>
-          <td>${need.toLocaleString()}</td>
-          <td>${hours}</td>
-          <td>${days} 天</td>
-        </tr>`;
-      });
+function calculate() {
+  const resources = [
+    { name: "金幣", target: "target_gold", current: "current_gold", hour: "hour_gold" },
+    { name: "粗煉石", target: "target_stone", current: "current_stone", hour: "hour_stone" },
+    { name: "精華", target: "target_essence", current: "current_essence", hour: "hour_essence" },
+    { name: "砂", target: "target_sand", current: "current_sand", hour: "hour_sand" },
+    { name: "飼料", target: "target_feed", current: "current_feed", hour: "hour_feed" }
+  ];
+  
+  let output = "<h3>小推車達成時間</h3><div class='table-container'><table><tr><th>資源</th><th>還需要</th><th>小時數</th><th>天數</th></tr>";
+  
+  resources.forEach(r => {
+    const target = parseInt(document.getElementById(r.target).value) || 0;
+    const current = parseInt(document.getElementById(r.current).value) || 0;
+    const perHour = parseInt(document.getElementById(r.hour).value) || 0;
 
-      output += "</table></div>";
-      document.getElementById("result").innerHTML = output;
-    }
+    const need = Math.max(target - current, 0);
+    const hours = perHour > 0 ? (need / perHour).toFixed(2) : "∞";
+    const days = perHour > 0 ? (hours / 24).toFixed(2) : "∞";
     
-	function clearAll() {
-	// 清空所有輸入框
-	document.querySelectorAll("input").forEach(input => {
-		if (input.type === "radio") {
-		input.checked = false; // 取消單選
-		} else {
-		input.value = "";
-		}
-	});
+    output += `<tr>
+      <td>${r.name}</td>
+      <td>${need.toLocaleString()}</td>
+      <td>${hours}</td>
+      <td>${days} 天</td>
+    </tr>`;
+  });
 
-	// 鎖定輸入天數 (直到選擇 S3 才能開啟)
-	document.getElementById("days").disabled = true;
+  output += "</table></div>";
+  document.getElementById("result").innerHTML = output;
+}
 
-	// 重置結果區
-	document.getElementById("result").innerHTML = "請輸入資料並按下計算";
-	document.getElementById("day_result").innerHTML = "";
-	document.getElementById("day_result1").innerHTML = "";
-	document.getElementById("day_result2").innerHTML = "";
-	document.getElementById("total_result").textContent = "總挖掘：";
-	document.getElementById("day_status").textContent = "剩餘天數：0"; 
-	}
+function clearAll() {
+  document.querySelectorAll("input").forEach(input => {
+    if (input.type === "radio") {
+      input.checked = false;
+    } else {
+      input.value = "";
+    }
+  });
+  document.getElementById("days").disabled = true;
+  document.getElementById("result").innerHTML = "請輸入資料並按下計算";
+  document.getElementById("day_result").innerHTML = "";
+  document.getElementById("day_result1").innerHTML = "";
+  document.getElementById("day_result2").innerHTML = "";
+  document.getElementById("total_result").textContent = "總挖掘：";
+  document.getElementById("day_status").textContent = "剩餘天數：0";
+  clearInterval(countdownTimer);
+}
 
+const baseValues = {
+  "金幣": "hour_gold",
+  "粗煉石": "hour_stone",
+  "精華": "hour_essence",
+  "砂": "hour_sand",
+  "飼料": "hour_feed"
+};
 
-    const baseValues = {
-      "金幣": "hour_gold",      
-      "粗煉石": "hour_stone",
-      "精華": "hour_essence",
-	  "砂": "hour_sand",
-      "飼料": "hour_feed"
-    };
+function handleDaysInput() {
+  const days = parseInt(document.getElementById("days").value) || 0;
+  let htmlTotal = "", htmlDiff = "", htmlTimes = "";
 
-    function handleDaysInput() {
-      const days = parseInt(document.getElementById("days").value) || 0;
+  function formatNumberWithWan(num) {
+    const n = parseInt(num) || 0;
+    const wan = (n / 10000).toFixed(2);
+    return `${wan}萬 (${n.toLocaleString()})`;
+  }
 
-      let htmlTotal = "", htmlDiff = "", htmlTimes = "";
+  for (let item in baseValues) {
+    const perHour = parseInt(document.getElementById(baseValues[item]).value) || 0;
+    const current = parseInt(document.getElementById("current_" + baseValues[item].split("_")[1]).value) || 0;
+    const target = parseInt(document.getElementById("target_" + baseValues[item].split("_")[1]).value) || 0;
 
-      function formatNumberWithWan(num) {
-        const n = parseInt(num) || 0;
-        const wan = (n / 10000).toFixed(2);
-        return `${wan}萬 (${n.toLocaleString()})`;
+    const total = perHour * 24 * days;
+    const diff = target - total - current;
+    const diffDisplay = diff < 0 ? `<span style="color:red">${formatNumberWithWan(diff)}</span>` : formatNumberWithWan(diff);
+
+    htmlTotal += `<tr><td>${item}</td><td>${formatNumberWithWan(total)}</td></tr>`;
+    htmlDiff  += `<tr><td>${item}</td><td>${diffDisplay}</td></tr>`;
+
+    if (item !== "飼料") {
+      const dungeon = parseInt(document.getElementById("current1_" + baseValues[item].split("_")[1]).value) || 0;
+      const times = dungeon > 0 ? Math.ceil(Math.max(diff, 0) / dungeon) : "∞";
+      htmlTimes += `<tr><td>${item}</td><td>${times}</td></tr>`;
+    }
+  }
+
+  document.getElementById("day_result").innerHTML = htmlTotal;
+  document.getElementById("day_result1").innerHTML = htmlDiff;
+  document.getElementById("day_result2").innerHTML = htmlTimes;
+}
+
+function calculateResult() {
+  const days = parseInt(document.getElementById("days").value) || 0;
+  const times = parseInt(document.getElementById("times").value) || 0;
+  const result = days * 5 * times;
+  document.getElementById("total_result").textContent = "總挖掘：" + result + " 次";
+}
+
+// 🔹 展開設定卡片
+function toggleMultiplier() {
+  const card = document.getElementById("multiplierCard");
+  const btnText = document.getElementById("btnText");
+  const arrow = document.getElementById("arrow");
+  card.classList.toggle("show");
+  arrow.classList.toggle("rotate");
+  btnText.textContent = card.classList.contains("show") ? "收起小推車設定" : "展開小推車設定";
+}
+
+// 🔹 儲存資料
+function saveData() {
+  let inputs = {};
+  document.querySelectorAll("input").forEach(input => {
+    inputs[input.id] = input.value;
+  });
+  localStorage.setItem("cartData", JSON.stringify(inputs));
+  alert("✅ 資料已儲存！");
+}
+
+// 🔹 載入資料
+function loadData() {
+  const saved = localStorage.getItem("cartData");
+  if (saved) {
+    const inputs = JSON.parse(saved);
+    Object.keys(inputs).forEach(id => {
+      if (document.getElementById(id)) {
+        document.getElementById(id).value = inputs[id];
       }
+    });
+  }
+  handleDaysInput();
+  calculateResult();
+}
 
-      for (let item in baseValues) {
-        const perHour = parseInt(document.getElementById(baseValues[item]).value) || 0;
-        const current = parseInt(document.getElementById("current_" + baseValues[item].split("_")[1]).value) || 0;
-        const target = parseInt(document.getElementById("target_" + baseValues[item].split("_")[1]).value) || 0;
+// 🔹 恢復預設
+function resetData() {
+  localStorage.removeItem("cartData");
+  clearAll();
+  alert("♻️ 已恢復預設，並清除儲存的資料！");
+}
 
-        const total = perHour * 24 * days;
-        const diff = target - total - current;
-        const diffDisplay = diff < 0 ? `<span style="color:red">${formatNumberWithWan(diff)}</span>` : formatNumberWithWan(diff);
+// 🔹 顯示今天日期
+function showToday() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  document.getElementById("today").textContent = `今天日期：${year}/${month}/${day}`;
+}
 
-        htmlTotal += `<tr><td>${item}</td><td>${formatNumberWithWan(total)}</td></tr>`;
-        htmlDiff  += `<tr><td>${item}</td><td>${diffDisplay}</td></tr>`;
+// ✅ 改良版：以早上 8 點為基準 + 即時倒數
+function setDays() {
+  const selected = document.querySelector("input[name='option']:checked").value;
+  const daysInput = document.getElementById("days");
+  clearInterval(countdownTimer);
 
-        // 秘境次數不含飼料
-        if (item !== "飼料") {
-          const dungeon = parseInt(document.getElementById("current1_" + baseValues[item].split("_")[1]).value) || 0;
-          const times = dungeon > 0 ? Math.ceil(Math.max(diff,0) / dungeon) : "∞";
-          htmlTimes += `<tr><td>${item}</td><td>${times}</td></tr>`;
-        }
-      }
-
-      document.getElementById("day_result").innerHTML = htmlTotal;
-      document.getElementById("day_result1").innerHTML = htmlDiff;
-      document.getElementById("day_result2").innerHTML = htmlTimes;
+  if (selected === "manual") {
+    daysInput.value = "";
+    daysInput.disabled = false;
+    document.getElementById("day_status").innerHTML = "目前天數：0（手動輸入模式）";
+  } else {
+    let endDate, labelText;
+    if (selected === "S1") {
+      endDate = new Date("2025-08-30T08:00:00");
+      labelText = "2025/08/30";
+    } else if (selected === "S2") {
+      endDate = new Date("2025-11-05T08:00:00");
+      labelText = "2025/11/05";
     }
 
-    function calculateResult() {
-      const days = parseInt(document.getElementById("days").value) || 0;
-      const times = parseInt(document.getElementById("times").value) || 0;
-      const result = days * 5 * times;
-      document.getElementById("total_result").textContent = "總挖掘：" + result + " 次";
+    const now = new Date();
+    const diffTime = endDate.getTime() - now.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const daysRemaining = diffDays > 0 ? diffDays : 0;
+
+    daysInput.value = daysRemaining;
+    daysInput.disabled = true;
+
+    document.getElementById("day_status").innerHTML = `
+      剩餘天數：<strong>${daysRemaining}</strong> 天
+      <br><span style="font-size:13px;color:#555;">（截止至 ${labelText} 早上 08:00）</span>
+      <br><span id="countdown" style="color:#2b7cff;font-weight:bold;"></span>
+    `;
+    startCountdown(endDate);
+  }
+  calculateResult1();
+}
+
+// ✅ 動態倒數
+function startCountdown(endDate) {
+  function updateCountdown() {
+    const now = new Date();
+    const distance = endDate - now;
+    if (distance <= 0) {
+      clearInterval(countdownTimer);
+      document.getElementById("countdown").textContent = "⏰ 倒數結束！";
+      return;
     }
-	
-	// 展開
-	function toggleMultiplier() {
-      const card = document.getElementById("multiplierCard");
-      const btnText = document.getElementById("btnText");
-      const arrow = document.getElementById("arrow");
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    document.getElementById("countdown").textContent = 
+      `⏳ 還有 ${days}天 ${hours}小時 ${minutes}分 ${seconds}秒`;
+  }
+  updateCountdown();
+  countdownTimer = setInterval(updateCountdown, 1000);
+}
 
-      card.classList.toggle("show");
-      arrow.classList.toggle("rotate");
+function calculateResult1() {
+  const days = parseInt(document.getElementById("days").value) || 0;
+  if (!document.getElementById("countdown")) {
+    document.getElementById("day_status").textContent = "剩餘天數：" + days;
+  }
+}
 
-      if (card.classList.contains("show")) {
-        btnText.textContent = "收起小推車設定";
-      } else {
-        btnText.textContent = "展開小推車設定";
-      }
-    }
+// 頁面載入
+window.onload = () => {
+  showToday();
+  loadData();
+};
+</script>
 
-    // 儲存數據
-    function saveData() {
-      let inputs = {};
-      document.querySelectorAll("input").forEach(input => {
-        inputs[input.id] = input.value;
-      });
-      localStorage.setItem("cartData", JSON.stringify(inputs));
-      alert("✅ 資料已儲存！");
-    }
-
-    // 載入數據
-    function loadData() {
-      const saved = localStorage.getItem("cartData");
-      if (saved) {
-        const inputs = JSON.parse(saved);
-        Object.keys(inputs).forEach(id => {
-          if (document.getElementById(id)) {
-            document.getElementById(id).value = inputs[id];
-          }
-        });
-      }
-      handleDaysInput();
-      calculateResult();
-    }
-
-    // 恢復預設
-    function resetData() {
-      localStorage.removeItem("cartData");
-      clearAll();
-      alert("♻️ 已恢復預設，並清除儲存的資料！");
-    }
-
-    // 頁面載入時自動載入
-    window.onload = loadData;
-	
-	
-    // 顯示今天日期
-    function showToday() {
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, "0");
-      const day = String(today.getDate()).padStart(2, "0");
-      document.getElementById("today").textContent = 
-        "今天日期：" + year + "/" + month + "/" + day;
-    }
-
-		function setDays() {
-	const selected = document.querySelector("input[name='option']:checked").value;
-	const daysInput = document.getElementById("days");
-	
-	if (selected === "manual") {
-		daysInput.value = "";
-		daysInput.disabled = false; // 開放輸入
-	} else {
-		let endDate;
-		if (selected === "S1") {
-		endDate = new Date("2025-08-30");
-		} else if (selected === "S2") {
-		endDate = new Date("2025-11-05");
-		}
-	
-		const today = new Date();
-		const diffTime = endDate - today;
-		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-		daysInput.value = diffDays > 0 ? diffDays : 0;
-		daysInput.disabled = true;
-	}
-	calculateResult1();
-	}
-	
-    function calculateResult1() {
-      const days = parseInt(document.getElementById("days").value) || 0;
-      document.getElementById("day_status").textContent = "剩餘天數：" + days;
-    }
-
-    // 載入時顯示今天日期
-    showToday();
-  </script>
 </body>
 </html>
