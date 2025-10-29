@@ -12,7 +12,7 @@
     padding: 20px;
   }
   .card {
-    max-width: 400px;
+    max-width: 420px;
     margin: auto;
     background: #fff;
     padding: 20px;
@@ -56,6 +56,13 @@
     padding: 15px;
     line-height: 1.6;
   }
+  #countdown {
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: #2b7cff;
+    font-size: 17px;
+  }
 </style>
 </head>
 <body>
@@ -69,7 +76,7 @@
   <label>經驗值儲存量（萬）：</label>
   <input type="number" id="storageExp" value="2625">
 
-  <label>每日加速次數（一次+2小時經驗）：</label>
+  <label>每日加速次數（一次 +2 小時經驗）：</label>
   <input type="number" id="boostCount" value="0">
 
   <div style="display:flex; justify-content: space-between;">
@@ -77,22 +84,27 @@
     <button class="reset-btn" onclick="resetDefault()">恢復預設</button>
   </div>
 
+  <div id="countdown">⏳ 請稍候載入倒數...</div>
+
   <div class="result" id="result">
     請輸入資料並按下「計算」
   </div>
 </div>
 
 <script>
+let countdownTimer;
+const endDate = new Date("2025-11-05T08:00:00");
+
+// 🧮 主計算函式
 function calculate() {
   const expPerHour = parseFloat(document.getElementById("expPerHour").value) || 0;
   const storageExp = parseFloat(document.getElementById("storageExp").value) * 10000 || 0;
   const boostCount = parseInt(document.getElementById("boostCount").value) || 0;
 
-  const totalBoostHours = boostCount * 2; // ✅ 不乘天數
+  const totalBoostHours = boostCount * 2; // 每次加速 +2小時
   const neededHours = (storageExp / expPerHour) - totalBoostHours;
   const neededDays = neededHours / 24;
 
-  const endDate = new Date("2025-11-05T08:00:00"); // 截止時間
   const startDate = new Date(endDate.getTime() - neededHours * 60 * 60 * 1000);
 
   const startString = `${startDate.getFullYear()}/${(startDate.getMonth()+1)
@@ -104,17 +116,48 @@ function calculate() {
     <b>📘 儲存總經驗：</b> ${storageExp.toLocaleString()}<br>
     <b>⏱ 需要時間：</b> 約 ${neededHours.toFixed(2)} 小時（${neededDays.toFixed(2)} 天）<br>
     <b>🚀 加速效果：</b> 共加速 ${totalBoostHours} 小時<br>
-    <b>🗓 建議開始時間：</b> <span style="color:#2b7cff;font-weight:bold;">${startString}</span><br>
+    <b>🗓 建議開始時間：</b> 
+      <span style="color:#2b7cff;font-weight:bold;">${startString}</span><br>
     <small>（截止至 2025/11/05 早上 08:00）</small>
   `;
 }
 
+// 🔁 倒數計時
+function startCountdown() {
+  clearInterval(countdownTimer);
+  function updateCountdown() {
+    const now = new Date();
+    const distance = endDate - now;
+
+    if (distance <= 0) {
+      document.getElementById("countdown").textContent = "⏰ 倒數結束！";
+      clearInterval(countdownTimer);
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("countdown").textContent =
+      `⏳ 距離截止日：${days}天 ${hours}小時 ${minutes}分 ${seconds}秒`;
+  }
+
+  updateCountdown();
+  countdownTimer = setInterval(updateCountdown, 1000);
+}
+
+// ♻️ 恢復預設
 function resetDefault() {
   document.getElementById("expPerHour").value = 729362;
   document.getElementById("storageExp").value = 2625;
   document.getElementById("boostCount").value = 0;
   document.getElementById("result").innerHTML = "已恢復預設，請重新計算。";
 }
+
+// 頁面載入時啟動倒數
+window.onload = startCountdown;
 </script>
 
 </body>
