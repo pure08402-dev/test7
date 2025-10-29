@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>經驗值儲存時間計算器</title>
+<style>
+body {
+  font-family: "Microsoft JhengHei", sans-serif;
+  background: #f5f7fa;
+  padding: 20px;
+}
+.card {
+  max-width: 420px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+h2 {
+  text-align: center;
+  color: #333;
+}
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #444;
+}
+input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+button:hover {
+  background: #45a049;
+}
+.result {
+  margin-top: 20px;
+  background: #f0f9ff;
+  border: 1px solid #b6e0fe;
+  border-radius: 10px;
+  padding: 15px;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.countdown {
+  font-weight: bold;
+  color: #007bff;
+  margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>經驗值儲存計算器</h2>
+  
+  <label>每小時經驗值：</label>
+  <input type="number" id="exp_hour" value="729362">
+
+  <label>經驗值儲存量（單位：萬）：</label>
+  <input type="number" id="exp_max" value="2625">
+
+  <button onclick="calculateExp()">重新計算</button>
+
+  <div class="result" id="result">正在計算中...</div>
+  <div class="countdown" id="countdown"></div>
+</div>
+
+<script>
+let countdownTimer = null;
+
+function calculateExp() {
+  clearInterval(countdownTimer);
+
+  const expPerHour = parseFloat(document.getElementById("exp_hour").value) || 0;
+  const expMaxInput = parseFloat(document.getElementById("exp_max").value) || 0;
+  const expMax = expMaxInput * 10000; // ✅ 將萬單位轉成實際值
+  const resultDiv = document.getElementById("result");
+  const countdownDiv = document.getElementById("countdown");
+
+  if (expPerHour <= 0 || expMax <= 0) {
+    resultDiv.innerHTML = "⚠️ 請輸入有效的數字！";
+    countdownDiv.textContent = "";
+    return;
+  }
+
+  // 所需時間（小時）
+  const hoursNeeded = expMax / expPerHour;
+  const totalHours = hoursNeeded.toFixed(2);
+  const days = Math.floor(hoursNeeded / 24);
+  const hours = Math.round(hoursNeeded % 24);
+
+  // 截止時間：2025/11/05 早上 08:00
+  const endTime = new Date("2025-11-05T08:00:00+08:00");
+
+  // 推算開始時間
+  const startTime = new Date(endTime.getTime() - hoursNeeded * 3600000);
+
+  // 格式化時間
+  const startStr = startTime.toLocaleString("zh-TW", { hour12: false });
+
+  resultDiv.innerHTML = `
+    <b>🔹 儲滿所需時間：</b> ${days} 天 ${hours} 小時（約 ${totalHours} 小時）<br>
+    <b>🔹 經驗值量：：</b> ${expMax.toLocaleString()} 點<br>
+    <b>🔹 截止時間：</b> 2025/11/05 早上 08:00<br>
+    <b>🔹 應該開始儲存時間：</b><br>${startStr}
+  `;
+
+  // ✅ 即時倒數更新
+  countdownTimer = setInterval(() => {
+    const now = new Date();
+    const diffMs = startTime - now;
+    if (diffMs <= 0) {
+      clearInterval(countdownTimer);
+      countdownDiv.textContent = "✅ 現在就該開始儲存！";
+      return;
+    }
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+    const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+    countdownDiv.textContent = 
+      `⏳ 距離開始儲存還有 ${diffDays}天 ${diffHours}小時 ${diffMinutes}分 ${diffSeconds}秒`;
+  }, 1000);
+}
+
+// ✅ 頁面載入後自動計算
+window.onload = calculateExp;
+</script>
+
+</body>
+</html>
