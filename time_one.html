@@ -113,6 +113,8 @@
     <option value="S1">S1 計算方案</option>
     <option value="S2" selected>S2 計算方案</option>
     <option value="S3">S3 計算方案</option>
+	
+	
   </select>
 
   <label>目前評分：</label>
@@ -127,9 +129,10 @@
 
   <div id="result" class="result">請輸入數值並按下計算。</div>
 
+
   <!-- 混合模擬 -->
   <div class="subcard">
-    <h3 style="text-align:center;">🔮 混合模擬提升</h3>
+    <h3 style="text-align:center;">🔮 模擬提升</h3>
     <div class="flex">
       <div><label>人物 (+100)</label><input type="number" id="boost_lv" value="0"></div>
       <div><label>裝備</label><input type="number" id="boost_eq" value="0"></div>
@@ -170,10 +173,13 @@ function calculateStar() {
 
   const diff = targetScore - score;
 
-  let html = `<b>目前原初之星：</b> ${currentStar.toFixed(2)} ⭐<br>`;
+  let html = `
+  <b>目前方案：</b> ${document.getElementById("scheme").value}<br>
+  <b>目前原初之星：</b> ${currentStar.toFixed(2)} ⭐<br>`;
   html += `<b>目標原初之星：</b> ${targetStar.toFixed(2)} ⭐<br>`;
   html += `<b>星差：</b> ${(targetStar - currentStar).toFixed(2)} ⭐<br>`;
   html += `<b>評分差額：</b> ${diff.toFixed(2)} 分<br><br>`;
+  
 
   html += `<table><tr><th>類別</th><th>加成值</th><th>需要提升量</th></tr>`;
   let bestType = "", bestValue = Infinity;
@@ -260,6 +266,8 @@ function loadData() {
   }
 }
 window.onload = loadData;
+
+
 </script>
 
 <div style="max-width:500px;margin:15px auto;text-align:center;font-size:12px;color:#555;line-height:1.4;">
