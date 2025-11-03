@@ -101,13 +101,6 @@
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 10px;
   }
-  @media (max-width: 480px) {
-    h2 { font-size: 20px; }
-    label { font-size: 14px; }
-    input, select { font-size: 15px; }
-    button { font-size: 15px; }
-    th, td { font-size: 13px; }
-  }
 </style>
 </head>
 <body>
@@ -136,7 +129,7 @@
 
   <!-- 混合模擬 -->
   <div class="subcard">
-    <h3 style="text-align:center;">🔮 模擬模擬提升</h3>
+    <h3 style="text-align:center;">🔮 混合模擬提升</h3>
     <div class="flex">
       <div><label>人物 (+100)</label><input type="number" id="boost_lv" value="0"></div>
       <div><label>裝備</label><input type="number" id="boost_eq" value="0"></div>
@@ -151,11 +144,11 @@
 
 <script>
 const schemes = {
-  "S1": { "人物等級": 100, "裝備": 38, "技能": 13, "幻獸": 14, "遺物": 57 },
-  "S2": { "人物等級": 100, "裝備": 18, "技能": 7, "幻獸": 8, "遺物": 33 },
-  "S3": { "人物等級": 100, "裝備": 14, "技能": 5, "幻獸": 6, "遺物": 26 }
+  "S1": { "人物等級": 100, "裝備": 38, "技能": 13, "幻獸": 14, "遺物": 57, formula: (s)=> (s/100)+10 },
+  "S2": { "人物等級": 100, "裝備": 18, "技能": 7, "幻獸": 8, "遺物": 33, formula: (s)=> (s/27)+45 },
+  "S3": { "人物等級": 100, "裝備": 14, "技能": 5, "幻獸": 6, "遺物": 26, formula: (s)=> (s/13)+65 }
 };
-let coeffs = schemes["S2"]; // 預設 S2
+let coeffs = schemes["S2"];
 
 function changeScheme() {
   const selected = document.getElementById("scheme").value;
@@ -166,8 +159,15 @@ function changeScheme() {
 function calculateStar() {
   const score = parseFloat(document.getElementById("score").value) || 0;
   const targetStar = parseFloat(document.getElementById("targetStar").value) || 0;
-  const currentStar = (score / 27) + 45;
-  const targetScore = (targetStar - 45) * 27;
+
+  const formula = coeffs.formula;
+  const currentStar = formula(score);
+  let targetScore;
+
+  if (coeffs === schemes["S1"]) targetScore = (targetStar - 10) * 100;
+  else if (coeffs === schemes["S2"]) targetScore = (targetStar - 45) * 27;
+  else targetScore = (targetStar - 65) * 13;
+
   const diff = targetScore - score;
 
   let html = `<b>目前原初之星：</b> ${currentStar.toFixed(2)} ⭐<br>`;
@@ -179,6 +179,7 @@ function calculateStar() {
   let bestType = "", bestValue = Infinity;
 
   for (let [key, val] of Object.entries(coeffs)) {
+    if (key === "formula") continue;
     const need = diff / val;
     html += `<tr><td>${key}</td><td>${val}</td><td>${need.toFixed(2)}</td></tr>`;
     if (need < bestValue) { bestValue = need; bestType = key; }
@@ -202,10 +203,15 @@ function simulateMultiBoost() {
   const c = coeffs;
   const addScore = lv*c["人物等級"] + eq*c["裝備"] + skill*c["技能"] + pet*c["幻獸"] + relic*c["遺物"];
   const newScore = score + addScore;
-  const newStar = (newScore / 27) + 45;
+  const newStar = c.formula(newScore);
+
+  let targetScore;
+  if (c === schemes["S1"]) targetScore = (targetStar - 10) * 100;
+  else if (c === schemes["S2"]) targetScore = (targetStar - 45) * 27;
+  else targetScore = (targetStar - 65) * 13;
 
   const starDiff = targetStar - newStar;
-  const scoreDiff = (targetStar - 45) * 27 - newScore;
+  const scoreDiff = targetScore - newScore;
 
   let html = `
   <b>目前方案：</b> ${document.getElementById("scheme").value}<br>
