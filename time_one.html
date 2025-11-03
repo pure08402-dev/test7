@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⭐ 原初之星達標計算器</title>
+<style>
+  body {
+    font-family: "Microsoft JhengHei", sans-serif;
+    background: #f6f9fc;
+    margin: 0;
+    padding: 20px;
+  }
+  .card {
+    max-width: 600px;
+    background: #fff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  h2 { text-align: center; color: #333; }
+  label { display: block; margin-top: 10px; font-weight: bold; }
+  input {
+    width: 100%; padding: 10px; margin-top: 5px;
+    border: 1px solid #ccc; border-radius: 6px; font-size: 16px;
+  }
+  button {
+    width: 100%; padding: 12px; margin-top: 10px;
+    border: none; border-radius: 6px; font-size: 16px; font-weight: bold; color: white; cursor: pointer;
+  }
+  .btn-main { background: #4CAF50; }
+  .btn-main:hover { background: #45a049; }
+  .btn-save { background: #2196F3; }
+  .btn-save:hover { background: #1976D2; }
+  .btn-reset { background: #FF9800; }
+  .btn-reset:hover { background: #E68900; }
+  .result {
+    margin-top: 20px; padding: 15px;
+    border-radius: 10px; background: #f0f9ff; border: 1px solid #b6e0fe;
+    line-height: 1.6;
+  }
+  table {
+    width: 100%; border-collapse: collapse; margin-top: 10px;
+  }
+  th, td {
+    border: 1px solid #ccc; text-align: center; padding: 8px;
+  }
+  th { background: #f2f2f2; }
+  .highlight { color: #2b7cff; font-weight: bold; font-size: 16px; }
+  .subcard {
+    background: #fafafa; border-radius: 10px; padding: 12px; margin-top: 12px; border: 1px solid #ddd;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>⭐ 原初之星達標計算器</h2>
+
+  <label>目前評分：</label>
+  <input type="number" id="score" placeholder="請輸入目前評分">
+
+  <label>目標原初之星：</label>
+  <input type="number" id="targetStar" placeholder="請輸入目標星數">
+
+  <button class="btn-main" onclick="calculateStar()">開始計算</button>
+  <button class="btn-save" onclick="saveData()">💾 儲存數據</button>
+  <button class="btn-reset" onclick="resetData()">♻️ 恢復預設</button>
+
+  <div id="result" class="result">請輸入數值並按下計算。</div>
+
+  <div class="subcard">
+    <h3>📈 進階建議模式</h3>
+    <p>模擬你想提升的項目，看看原初之星會變多少。</p>
+    <label>選擇項目：</label>
+    <select id="boostType">
+      <option value="人物等級">人物等級 (+100分/等)</option>
+      <option value="裝備">裝備 (+18分/等)</option>
+      <option value="技能">技能 (+7分/等)</option>
+      <option value="幻獸">幻獸 (+8分/等)</option>
+      <option value="遺物">遺物 (+33分/等)</option>
+    </select>
+
+    <label>提升量：</label>
+    <input type="number" id="boostValue" placeholder="輸入提升數值，例如 5">
+
+    <button class="btn-main" style="background:#673AB7;" onclick="simulateBoost()">🔮 模擬提升效果</button>
+    <div id="boostResult" class="result" style="display:none;"></div>
+  </div>
+</div>
+
+<script>
+const defaultValues = { score: 30470, targetStar: 1180 };
+const coeffs = { "人物等級": 100, "裝備": 18, "技能": 7, "幻獸": 8, "遺物": 33 };
+
+// 🧮 主計算
+function calculateStar() {
+  const score = parseFloat(document.getElementById("score").value) || 0;
+  const targetStar = parseFloat(document.getElementById("targetStar").value) || 0;
+
+  const currentStar = (score / 27) + 45;
+  const targetScore = (targetStar - 45) * 27;
+  const diff = targetScore - score;
+
+  let html = `<b>目前原初之星：</b> ${currentStar.toFixed(2)} ⭐<br>`;
+  html += `<b>目標原初之星：</b> ${targetStar.toFixed(2)} ⭐<br>`;
+  html += `<b>星差：</b> ${(targetStar - currentStar).toFixed(2)} ⭐<br>`;
+  html += `<b>評分差額：</b> ${diff.toFixed(2)} 分<br><br>`;
+
+  html += `<table>
+    <tr><th>類別</th><th>加成值</th><th>需要提升量</th></tr>`;
+
+  let bestType = "";
+  let bestValue = Infinity;
+
+  for (let [key, val] of Object.entries(coeffs)) {
+    const need = diff / val;
+    html += `<tr><td>${key}</td><td>${val}</td><td>${need.toFixed(2)}</td></tr>`;
+    if (need < bestValue) {
+      bestValue = need;
+      bestType = key;
+    }
+  }
+
+  html += `</table><br>
+  <div class="highlight">💡 最優惠提升方式：建議提升 <b>${bestType}</b> 約 ${bestValue.toFixed(2)} 點！</div>`;
+
+  document.getElementById("result").innerHTML = html;
+}
+
+// 🔮 模擬提升
+function simulateBoost() {
+  const type = document.getElementById("boostType").value;
+  const boostValue = parseFloat(document.getElementById("boostValue").value) || 0;
+  const score = parseFloat(document.getElementById("score").value) || 0;
+
+  const addScore = coeffs[type] * boostValue;
+  const newScore = score + addScore;
+  const newStar = (newScore / 27) + 45;
+
+  let html = `
+  <b>提升項目：</b> ${type}<br>
+  <b>提升量：</b> ${boostValue}<br>
+  <b>增加評分：</b> +${addScore.toFixed(2)}<br>
+  <b>新的總評分：</b> ${newScore.toFixed(2)}<br>
+  <b>預測原初之星：</b> <span style="color:#673AB7;font-weight:bold;">${newStar.toFixed(2)} ⭐</span>`;
+
+  const boostBox = document.getElementById("boostResult");
+  boostBox.innerHTML = html;
+  boostBox.style.display = "block";
+}
+
+// 💾 儲存資料
+function saveData() {
+  const data = {
+    score: document.getElementById("score").value,
+    targetStar: document.getElementById("targetStar").value
+  };
+  localStorage.setItem("starData", JSON.stringify(data));
+  alert("✅ 資料已儲存！");
+}
+
+// ♻️ 恢復預設
+function resetData() {
+  localStorage.removeItem("starData");
+  document.getElementById("score").value = defaultValues.score;
+  document.getElementById("targetStar").value = defaultValues.targetStar;
+  document.getElementById("result").innerHTML = "已恢復預設值，請按下『開始計算』。";
+  document.getElementById("boostResult").style.display = "none";
+}
+
+// 🔹 載入資料
+function loadData() {
+  const saved = localStorage.getItem("starData");
+  if (saved) {
+    const data = JSON.parse(saved);
+    document.getElementById("score").value = data.score;
+    document.getElementById("targetStar").value = data.targetStar;
+  } else {
+    document.getElementById("score").value = defaultValues.score;
+    document.getElementById("targetStar").value = defaultValues.targetStar;
+  }
+}
+
+// 🔸 載入時初始化
+window.onload = loadData;
+</script>
+
+</body>
+</html>
