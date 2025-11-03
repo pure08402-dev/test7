@@ -134,11 +134,14 @@
   <div class="subcard">
     <h3 style="text-align:center;">🔮 模擬提升</h3>
     <div class="flex">
-      <div><label>人物 (+100)</label><input type="number" id="boost_lv" value="0"></div>
-      <div><label>裝備</label><input type="number" id="boost_eq" value="0"></div>
-      <div><label>技能</label><input type="number" id="boost_skill" value="0"></div>
-      <div><label>幻獸</label><input type="number" id="boost_pet" value="0"></div>
-      <div><label>遺物</label><input type="number" id="boost_relic" value="0"></div>
+	
+	
+	  <div><label for="boost_lv">人物 (+100)</label><input type="number" id="boost_lv" value="0"></div>
+	  <div><label for="boost_eq">裝備 (+38)</label><input type="number" id="boost_eq" value="0"></div>
+	  <div><label for="boost_skill">技能 (+13)</label><input type="number" id="boost_skill" value="0"></div>
+	  <div><label for="boost_pet">幻獸 (+14)</label><input type="number" id="boost_pet" value="0"></div>
+	  <div><label for="boost_relic">遺物 (+57)</label><input type="number" id="boost_relic" value="0"></div>
+
     </div>
     <button class="btn-main" style="background:#673AB7;" onclick="simulateMultiBoost()">🔮 計算結果</button>
     <div id="boostResult" class="result" style="display:none;"></div>
@@ -266,6 +269,20 @@ function loadData() {
   }
 }
 window.onload = loadData;
+
+
+function changeScheme() {
+  const selected = document.getElementById("scheme").value;
+  coeffs = schemes[selected];
+  document.getElementById("result").innerHTML = `✅ 已切換至 ${selected} 方案`;
+
+  // 更新模擬提升標籤的加成數字
+  document.querySelector("label[for='boost_lv']").innerHTML = `人物 (+${coeffs["人物等級"]})`;
+  document.querySelector("label[for='boost_eq']").innerHTML = `裝備 (+${coeffs["裝備"]})`;
+  document.querySelector("label[for='boost_skill']").innerHTML = `技能 (+${coeffs["技能"]})`;
+  document.querySelector("label[for='boost_pet']").innerHTML = `幻獸 (+${coeffs["幻獸"]})`;
+  document.querySelector("label[for='boost_relic']").innerHTML = `遺物 (+${coeffs["遺物"]})`;
+}
 
 
 </script>
