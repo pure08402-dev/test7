@@ -31,7 +31,7 @@
     font-size: 15px;
     color: #333;
   }
-  input {
+  input, select {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
@@ -104,7 +104,7 @@
   @media (max-width: 480px) {
     h2 { font-size: 20px; }
     label { font-size: 14px; }
-    input { font-size: 15px; }
+    input, select { font-size: 15px; }
     button { font-size: 15px; }
     th, td { font-size: 13px; }
   }
@@ -115,11 +115,18 @@
 <div class="card">
   <h2>⭐ 原初之星達標計算器</h2>
 
+  <label>選擇加成方案：</label>
+  <select id="scheme" onchange="changeScheme(); calculateStar();">
+    <option value="S1">S1 計算方案</option>
+    <option value="S2" selected>S2 計算方案</option>
+    <option value="S3">S3 計算方案</option>
+  </select>
+
   <label>目前評分：</label>
-  <input type="number" id="score" placeholder="輸入目前評分">
+  <input type="number" id="score" placeholder="輸入目前評分" value="30470">
 
   <label>目標原初之星：</label>
-  <input type="number" id="targetStar" placeholder="輸入目標星數">
+  <input type="number" id="targetStar" placeholder="輸入目標星數" value="1180">
 
   <button class="btn-main" onclick="calculateStar()">開始計算</button>
   <button class="btn-save" onclick="saveData()">💾 儲存數據</button>
@@ -131,38 +138,31 @@
   <div class="subcard">
     <h3 style="text-align:center;">🔮 混合模擬提升</h3>
     <div class="flex">
-      <div>
-        <label>人物 (+100)</label>
-        <input type="number" id="boost_lv" value="0">
-      </div>
-      <div>
-        <label>裝備 (+18)</label>
-        <input type="number" id="boost_eq" value="0">
-      </div>
-      <div>
-        <label>技能 (+7)</label>
-        <input type="number" id="boost_skill" value="0">
-      </div>
-      <div>
-        <label>幻獸 (+8)</label>
-        <input type="number" id="boost_pet" value="0">
-      </div>
-      <div>
-        <label>遺物 (+33)</label>
-        <input type="number" id="boost_relic" value="0">
-      </div>
+      <div><label>人物 (+100)</label><input type="number" id="boost_lv" value="0"></div>
+      <div><label>裝備</label><input type="number" id="boost_eq" value="0"></div>
+      <div><label>技能</label><input type="number" id="boost_skill" value="0"></div>
+      <div><label>幻獸</label><input type="number" id="boost_pet" value="0"></div>
+      <div><label>遺物</label><input type="number" id="boost_relic" value="0"></div>
     </div>
-
     <button class="btn-main" style="background:#673AB7;" onclick="simulateMultiBoost()">🔮 模擬混合提升</button>
     <div id="boostResult" class="result" style="display:none;"></div>
   </div>
 </div>
 
 <script>
-const defaultValues = { score: 30470, targetStar: 1180 };
-const coeffs = { "人物等級": 100, "裝備": 18, "技能": 7, "幻獸": 8, "遺物": 33 };
+const schemes = {
+  "S1": { "人物等級": 100, "裝備": 38, "技能": 13, "幻獸": 14, "遺物": 57 },
+  "S2": { "人物等級": 100, "裝備": 18, "技能": 7, "幻獸": 8, "遺物": 33 },
+  "S3": { "人物等級": 100, "裝備": 14, "技能": 5, "幻獸": 6, "遺物": 26 }
+};
+let coeffs = schemes["S2"]; // 預設 S2
 
-// ⭐ 主計算
+function changeScheme() {
+  const selected = document.getElementById("scheme").value;
+  coeffs = schemes[selected];
+  document.getElementById("result").innerHTML = `✅ 已切換至 ${selected} 方案`;
+}
+
 function calculateStar() {
   const score = parseFloat(document.getElementById("score").value) || 0;
   const targetStar = parseFloat(document.getElementById("targetStar").value) || 0;
@@ -189,7 +189,6 @@ function calculateStar() {
   document.getElementById("result").innerHTML = html;
 }
 
-// 🔮 模擬混合提升
 function simulateMultiBoost() {
   const score = parseFloat(document.getElementById("score").value) || 0;
   const targetStar = parseFloat(document.getElementById("targetStar").value) || 0;
@@ -200,7 +199,8 @@ function simulateMultiBoost() {
   const pet = +document.getElementById("boost_pet").value || 0;
   const relic = +document.getElementById("boost_relic").value || 0;
 
-  const addScore = lv*100 + eq*18 + skill*7 + pet*8 + relic*33;
+  const c = coeffs;
+  const addScore = lv*c["人物等級"] + eq*c["裝備"] + skill*c["技能"] + pet*c["幻獸"] + relic*c["遺物"];
   const newScore = score + addScore;
   const newStar = (newScore / 27) + 45;
 
@@ -208,6 +208,7 @@ function simulateMultiBoost() {
   const scoreDiff = (targetStar - 45) * 27 - newScore;
 
   let html = `
+  <b>目前方案：</b> ${document.getElementById("scheme").value}<br>
   <b>提升總分：</b> +${addScore.toLocaleString()}<br>
   <b>新的總評分：</b> ${newScore.toLocaleString()}<br>
   <b>預測原初之星：</b> <span style="color:#673AB7;font-weight:bold;">${newStar.toFixed(2)} ⭐</span><br><br>
@@ -219,32 +220,37 @@ function simulateMultiBoost() {
   document.getElementById("boostResult").style.display = "block";
 }
 
-// 💾 儲存與載入
+// 儲存與恢復
 function saveData() {
   const data = {
     score: document.getElementById("score").value,
-    targetStar: document.getElementById("targetStar").value
+    targetStar: document.getElementById("targetStar").value,
+    scheme: document.getElementById("scheme").value
   };
   localStorage.setItem("starData", JSON.stringify(data));
   alert("✅ 資料已儲存！");
 }
+
 function resetData() {
   localStorage.removeItem("starData");
-  document.getElementById("score").value = defaultValues.score;
-  document.getElementById("targetStar").value = defaultValues.targetStar;
+  document.getElementById("scheme").value = "S2";
+  changeScheme();
+  document.getElementById("score").value = "30470";
+  document.getElementById("targetStar").value = "1180";
   document.getElementById("result").innerHTML = "已恢復預設值，請按『開始計算』。";
   document.getElementById("boostResult").style.display = "none";
-  document.querySelectorAll("#boost_lv,#boost_eq,#boost_skill,#boost_pet,#boost_relic").forEach(i => i.value = 0);
 }
+
 function loadData() {
   const saved = localStorage.getItem("starData");
   if (saved) {
     const data = JSON.parse(saved);
     document.getElementById("score").value = data.score;
     document.getElementById("targetStar").value = data.targetStar;
+    document.getElementById("scheme").value = data.scheme || "S2";
+    changeScheme();
   } else {
-    document.getElementById("score").value = defaultValues.score;
-    document.getElementById("targetStar").value = defaultValues.targetStar;
+    resetData();
   }
 }
 window.onload = loadData;
