@@ -235,37 +235,56 @@ function changeScheme() {
 function calculateStar() {
   const score = parseFloat(document.getElementById("score").value) || 0;
   const targetStar = parseFloat(document.getElementById("targetStar").value) || 0;
+  const scheme = document.getElementById("scheme").value;
+  const coeffs = schemes[scheme];
 
-  const formula = coeffs.formula;
-  const currentStar = formula(score);
+  const currentStar = coeffs.formula(score);
+
   let targetScore;
-
-  if (coeffs === schemes["S1"]) targetScore = (targetStar - 10) * 100;
-  else if (coeffs === schemes["S2"]) targetScore = (targetStar - 45) * 27;
+  if (scheme === "S1") targetScore = (targetStar - 10) * 100;
+  else if (scheme === "S2") targetScore = (targetStar - 45) * 27;
   else targetScore = (targetStar - 65) * 13;
 
   const diff = targetScore - score;
 
   let html = `
-  <b>目前方案：</b> ${document.getElementById("scheme").value}<br>
-  <b>目前原初之星：</b> ${currentStar.toFixed(2)} ⭐<br>`;
-  html += `<b>目標原初之星：</b> ${targetStar.toFixed(2)} ⭐<br>`;
-  html += `<b>星差：</b> ${(targetStar - currentStar).toFixed(2)} ⭐<br>`;
-  html += `<b>評分差額：</b> ${diff.toFixed(2)} 分<br><br>`;
-  
+    <b>目前方案：</b> ${scheme}<br>
+    <b>目前原初之星：</b> ${currentStar.toFixed(2)} ⭐<br>
+    <b>目標原初之星：</b> ${targetStar.toFixed(2)} ⭐<br>
+    <b>星差：</b> ${(targetStar - currentStar).toFixed(2)} ⭐<br>
+    <b>評分差額：</b> ${diff.toFixed(2)} 分<br><br>
+  `;
 
-  html += `<table><tr><th>類別</th><th>加成值</th><th>需要提升量</th></tr>`;
-  let bestType = "", bestValue = Infinity;
+  html += `<table border="1"><tr><th>類別</th><th>加成值</th><th>需要提升量</th></tr>`;
+  let bestType = "";
+  let bestValue = Infinity;
 
   for (let [key, val] of Object.entries(coeffs)) {
     if (key === "formula") continue;
-    const need = diff / val;
+
+    // 計算提升量
+    const need = val !== 0 ? diff / val : 0;
+
+    // 如果提升量是負數，跳過顯示
+    if (need <= 0) continue;
+
     html += `<tr><td>${key}</td><td>${val}</td><td>${need.toFixed(2)}</td></tr>`;
-    if (need < bestValue) { bestValue = need; bestType = key; }
+
+    // 更新最優惠提升方式
+    if (need < bestValue) {
+      bestValue = need;
+      bestType = key;
+    }
   }
 
-  html += `</table><br>
-  <div class="highlight">💡 最優惠提升方式：<br>建議提升 <b>${bestType}</b> 約 ${bestValue.toFixed(2)} 點！</div>`;
+  // 如果有找到正數的最優惠方式才顯示
+  if (bestType) {
+    html += `</table><br>
+      <div class="highlight">💡 最優惠提升方式：<br>建議提升 <b>${bestType}</b> 約 ${bestValue.toFixed(2)} 點！</div>`;
+  } else {
+    html += `</table><br><div class="highlight">💡 請正確填入評分跟目標星數</div>`;
+  }
+
   document.getElementById("result").innerHTML = html;
 }
 
