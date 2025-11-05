@@ -5,6 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>杖劍傳說 賽季 養成評分計算器</title>
     
+	
+<style>
+/* 👆 專用手指按鈕設計 */
+.nav-btn {
+  display: inline-block;
+  width: 85%;
+  margin: 8px auto;
+  padding: 14px;
+  font-size: 17px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(90deg, #4a90e2, #6fa8dc);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* 按鈕動畫效果 */
+@keyframes tap {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.nav-btn:hover {
+  animation: tap 0.35s ease-in-out;
+  background: linear-gradient(90deg, #357abd, #5b8fd8);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+</style>	
 
 <style>
 body { 
@@ -111,7 +141,6 @@ button:hover {
       background-color: #a71d2a;
     }	
 	
-	
 
 .clear-btn { 
   background: #d9534f; 
@@ -206,9 +235,11 @@ tr:nth-child(even) {
 <h1>杖劍傳說 賽季 </h1>
 <h1>養成評分計算器</h1>
 
-<button onclick="window.location.href='https://pure08402-dev.github.io/test7/equip'">⭐&nbsp;&nbsp;&nbsp;&nbsp;S2升級素材計算</button>
-<br><br>
-<button onclick="window.location.href='https://pure08402-dev.github.io/test7/Trolley'">⭐&nbsp;&nbsp;&nbsp;&nbsp;小推車天數計算</button>
+<!-- 👆 功能按鈕區 -->
+<div class="card" style="text-align: center;">
+  <button class="nav-btn" onclick="window.location.href='https://pure08402-dev.github.io/test7/equip'">👆&nbsp;&nbsp;&nbsp;&nbsp; 升級素材計算</button>
+  <button class="nav-btn" onclick="window.location.href='https://pure08402-dev.github.io/test7/Trolley'">👆&nbsp;&nbsp;&nbsp;&nbsp; 手推車天數計算</button>
+</div>
 
 <div class="card">
 <h2>S2原初之星</h2>
