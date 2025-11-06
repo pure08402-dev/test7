@@ -578,6 +578,24 @@ Object.assign(canvas.style, {
   </span>
 </footer>
 
+  <!-- 🌍 全球造訪人數統計 -->
+<div style="text-align:center; margin-top:20px; font-size:16px; color:#555;">
+  👁️ <span id="visitCounter">讀取中...</span>
+</div>
+
+<script>
+  async function updateVisitorCount() {
+  try {
+    const res = await fetch("https://api.countapi.xyz/hit/pure08402-dev.github.io/index");
+    const data = await res.json();
+    document.getElementById("visitCounter").textContent = `全球造訪人數：${data.value.toLocaleString()} 次`;
+  } catch (error) {
+    document.getElementById("visitCounter").textContent = "無法取得造訪統計";
+  }
+}
+window.addEventListener("DOMContentLoaded", updateVisitorCount);
+</script>
+		
 
 
 <script>
