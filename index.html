@@ -293,6 +293,20 @@ Object.assign(canvas.style, {
 <h1>杖劍傳說 賽季 </h1>
 <h1>養成評分計算器</h1>
 
+	  <!-- 🌍 全球造訪人數統計 -->
+<div style="text-align:center; font-size:16px; color:#444;">
+  👁️ <span id="visitCounter">載入中...</span>
+</div>
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+  let count = localStorage.getItem("localVisits") || 0;
+  count = parseInt(count) + 1;
+  localStorage.setItem("localVisits", count);
+  document.getElementById("visitCounter").textContent = `你的造訪次數：${count} 次`;
+});
+</script>
+
+	
 <!-- 👆 功能按鈕區 -->
 <div class="card" style="text-align: center;">
   <button class="nav-btn" onclick="window.location.href='https://pure08402-dev.github.io/test7/equip'">👆&nbsp;&nbsp;&nbsp;&nbsp; S2升級素材計算</button>
@@ -578,18 +592,7 @@ Object.assign(canvas.style, {
   </span>
 </footer>
 
-  <!-- 🌍 全球造訪人數統計 -->
-<div style="text-align:center; font-size:16px; color:#444;">
-  👁️ <span id="visitCounter">載入中...</span>
-</div>
-<script>
-window.addEventListener("DOMContentLoaded", () => {
-  let count = localStorage.getItem("localVisits") || 0;
-  count = parseInt(count) + 1;
-  localStorage.setItem("localVisits", count);
-  document.getElementById("visitCounter").textContent = `你的造訪次數：${count} 次`;
-});
-</script>
+
 		
 
 
