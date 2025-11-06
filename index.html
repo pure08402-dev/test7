@@ -586,7 +586,7 @@ Object.assign(canvas.style, {
 <script>
   async function updateVisitorCount() {
   try {
-    const res = await fetch("https://api.countapi.xyz/hit/pure08402-dev.github.io/index");
+    const res = await fetch("https://api.countapi.xyz/hit/pure08402-dev.github.io/test7/");
     const data = await res.json();
     document.getElementById("visitCounter").textContent = `全球造訪人數：${data.value.toLocaleString()} 次`;
   } catch (error) {
