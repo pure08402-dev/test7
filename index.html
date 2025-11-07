@@ -448,7 +448,7 @@ window.addEventListener("DOMContentLoaded", () => {
   <span id="totalDisplay" style="margin-left: 10px; font-weight: bold; color: #d63384;"></span>
 </div>
 
-  <div class="table-container">
+  <div class="table-container" id="starTableContainer" style="display:none;">
     <table id="starTable">
       <tr><th>星數</th><th>效果</th></tr>
       <tr><td>48</td><td>攻擊</td></tr>
@@ -800,6 +800,9 @@ function highlightStar() {
   const star = parseInt(document.getElementById('star').innerText) || 0;
   const total = s1 + star;
   document.getElementById('totalDisplay').innerText = "總和: " + total;
+  
+    // ✅ 顯示星數表
+  document.getElementById('starTableContainer').style.display = 'block';
 
   const rows = document.querySelectorAll('#starTable tr');
   rows.forEach(row => row.style.backgroundColor = "");
