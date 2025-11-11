@@ -1,0 +1,222 @@
+
+/* 👆 專用手指按鈕設計 */
+.nav-btn {
+  display: inline-block;
+  width: 85%;
+  margin: 8px auto;
+  padding: 14px;
+  font-size: 17px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(90deg, #4a90e2, #6fa8dc);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* 按鈕動畫效果 */
+@keyframes tap {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.nav-btn:hover {
+  animation: tap 0.35s ease-in-out;
+  background: linear-gradient(90deg, #357abd, #5b8fd8);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+	
+
+
+body { 
+  font-family: "Microsoft JhengHei", sans-serif; 
+  margin: 0; 
+  padding: 10px; 
+  background: #f0f2f5; 
+}
+
+h1 { 
+  text-align: center; 
+  margin-bottom: 15px; 
+}
+
+.card {
+  background: #fff; 
+  border-radius: 12px; 
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  padding: 16px; 
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  margin-top: 0; 
+  font-size: 18px; 
+  border-left: 5px solid #4a90e2;
+  padding-left: 8px; 
+  color: #333;
+}
+
+.field { 
+  margin-bottom: 12px; 
+}
+
+label { 
+  display: block; 
+  margin-bottom: 4px; 
+  font-size: 14px; 
+  font-weight: bold; 
+}
+
+input { 
+  width: 100%;              /* 佔滿全寬 */
+  padding: 12px;            /* 手機上更好點擊 */
+  font-size: 16px;          /* 字體放大 */
+  border: 1px solid #ccc; 
+  border-radius: 6px; 
+  box-sizing: border-box;   /* 避免超出容器 */
+}
+
+button {
+  width: 100%;              /* 佔滿全寬 */
+  padding: 12px;            /* 提高可點擊範圍 */
+  font-size: 16px;          /* 字體放大 */
+  font-weight: bold;        /* 手機上更清晰 */
+  border: none; 
+  border-radius: 8px;
+  cursor: pointer; 
+  color: #fff; 
+  background: #4a90e2; 
+  transition: 0.2s;
+}
+
+button:hover { 
+  background: #357abd; 
+}
+
+    .arrow {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    .rotate {
+      transform: rotate(180deg);
+    }
+    /* 卡片收合動畫 */
+    #multiplierCard {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      background: #fff;
+      border-radius: 12px;
+      margin-top: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 0 15px;
+    }
+    #multiplierCard.show {
+      max-height: 1000px; /* 足夠展開 */
+      padding: 15px;
+    }
+    .btn-group {
+      margin-top: 15px;
+      text-align: right;
+    }
+    .btn-group button:nth-child(2) {
+      background-color: #28a745; /* 綠色 恢復 */
+    }
+    .btn-group button:nth-child(2):hover {
+      background-color: #1e7e34;
+    }
+    .btn-group button:nth-child(3) {
+      background-color: #dc3545; /* 紅色 清除 */
+    }
+    .btn-group button:nth-child(3):hover {
+      background-color: #a71d2a;
+    }	
+	
+
+.clear-btn { 
+  background: #d9534f; 
+}
+
+.clear-btn:hover { 
+  background: #b52b27; 
+}
+
+.result label { 
+  font-size: 15px; 
+  margin-top: 8px; 
+  display: block; 
+}
+
+.star { 
+  color: #007bff; 
+  font-weight: bold; 
+}
+
+/* Tooltip */
+.tooltip { 
+  position: relative; 
+  display: inline-block; 
+  cursor: pointer; 
+}
+
+.tooltip .tiptext {
+  visibility: hidden; 
+  width: 160px; 
+  background-color: #ffffe0; 
+  color: black;
+  text-align: left; 
+  border: 1px solid #aaa; 
+  border-radius: 6px; 
+  padding: 6px;
+  position: absolute; 
+  z-index: 1; 
+  top: -5px; 
+  left: 105%; 
+  font-size: 12px;
+}
+
+.tooltip:hover .tiptext { 
+  visibility: visible; 
+}
+
+/* 表格樣式 */
+.table-container {
+  width: 100%;
+  overflow-x: hidden;  /* 不橫向滑動 */
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;         /* 自動填滿容器 */
+  table-layout: auto;  /* 自動調整欄位寬度 */
+}
+
+th, td {
+  border: 1px solid #ddd;
+  text-align: center;
+  word-break: break-word; /* 避免文字溢出 */
+}
+
+th {
+  background: #4a90e2;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.highlight {
+  background: #ffff99;
+  font-weight: bold;
+}
+
+/* 手機螢幕適配 */
+@media (max-width: 480px) {
+  h2 { font-size: 18px; }
+  input, button { font-size: 16px; padding: 14px; }
+  .result { font-size: 14px; }
+}
+
+
