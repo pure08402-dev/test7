@@ -150,54 +150,38 @@ body.dark .unit-label { color: #cbd5e1; }
 .flex-col {
   flex: 1 1 45%;
 }
+.theme-toggle {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  background: none;
+  border: none;
+  font-size: 1.3em;
+  cursor: pointer;
+  color: var(--accent);
+  transition: transform 0.3s ease;
+}
+.theme-toggle:hover {
+  transform: scale(1.2);
+}
 @media (max-width:600px){
   main.card{margin:10px;padding:18px;}
   h2{font-size:1.3em;}
   button{font-size:1em;padding:12px;}
   input{font-size:0.95em;}
 }
-
-/* 浮動夜間模式按鈕 */
-.theme-toggle {
-  position: fixed;
-  right: 16px;
-  bottom: 16px;
-  background: var(--accent-light);
-  border: none;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  font-size: 1.5em;
-  cursor: pointer;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: transform 0.3s, background 0.3s;
-  z-index: 9999;
-}
-.theme-toggle:hover {
-  transform: scale(1.2);
-  background: var(--accent);
-}
 </style>
 </head>
 <body>
-
 <main class="card">
+  <button class="theme-toggle" id="themeToggle" title="切換主題">🌙</button>
   <h2>經驗時間計算器</h2>
-  <small>簡單計算,僅功參考</small>
-  <small>實際以遊戲為主</small>
+  <small>Ver 1.1.0 - 上傳經驗表版</small>
+
+  <label>上傳經驗表 CSV</label>
+  <input type="file" id="csvFile" accept=".csv">
 
   <form id="expForm">
-    <label>選擇賽季</label>
-    <select id="seasonSelect">
-      <option value="s1">S1-澤之國</option>
-      <option value="s2">S2-龍之國</option>
-      <option value="s3" selected>S3-羽之國</option>
-    </select>
-
     <label>現在等級（Lv）</label>
     <input id="currentLevel" type="number" min="1" placeholder="例如：98">
 
@@ -222,7 +206,7 @@ body.dark .unit-label { color: #cbd5e1; }
       </div>
     </div>
 
-    <button type="submit" disabled>✨ 正在載入經驗表… ✨</button>
+    <button type="submit">✨ 開始計算 ✨</button>
   </form>
 
   <section id="results" class="results" hidden>
@@ -235,11 +219,8 @@ body.dark .unit-label { color: #cbd5e1; }
     <p id="acceleratedCountdown"></p>
   </section>
 
-  <footer>羽之國 Ver 1.2.0</footer>
+  <footer>羽之國 Ver 1.1.0 - 上傳經驗表版</footer>
 </main>
-
-<!-- 浮動夜間切換按鈕 -->
-<button class="theme-toggle" id="themeToggle" title="切換主題">🌙</button>
 
 <script>
 // ====== 夜間模式切換 ======
@@ -253,7 +234,7 @@ function applyTheme(dark) {
 applyTheme(localStorage.getItem("theme") === "dark");
 themeToggle.addEventListener("click", () => applyTheme(!body.classList.contains("dark")));
 
-// ====== 經驗表自動讀取 ======
+// ====== 經驗表與前綴和 ======
 let EXP_TABLE = new Map();
 let prefixSum = [];
 
@@ -262,40 +243,27 @@ function updatePrefixSum() {
   const maxLv = Math.max(...levels);
   prefixSum = [0];
   for (let i = 1; i <= maxLv; i++) {
-    prefixSum[i] = prefixSum[i-1] + (EXP_TABLE.get(i) || 0);
+    const exp = EXP_TABLE.get(i) || 0;
+    prefixSum[i] = prefixSum[i - 1] + exp;
   }
 }
 
-const submitBtn = document.querySelector("#expForm button[type='submit']");
-const seasonSelect = document.getElementById("seasonSelect");
-
-function loadExpTable(season) {
-  submitBtn.disabled = true;
-  submitBtn.textContent = "✨ 正在載入經驗表… ✨";
-  EXP_TABLE.clear();
-  fetch(`static/database/exp_${season}.csv`)
-    .then(res => res.text())
-    .then(text => {
-      text.trim().split(/\r?\n/).slice(1).forEach(line => {
-        const [lv, exp] = line.split(',').map(Number);
-        if (!isNaN(lv) && !isNaN(exp)) EXP_TABLE.set(lv, exp);
-      });
-      updatePrefixSum();
-      console.log(`經驗表 ${season.toUpperCase()} 已載入完成！`);
-      submitBtn.disabled = false;
-      submitBtn.textContent = "✨ 開始計算 ✨";
-    })
-    .catch(err => {
-      console.error('讀取 CSV 失敗', err);
-      submitBtn.textContent = "⚠ 讀取失敗，請刷新";
+document.getElementById("csvFile").addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = evt => {
+    const text = evt.target.result;
+    EXP_TABLE.clear();
+    text.trim().split(/\r?\n/).slice(1).forEach(line => {
+      const [lv, exp] = line.split(',').map(Number);
+      if (!isNaN(lv) && !isNaN(exp)) EXP_TABLE.set(lv, exp);
     });
-}
-
-// 初始載入
-loadExpTable(seasonSelect.value);
-
-// 改變賽季時重新載入
-seasonSelect.addEventListener("change", e => loadExpTable(e.target.value));
+    updatePrefixSum();
+    alert("經驗表已載入完成！");
+  };
+  reader.readAsText(file);
+});
 
 // ====== 工具函數 ======
 const fmtNum = n => new Intl.NumberFormat().format(n);
@@ -327,7 +295,7 @@ function startCountdown(finishAt, accFinishAt){
 // ====== 主邏輯 ======
 document.getElementById("expForm").addEventListener("submit", e=>{
   e.preventDefault();
-  if (EXP_TABLE.size === 0) { alert("經驗表尚未載入完成！"); return; }
+  if (EXP_TABLE.size === 0) { alert("請先上傳經驗表 CSV！"); return; }
 
   const curLv=+document.getElementById("currentLevel").value||0;
   const curExp=(+document.getElementById("currentExp").value||0)*10000;
@@ -354,10 +322,6 @@ document.getElementById("expForm").addEventListener("submit", e=>{
   document.getElementById("acceleratedTime").textContent = `加速完成：${new Date(accFinishAt).toLocaleString()}`;
   startCountdown(finishAt, accFinishAt);
 });
-
-
-
-
 </script>
 </body>
 </html>
