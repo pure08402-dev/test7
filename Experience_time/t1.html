@@ -354,6 +354,48 @@ document.getElementById("expForm").addEventListener("submit", e=>{
   document.getElementById("acceleratedTime").textContent = `加速完成：${new Date(accFinishAt).toLocaleString()}`;
   startCountdown(finishAt, accFinishAt);
 });
+
+// ====== 選擇賽季自動保存到 localStorage ======
+const seasonSelect = document.getElementById("seasonSelect");
+
+// 初始值從 localStorage 或預設 S3
+const savedSeason = localStorage.getItem("season") || "s3";
+seasonSelect.value = savedSeason;
+
+// 載入對應經驗表
+function loadExpTable(season) {
+  submitBtn.disabled = true;
+  submitBtn.textContent = "✨ 正在載入經驗表… ✨";
+  EXP_TABLE.clear();
+  fetch(`static/database/exp_${season}.csv`)
+    .then(res => res.text())
+    .then(text => {
+      text.trim().split(/\r?\n/).slice(1).forEach(line => {
+        const [lv, exp] = line.split(',').map(Number);
+        if (!isNaN(lv) && !isNaN(exp)) EXP_TABLE.set(lv, exp);
+      });
+      updatePrefixSum();
+      console.log(`經驗表 ${season.toUpperCase()} 已載入完成！`);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "✨ 開始計算 ✨";
+    })
+    .catch(err => {
+      console.error('讀取 CSV 失敗', err);
+      submitBtn.textContent = "⚠ 讀取失敗，請刷新";
+    });
+}
+
+// 初次載入
+loadExpTable(savedSeason);
+
+// 當賽季改變時
+seasonSelect.addEventListener("change", e => {
+  const season = e.target.value;
+  localStorage.setItem("season", season); // 儲存到 localStorage
+  loadExpTable(season);                    // 重新載入 CSV
+});
+
+
 </script>
 </body>
 </html>
