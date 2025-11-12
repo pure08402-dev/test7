@@ -150,33 +150,44 @@ body.dark .unit-label { color: #cbd5e1; }
 .flex-col {
   flex: 1 1 45%;
 }
-.theme-toggle {
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  background: none;
-  border: none;
-  font-size: 1.3em;
-  cursor: pointer;
-  color: var(--accent);
-  transition: transform 0.3s ease;
-}
-.theme-toggle:hover {
-  transform: scale(1.2);
-}
 @media (max-width:600px){
   main.card{margin:10px;padding:18px;}
   h2{font-size:1.3em;}
   button{font-size:1em;padding:12px;}
   input{font-size:0.95em;}
 }
+
+/* 浮動夜間模式按鈕 */
+.theme-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  background: var(--accent-light);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.3s, background 0.3s;
+  z-index: 9999;
+}
+.theme-toggle:hover {
+  transform: scale(1.2);
+  background: var(--accent);
+}
 </style>
 </head>
 <body>
+
 <main class="card">
-  <button class="theme-toggle" id="themeToggle" title="切換主題">🌙</button>
   <h2>羽之國 S3 經驗時間計算器</h2>
-  <small>Ver 1.1.0 - 夜間模式升級版</small>
+  <small>Ver 1.1.0 - 夜間模式浮動版</small>
 
   <form id="expForm">
     <label>現在等級（Lv）</label>
@@ -203,7 +214,7 @@ body.dark .unit-label { color: #cbd5e1; }
       </div>
     </div>
 
-    <button type="submit">✨ 開始計算 ✨</button>
+    <button type="submit" disabled>✨ 正在載入經驗表… ✨</button>
   </form>
 
   <section id="results" class="results" hidden>
@@ -216,8 +227,11 @@ body.dark .unit-label { color: #cbd5e1; }
     <p id="acceleratedCountdown"></p>
   </section>
 
-  <footer>© 小咕・羽之國 Ver 1.1.0 - 夜間模式升級版</footer>
+  <footer>© 小咕・羽之國 Ver 1.1.0 - 夜間模式浮動版</footer>
 </main>
+
+<!-- 浮動夜間切換按鈕 -->
+<button class="theme-toggle" id="themeToggle" title="切換主題">🌙</button>
 
 <script>
 // ====== 夜間模式切換 ======
@@ -244,6 +258,8 @@ function updatePrefixSum() {
   }
 }
 
+const submitBtn = document.querySelector("#expForm button[type='submit']");
+
 fetch('static/database/exp_table.csv')
   .then(res => res.text())
   .then(text => {
@@ -253,6 +269,8 @@ fetch('static/database/exp_table.csv')
     });
     updatePrefixSum();
     console.log('經驗表已載入完成！');
+    submitBtn.disabled = false;
+    submitBtn.textContent = "✨ 開始計算 ✨";
   })
   .catch(err => console.error('讀取 CSV 失敗', err));
 
