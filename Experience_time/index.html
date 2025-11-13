@@ -179,6 +179,50 @@ body.dark .unit-label { color: #cbd5e1; }
 }
 .flex-col { flex: 1 1 45%; }
 
+
+/* 單位切換開關 */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+  margin: 0 4px;
+}
+.switch input { display: none; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: #93c5fd;
+  transition: .3s;
+  border-radius: 22px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+.switch input:checked + .slider {
+  background-color: #3b82f6;
+}
+.switch input:checked + .slider:before {
+  transform: translateX(18px);
+}
+body.dark .slider {
+  background-color: #64748b;
+}
+body.dark .switch input:checked + .slider {
+  background-color: #60a5fa;
+}
+
+
 /* 浮動夜間模式按鈕 */
 .theme-toggle {
   position: fixed;
@@ -220,7 +264,7 @@ body.dark .unit-label { color: #cbd5e1; }
 
 <main class="card">
   <h2>經驗時間計算器</h2>
-  <small>簡單計算,僅功參考</small>
+  <small>簡單計算,僅供參考</small>
   <small>實際以遊戲為主</small>
 
   <form id="expForm">
@@ -231,17 +275,40 @@ body.dark .unit-label { color: #cbd5e1; }
       <option value="s3" selected>S3-羽之國</option>
     </select>
 
-    <label>現在等級（Lv）</label>
-    <input id="currentLevel" type="number" min="1" placeholder="例如：98">
+<label>現在等級（Lv）</label>
+<input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：98">
 
-    <label>現有經驗（Exp，萬）<span class="unit-label">輸入 5 代表 50000</span></label>
-    <input id="currentExp" type="number" min="0" step="0.1" placeholder="例如：5">
+<label>現有經驗（Exp）
+      <span class="unit-label">單位：
+        <label class="switch">
+          <input type="checkbox" id="expUnitToggle">
+          <span class="slider"></span>
+        </label>
+        <span id="expUnitLabel">萬</span>
+      </span>
+    </label>
+<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="0.1" placeholder="例如：5">
 
-    <label>目標等級（Lv）</label>
-    <input id="targetLevel" type="number" min="1" placeholder="例如：100">
 
-    <label>每小時經驗（EXP/h）</label>
-    <input id="expPerHour" type="number" min="1" placeholder="例如：20000">
+
+<label>目標等級（Lv）</label>
+<input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：100">
+
+    <label>每小時經驗（EXP/h）
+      <span class="unit-label">單位：
+        <label class="switch">
+          <input type="checkbox" id="ephUnitToggle">
+          <span class="slider"></span>
+        </label>
+        <span id="ephUnitLabel">萬</span>
+      </span>
+    </label>
+    <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="0.1" placeholder="例如：20000">
+
+
+
+
+
 
     <div class="divider">加速項目</div>
     <div class="flex-row">
@@ -330,6 +397,25 @@ loadExpTable(seasonSelect.value);
 // 改變賽季時重新載入
 seasonSelect.addEventListener("change", e => loadExpTable(e.target.value));
 
+// 單位切換控制，預設不使用萬
+let expInTenThousands = false, ephInTenThousands = false; // <-- 預設 false
+const expToggle = document.getElementById("expUnitToggle"),
+      ephToggle = document.getElementById("ephUnitToggle");
+const expUnitLabel = document.getElementById("expUnitLabel"),
+      ephUnitLabel = document.getElementById("ephUnitLabel");
+// 初始化單位標籤
+expUnitLabel.textContent = expInTenThousands ? "萬" : "";
+ephUnitLabel.textContent = ephInTenThousands ? "萬" : "";
+// 切換事件
+expToggle.addEventListener("change", () => {
+  expInTenThousands = expToggle.checked; // 勾選就使用萬
+  expUnitLabel.textContent = expInTenThousands ? "萬" : "";
+});
+ephToggle.addEventListener("change", () => {
+  ephInTenThousands = ephToggle.checked; // 勾選就使用萬
+  ephUnitLabel.textContent = ephInTenThousands ? "萬" : "";
+});
+
 // ====== 工具函數 ======
 const fmtNum = n => new Intl.NumberFormat().format(n);
 const fmtDur = s => {
@@ -363,9 +449,11 @@ document.getElementById("expForm").addEventListener("submit", e=>{
   if (EXP_TABLE.size === 0) { alert("經驗表尚未載入完成！"); return; }
 
   const curLv=+document.getElementById("currentLevel").value||0;
-  const curExp=(+document.getElementById("currentExp").value||0)*10000;
+  let curExp = +document.getElementById("currentExp").value || 0;
   const tgtLv=+document.getElementById("targetLevel").value||0;
-  const eph=+document.getElementById("expPerHour").value||0;
+  let eph = +document.getElementById("expPerHour").value || 0;
+  if (expInTenThousands) curExp *= 10000;
+  if (ephInTenThousands) eph *= 10000;
   const boosts=(+document.getElementById("dailyBoosts").value||0)+(+document.getElementById("stoneBoosts").value||0);
 
   if(curLv<=0 || tgtLv<=curLv || eph<=0){ alert("請輸入正確的等級與經驗值"); return; }
