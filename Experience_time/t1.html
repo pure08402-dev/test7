@@ -397,13 +397,24 @@ loadExpTable(seasonSelect.value);
 // 改變賽季時重新載入
 seasonSelect.addEventListener("change", e => loadExpTable(e.target.value));
 
-// 單位切換控制
-let expInTenThousands=true,ephInTenThousands=true;
-const expToggle=document.getElementById("expUnitToggle"),ephToggle=document.getElementById("ephUnitToggle");
-const expUnitLabel=document.getElementById("expUnitLabel"),ephUnitLabel=document.getElementById("ephUnitLabel");
-expToggle.addEventListener("change",()=>{expInTenThousands=!expToggle.checked;expUnitLabel.textContent=expInTenThousands?"萬":"";});
-ephToggle.addEventListener("change",()=>{ephInTenThousands=!ephToggle.checked;ephUnitLabel.textContent=ephInTenThousands?"萬":"";});
-
+// 單位切換控制，預設不使用萬
+let expInTenThousands = false, ephInTenThousands = false; // <-- 預設 false
+const expToggle = document.getElementById("expUnitToggle"),
+      ephToggle = document.getElementById("ephUnitToggle");
+const expUnitLabel = document.getElementById("expUnitLabel"),
+      ephUnitLabel = document.getElementById("ephUnitLabel");
+// 初始化單位標籤
+expUnitLabel.textContent = expInTenThousands ? "萬" : "";
+ephUnitLabel.textContent = ephInTenThousands ? "萬" : "";
+// 切換事件
+expToggle.addEventListener("change", () => {
+  expInTenThousands = expToggle.checked; // 勾選就使用萬
+  expUnitLabel.textContent = expInTenThousands ? "萬" : "";
+});
+ephToggle.addEventListener("change", () => {
+  ephInTenThousands = ephToggle.checked; // 勾選就使用萬
+  ephUnitLabel.textContent = ephInTenThousands ? "萬" : "";
+});
 
 // ====== 工具函數 ======
 const fmtNum = n => new Intl.NumberFormat().format(n);
@@ -438,11 +449,11 @@ document.getElementById("expForm").addEventListener("submit", e=>{
   if (EXP_TABLE.size === 0) { alert("經驗表尚未載入完成！"); return; }
 
   const curLv=+document.getElementById("currentLevel").value||0;
-  let curExp=+document.getElementById("currentExp").value||0;
+  let curExp = +document.getElementById("currentExp").value || 0;
   const tgtLv=+document.getElementById("targetLevel").value||0;
-  let eph=+document.getElementById("expPerHour").value||0;
-  if(expInTenThousands)curExp*=10000;
-  if(ephInTenThousands)eph*=10000;
+  let eph = +document.getElementById("expPerHour").value || 0;
+  if (expInTenThousands) curExp *= 10000;
+  if (ephInTenThousands) eph *= 10000;
   const boosts=(+document.getElementById("dailyBoosts").value||0)+(+document.getElementById("stoneBoosts").value||0);
 
   if(curLv<=0 || tgtLv<=curLv || eph<=0){ alert("請輸入正確的等級與經驗值"); return; }
