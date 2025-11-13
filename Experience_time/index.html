@@ -276,7 +276,7 @@ body.dark .switch input:checked + .slider {
     </select>
 
 <label>現在等級（Lv）</label>
-<input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：15">
+<input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：160">
 
 <label>現有經驗（Exp）
       <span class="unit-label">單位：
@@ -292,7 +292,7 @@ body.dark .switch input:checked + .slider {
 
 
 <label>目標等級（Lv）</label>
-<input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：100">
+<input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：161">
 
     <label>每小時經驗（EXP/h）
       <span class="unit-label">單位：
@@ -314,11 +314,11 @@ body.dark .switch input:checked + .slider {
     <div class="flex-row">
       <div class="flex-col">
         <label>日常加速次數</label>
-        <input id="dailyBoosts" type="number" min="0" value="0">
+        <input id="dailyBoosts" type="number" pattern="[0-9]*" min="0" value="0">
       </div>
       <div class="flex-col">
         <label>石頭加速次數</label>
-        <input id="stoneBoosts" type="number" min="0" value="0">
+        <input id="stoneBoosts" type="number" pattern="[0-9]*" min="0" value="0">
       </div>
     </div>
 
@@ -415,6 +415,18 @@ ephToggle.addEventListener("change", () => {
   ephInTenThousands = ephToggle.checked; // 勾選就使用萬
   ephUnitLabel.textContent = ephInTenThousands ? "萬" : "";
 });
+// 自動清除加速項目初始 0
+['dailyBoosts','stoneBoosts'].forEach(id => {
+  const input = document.getElementById(id);
+  input.addEventListener('focus', () => {
+    if (input.value === '0') input.value = '';
+  });
+  // 若需要離開後沒輸入自動還原 0
+  input.addEventListener('blur', () => {
+    if (input.value === '') input.value = '0';
+  });
+});
+
 
 // ====== 工具函數 ======
 const fmtNum = n => new Intl.NumberFormat().format(n);
