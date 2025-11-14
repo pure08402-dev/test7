@@ -248,6 +248,38 @@ body.dark .switch input:checked + .slider {
   background: var(--accent);
 }
 
+.group-box {
+  background: rgba(255, 255, 255, 0.35);   /* ✨ 透明 */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+  padding: 18px 14px;
+  margin-bottom: 18px;
+
+  backdrop-filter: blur(12px) saturate(160%); /* ✨ 玻璃效果 */
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.16);   /* ✨ 柔和陰影 */
+  transition: 0.25s ease;
+}
+
+.group-box:hover {
+  box-shadow: 0 10px 26px rgba(0,0,0,0.22);
+  transform: translateY(-2px);
+}
+
+body.dark .group-box {
+  background: rgba(30, 41, 59, 0.45);       /* 夜間透明玻璃效果 */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.5);
+}
+
+.group-title {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
 /* 手機版調整 */
 @media (max-width:600px){
   body { font-size: 17px; }
@@ -292,16 +324,16 @@ body.dark .switch input:checked + .slider {
 <label id="levelLabel">現在等級（Lv）</label>
 <input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：157">
 
-<label>現有經驗（Exp）
+	<label>現有經驗（Exp）</label>
+	
       <span class="unit-label">單位：
         <label class="switch">
           <input type="checkbox" id="expUnitToggle">
           <span class="slider"></span>
         </label>
         <span id="expUnitLabel">萬</span>
-      </span>
-    </label>
-<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="0.1" placeholder="啟用單位萬填'5'為5萬">
+      </span>    
+	<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="啟用單位萬填'5'為5萬">
 
 
 
@@ -317,7 +349,7 @@ body.dark .switch input:checked + .slider {
         </label>
         <span id="ephUnitLabel">萬</span>
       </span>
-    <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="0.1" placeholder="啟用單位萬填'2'為2萬">
+    <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="啟用單位萬填'2'為2萬">
 
 
 
@@ -356,7 +388,7 @@ body.dark .switch input:checked + .slider {
   </div>
 
 
-  <footer>羽之國 Ver 1.2.0</footer>
+  <footer>羽之國 Ver 1.2.1</footer>
 </main>
 
 <!-- 浮動夜間切換按鈕 -->
