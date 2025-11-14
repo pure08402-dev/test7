@@ -248,6 +248,56 @@ body.dark .switch input:checked + .slider {
   background: var(--accent);
 }
 
+.group-box {
+  background: rgba(255, 255, 255, 0.35);   /* ✨ 透明 */
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 16px;
+  padding: 18px 14px;
+  margin-bottom: 18px;
+
+  backdrop-filter: blur(12px) saturate(160%); /* ✨ 玻璃效果 */
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.16);   /* ✨ 柔和陰影 */
+  transition: 0.25s ease;
+}
+
+.group-box:hover {
+  box-shadow: 0 10px 26px rgba(0,0,0,0.22);
+  transform: translateY(-2px);
+}
+
+body.dark .group-box {
+  background: rgba(30, 41, 59, 0.45);       /* 夜間透明玻璃效果 */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.5);
+}
+
+.group-title {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.hint {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 2px 8px;
+  background: #eef6ff;        /* 日間 - 淡藍背景 */
+  color: #1e40af;             /* 日間 - 深藍字 */
+  border: 1px solid #c7ddff;  /* 日間 - 輕邊框 */
+  border-radius: 6px;
+  font-size: 12px;
+  transition: 0.25s ease;
+}
+
+body.dark .hint {
+  background: #2a3548;       /* 夜間 - 深藍灰 */
+  color: #93c5fd;            /* 夜間 - 淡藍字 */
+  border: 1px solid #475569; /* 夜間 - 灰藍邊框 */
+}
+
 /* 手機版調整 */
 @media (max-width:600px){
   body { font-size: 17px; }
@@ -257,10 +307,28 @@ body.dark .switch input:checked + .slider {
   button { font-size: 1.05em; padding: 14px; }
   input, select { font-size: 1em; }
 }
+
+.form-group {
+  margin-bottom: 18px; /* 每個區塊底部間隔 */
+}
 </style>
 
 </head>
 <body>
+
+<!-- 🔥 等級圖片彈窗 -->
+<div id="levelImageModal" style="
+  display:none; position:fixed; left:0; top:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.65); z-index:99999; justify-content:center; align-items:center;">
+  <img src="static/database/level_info.jpg" style="max-width:90%; max-height:90%; border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.5);">
+</div>
+<!-- 🔥 每小時經驗 JPG 彈窗 -->
+<div id="ephImageModal" style="
+  display:none; position:fixed; left:0; top:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.65); z-index:99999; justify-content:center; align-items:center;">
+  <img src="static/database/exp_per_hour.jpg" style="max-width:90%; max-height:90%; border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.5);">
+</div>
+
 
 <main class="card">
   <h2>經驗時間計算器</h2>
@@ -274,38 +342,48 @@ body.dark .switch input:checked + .slider {
       <option value="s2">S2-龍之國</option>
       <option value="s3" selected>S3-羽之國</option>
     </select>
+	
+	
+<main class="card">
+<div class="form-group">
+<label id="levelLabel">現在等級（Lv）</label>
+<input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：157">
+</div>
 
-<label>現在等級（Lv）</label>
-<input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：15">
-
-<label>現有經驗（Exp）
+<div class="form-group">
+	<label>現有經驗（Exp）</label>
+	
       <span class="unit-label">單位：
         <label class="switch">
           <input type="checkbox" id="expUnitToggle">
           <span class="slider"></span>
         </label>
-        <span id="expUnitLabel">萬</span>
-      </span>
-    </label>
-<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="0.1" placeholder="啟用單位萬填'5'為5萬">
+        <span id="expUnitLabel">萬</span><span class="hint">啟用單位「萬」→ 填 5 表示 5 萬</span>
+      </span>    
+	<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="例如：5">
+</div>
 
+</main>
 
-
+<main class="card">
+<div class="form-group">
 <label>目標等級（Lv）</label>
-<input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：100">
+<input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：160">
+</div>
 
-    <label>每小時經驗（EXP/h）
+<div class="form-group">	
+    <label id="ephLabel">每小時經驗（EXP/h） </label>
+	
       <span class="unit-label">單位：
         <label class="switch">
           <input type="checkbox" id="ephUnitToggle">
           <span class="slider"></span>
         </label>
-        <span id="ephUnitLabel">萬</span>
+        <span id="ephUnitLabel">萬</span><span class="hint">啟用單位「萬」→ 填 2 表示 2 萬</span>
       </span>
-    </label>
-    <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="0.1" placeholder="啟用單位萬填'2'為2萬">
-
-
+    <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：2">
+</div>	
+</main>
 
 
 
@@ -335,7 +413,14 @@ body.dark .switch input:checked + .slider {
     <p id="acceleratedCountdown"></p>
   </section>
 
-  <footer>羽之國 Ver 1.2.0</footer>
+<!-- 新增訪問統計欄 -->
+  <div style="text-align:center; font-size:0.9em; color:var(--text-sub); margin-top:14px;">
+    頁面訪問次數：<span id="counter">載入中...</span>｜
+    今日訪問：<span id="todayCounter">載入中...</span>｜
+  </div>
+
+
+  <footer>羽之國 Ver 1.2.1</footer>
 </main>
 
 <!-- 浮動夜間切換按鈕 -->
@@ -352,6 +437,40 @@ function applyTheme(dark) {
 }
 applyTheme(localStorage.getItem("theme") === "dark");
 themeToggle.addEventListener("click", () => applyTheme(!body.classList.contains("dark")));
+
+// ====== 加入訪問統計 ======
+(function(){
+  const counterEl = document.getElementById("counter");
+  const todayEl = document.getElementById("todayCounter");
+
+  // 獲取今日日期字串
+  const todayStr = new Date().toISOString().split("T")[0];
+
+  // 從 localStorage 讀取資料
+  let total = parseInt(localStorage.getItem("visit_total") || "0", 10);
+  let lastDate = localStorage.getItem("visit_lastDate") || "";
+  let todayCount = parseInt(localStorage.getItem("visit_todayCount") || "0", 10);
+
+  // 如果是新的一天就重置今日計數
+  if (lastDate !== todayStr) {
+    todayCount = 0;
+    lastDate = todayStr;
+  }
+
+  // 累加計數
+  total++;
+  todayCount++;
+
+  // 更新 localStorage
+  localStorage.setItem("visit_total", total);
+  localStorage.setItem("visit_todayCount", todayCount);
+  localStorage.setItem("visit_lastDate", todayStr);
+
+  // 更新畫面
+  counterEl.textContent = total.toLocaleString();
+  todayEl.textContent = todayCount.toLocaleString();
+})();
+
 
 // ====== 經驗表自動讀取 ======
 let EXP_TABLE = new Map();
@@ -488,6 +607,27 @@ document.getElementById("expForm").addEventListener("submit", e=>{
   startCountdown(finishAt, accFinishAt);
 });
 
+
+
+// ====== 點擊現在等級 → 顯示圖片 ======
+document.getElementById("levelLabel").addEventListener("click", () => {
+  document.getElementById("levelImageModal").style.display = "flex";
+});
+
+// 點擊背景關閉圖片
+document.getElementById("levelImageModal").addEventListener("click", () => {
+  document.getElementById("levelImageModal").style.display = "none";
+});
+
+// ====== 點擊 EXP/h → 顯示 JPG 圖片 ======
+document.getElementById("ephLabel").addEventListener("click", () => {
+  document.getElementById("ephImageModal").style.display = "flex";
+});
+
+// 點擊背景關閉圖片
+document.getElementById("ephImageModal").addEventListener("click", () => {
+  document.getElementById("ephImageModal").style.display = "none";
+});
 
 
 </script>
