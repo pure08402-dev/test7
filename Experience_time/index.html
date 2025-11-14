@@ -546,6 +546,19 @@ ephToggle.addEventListener("change", () => {
   });
 });
 
+// ===== 單位切換事件 =====
+expToggle.addEventListener("change", () => {
+  expInTenThousands = expToggle.checked;
+  expUnitLabel.textContent = expInTenThousands ? "萬" : "";
+  document.getElementById("currentExp").placeholder = expInTenThousands ? "例如：3077" : "例如：30770000";
+});
+
+ephToggle.addEventListener("change", () => {
+  ephInTenThousands = ephToggle.checked;
+  ephUnitLabel.textContent = ephInTenThousands ? "萬" : "";
+  document.getElementById("expPerHour").placeholder = ephInTenThousands ? "例如：444" : "例如：4448245";
+});
+
 
 // ====== 工具函數 ======
 const fmtNum = n => new Intl.NumberFormat().format(n);
