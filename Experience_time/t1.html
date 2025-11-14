@@ -262,9 +262,16 @@ body.dark .switch input:checked + .slider {
 </head>
 <body>
 
+<!-- 🔥 等級圖片彈窗 -->
+<div id="levelImageModal" style="
+  display:none; position:fixed; left:0; top:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.65); z-index:99999; justify-content:center; align-items:center;">
+  <img src="static/database/level_info.png" style="max-width:90%; max-height:90%; border-radius:12px; box-shadow:0 0 20px rgba(0,0,0,0.5);">
+</div>
+
 <main class="card">
   <h2>經驗時間計算器</h2>
-  <small>簡單計算,僅功參考</small>
+  <small>簡單計算,僅供參考</small>
   <small>實際以遊戲為主</small>
 
   <form id="expForm">
@@ -275,8 +282,8 @@ body.dark .switch input:checked + .slider {
       <option value="s3" selected>S3-羽之國</option>
     </select>
 
-<label>現在等級（Lv）</label>
-<input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：98">
+<label id="levelLabel">現在等級（Lv）</label>
+<input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：160">
 
 <label>現有經驗（Exp）
       <span class="unit-label">單位：
@@ -287,12 +294,12 @@ body.dark .switch input:checked + .slider {
         <span id="expUnitLabel">萬</span>
       </span>
     </label>
-<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="0.1" placeholder="例如：5">
+<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" step="0.1" placeholder="啟用單位萬填5為'5'萬">
 
 
 
 <label>目標等級（Lv）</label>
-<input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：100">
+<input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：161">
 
     <label>每小時經驗（EXP/h）
       <span class="unit-label">單位：
@@ -303,7 +310,7 @@ body.dark .switch input:checked + .slider {
         <span id="ephUnitLabel">萬</span>
       </span>
     </label>
-    <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="0.1" placeholder="例如：20000">
+    <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="0.1" placeholder="啟用單位萬填2為'2'萬">
 
 
 
@@ -314,11 +321,11 @@ body.dark .switch input:checked + .slider {
     <div class="flex-row">
       <div class="flex-col">
         <label>日常加速次數</label>
-        <input id="dailyBoosts" type="number" min="0" value="0">
+        <input id="dailyBoosts" type="number" pattern="[0-9]*" min="0" value="0">
       </div>
       <div class="flex-col">
         <label>石頭加速次數</label>
-        <input id="stoneBoosts" type="number" min="0" value="0">
+        <input id="stoneBoosts" type="number" pattern="[0-9]*" min="0" value="0">
       </div>
     </div>
 
@@ -334,6 +341,13 @@ body.dark .switch input:checked + .slider {
     <p id="countdown"></p>
     <p id="acceleratedCountdown"></p>
   </section>
+
+<!-- 新增訪問統計欄 -->
+  <div style="text-align:center; font-size:0.9em; color:var(--text-sub); margin-top:14px;">
+    頁面訪問次數：<span id="counter">載入中...</span>｜
+    今日訪問：<span id="todayCounter">載入中...</span>｜
+  </div>
+
 
   <footer>羽之國 Ver 1.2.0</footer>
 </main>
@@ -352,6 +366,40 @@ function applyTheme(dark) {
 }
 applyTheme(localStorage.getItem("theme") === "dark");
 themeToggle.addEventListener("click", () => applyTheme(!body.classList.contains("dark")));
+
+// ====== 加入訪問統計 ======
+(function(){
+  const counterEl = document.getElementById("counter");
+  const todayEl = document.getElementById("todayCounter");
+
+  // 獲取今日日期字串
+  const todayStr = new Date().toISOString().split("T")[0];
+
+  // 從 localStorage 讀取資料
+  let total = parseInt(localStorage.getItem("visit_total") || "0", 10);
+  let lastDate = localStorage.getItem("visit_lastDate") || "";
+  let todayCount = parseInt(localStorage.getItem("visit_todayCount") || "0", 10);
+
+  // 如果是新的一天就重置今日計數
+  if (lastDate !== todayStr) {
+    todayCount = 0;
+    lastDate = todayStr;
+  }
+
+  // 累加計數
+  total++;
+  todayCount++;
+
+  // 更新 localStorage
+  localStorage.setItem("visit_total", total);
+  localStorage.setItem("visit_todayCount", todayCount);
+  localStorage.setItem("visit_lastDate", todayStr);
+
+  // 更新畫面
+  counterEl.textContent = total.toLocaleString();
+  todayEl.textContent = todayCount.toLocaleString();
+})();
+
 
 // ====== 經驗表自動讀取 ======
 let EXP_TABLE = new Map();
@@ -415,6 +463,18 @@ ephToggle.addEventListener("change", () => {
   ephInTenThousands = ephToggle.checked; // 勾選就使用萬
   ephUnitLabel.textContent = ephInTenThousands ? "萬" : "";
 });
+// 自動清除加速項目初始 0
+['dailyBoosts','stoneBoosts'].forEach(id => {
+  const input = document.getElementById(id);
+  input.addEventListener('focus', () => {
+    if (input.value === '0') input.value = '';
+  });
+  // 若需要離開後沒輸入自動還原 0
+  input.addEventListener('blur', () => {
+    if (input.value === '') input.value = '0';
+  });
+});
+
 
 // ====== 工具函數 ======
 const fmtNum = n => new Intl.NumberFormat().format(n);
@@ -478,6 +538,15 @@ document.getElementById("expForm").addEventListener("submit", e=>{
 
 
 
+// ====== 點擊現在等級 → 顯示圖片 ======
+document.getElementById("levelLabel").addEventListener("click", () => {
+  document.getElementById("levelImageModal").style.display = "flex";
+});
+
+// 點擊背景關閉圖片
+document.getElementById("levelImageModal").addEventListener("click", () => {
+  document.getElementById("levelImageModal").style.display = "none";
+});
 </script>
 </body>
 </html>
