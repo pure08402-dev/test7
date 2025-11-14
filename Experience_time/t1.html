@@ -307,6 +307,10 @@ body.dark .hint {
   button { font-size: 1.05em; padding: 14px; }
   input, select { font-size: 1em; }
 }
+
+.form-group {
+  margin-bottom: 18px; /* 每個區塊底部間隔 */
+}
 </style>
 
 </head>
@@ -341,9 +345,12 @@ body.dark .hint {
 	
 	
 <main class="card">
+<div class="form-group">
 <label id="levelLabel">現在等級（Lv）</label>
 <input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：157">
+</div>
 
+<div class="form-group">
 	<label>現有經驗（Exp）</label>
 	
       <span class="unit-label">單位：
@@ -354,13 +361,17 @@ body.dark .hint {
         <span id="expUnitLabel">萬</span><span class="hint">啟用單位「萬」→ 填 5 表示 5 萬</span>
       </span>    
 	<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="例如：5">
+</div>
 
 </main>
 
 <main class="card">
+<div class="form-group">
 <label>目標等級（Lv）</label>
 <input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：160">
+</div>
 
+<div class="form-group">	
     <label id="ephLabel">每小時經驗（EXP/h） </label>
 	
       <span class="unit-label">單位：
@@ -371,7 +382,7 @@ body.dark .hint {
         <span id="ephUnitLabel">萬</span><span class="hint">啟用單位「萬」→ 填 2 表示 2 萬</span>
       </span>
     <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：2">
-
+</div>	
 </main>
 
 
