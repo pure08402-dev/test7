@@ -308,7 +308,8 @@ body.dark .switch input:checked + .slider {
 <label>目標等級（Lv）</label>
 <input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：160">
 
-    <label id="ephLabel">每小時經驗（EXP/h）
+    <label id="ephLabel">每小時經驗（EXP/h） </label>
+	
       <span class="unit-label">單位：
         <label class="switch">
           <input type="checkbox" id="ephUnitToggle">
@@ -316,7 +317,6 @@ body.dark .switch input:checked + .slider {
         </label>
         <span id="ephUnitLabel">萬</span>
       </span>
-    </label>
     <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" step="0.1" placeholder="啟用單位萬填'2'為2萬">
 
 
