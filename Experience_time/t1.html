@@ -280,6 +280,24 @@ body.dark .group-box {
   color: var(--accent);
 }
 
+.hint {
+  display: inline-block;
+  margin-left: 5px;
+  padding: 2px 8px;
+  background: #eef6ff;        /* 日間 - 淡藍背景 */
+  color: #1e40af;             /* 日間 - 深藍字 */
+  border: 1px solid #c7ddff;  /* 日間 - 輕邊框 */
+  border-radius: 6px;
+  font-size: 12px;
+  transition: 0.25s ease;
+}
+
+body.dark .hint {
+  background: #2a3548;       /* 夜間 - 深藍灰 */
+  color: #93c5fd;            /* 夜間 - 淡藍字 */
+  border: 1px solid #475569; /* 夜間 - 灰藍邊框 */
+}
+
 /* 手機版調整 */
 @media (max-width:600px){
   body { font-size: 17px; }
@@ -320,7 +338,9 @@ body.dark .group-box {
       <option value="s2">S2-龍之國</option>
       <option value="s3" selected>S3-羽之國</option>
     </select>
-
+	
+	
+<main class="card">
 <label id="levelLabel">現在等級（Lv）</label>
 <input id="currentLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：157">
 
@@ -331,12 +351,13 @@ body.dark .group-box {
           <input type="checkbox" id="expUnitToggle">
           <span class="slider"></span>
         </label>
-        <span id="expUnitLabel">萬</span>
+        <span id="expUnitLabel">萬</span><span class="hint">啟用單位「萬」→ 填 5 表示 5 萬</span>
       </span>    
-	<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="啟用單位萬填'5'為5萬">
+	<input id="currentExp" type="number" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="例如：5">
 
+</main>
 
-
+<main class="card">
 <label>目標等級（Lv）</label>
 <input id="targetLevel" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：160">
 
@@ -347,11 +368,11 @@ body.dark .group-box {
           <input type="checkbox" id="ephUnitToggle">
           <span class="slider"></span>
         </label>
-        <span id="ephUnitLabel">萬</span>
+        <span id="ephUnitLabel">萬</span><span class="hint">啟用單位「萬」→ 填 2 表示 2 萬</span>
       </span>
-    <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="啟用單位萬填'2'為2萬">
+    <input id="expPerHour" type="number" inputmode="numeric" pattern="[0-9]*" min="1" placeholder="例如：2">
 
-
+</main>
 
 
 
