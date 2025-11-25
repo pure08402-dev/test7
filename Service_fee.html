@@ -17,25 +17,14 @@
       color: #e6e6e6;
     }
 
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      max-width: 420px;
-      margin: auto;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
-      transition: 0.3s;
-    }
+
+
 
     body.dark .card {
       background: #1e1e1e;
       box-shadow: 0 3px 12px rgba(255, 255, 255, 0.05);
     }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 15px;
-    }
 
     label {
       display: block;
@@ -51,6 +40,7 @@
       border-radius: 10px;
       border: 1px solid #ccc;
       box-sizing: border-box;
+	  text-align: left; /* 文字靠左 */
       background: #fafafa;
       transition: 0.2s;
     }
@@ -130,29 +120,8 @@
       background: #3a3f55;
     }
 
-    .result-box {
-      margin-top: 25px;
-      background: #eef3ff;
-      border-radius: 10px;
-      padding: 15px;
-      font-size: 16px;
-      transition: 0.2s;
-    }
 
-    body.dark .result-box {
-      background: #222;
-      color: #ddd;
-    }
 
-    .result-line {
-      margin: 8px 0;
-    }
-
-    .label {
-      display: inline-block;
-      width: 120px;
-      font-weight: bold;
-    }
 
     .value {
       color: #007bff;
@@ -176,6 +145,97 @@
 
     body.light .theme-btn {
       background: #333;
+    }
+	
+	
+
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 24px;
+  max-width: 95%;
+  margin: 20px auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+body.dark .card {
+  background: rgba(30,30,30,0.95);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+      color: #fff;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+
+
+
+
+    .toggle-buttons {
+      display: flex;
+      margin-top: 10px;
+      gap: 10px;
+    }
+
+    .toggle-buttons button {
+      flex: 1;
+      padding: 12px 0;
+      font-size: 18px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      transition: 0.2s;
+    }
+
+    .toggle-buttons button.active {
+      background: #4f8ef7;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .keyboard {
+      margin-top: 15px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+
+
+    .result-line {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
+    .result-line span {
+      text-align: left; /* 文字靠左 */
+    }
+
+    .theme-btn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px;
+      font-size: 20px;
+      border-radius: 12px;
+      border: none;
+      background: #4f8ef7;
+      color: #fff;
+      cursor: pointer;
     }
   </style>
 </head>
