@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>手續費計算器</title>
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 450px;
+      margin: auto;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .result-box {
+      margin-top: 20px;
+      background: #eef3ff;
+      border-radius: 8px;
+      padding: 15px;
+      font-size: 16px;
+    }
+    .result-line {
+      margin: 8px 0;
+    }
+    .label {
+      display: inline-block;
+      width: 130px;
+      color: #333;
+      font-weight: bold;
+    }
+    .value {
+      color: #007bff;
+    }
+
+    /* === 虛擬鍵盤樣式 === */
+    .numpad {
+      display: none;
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      padding: 10px;
+      border-radius: 12px;
+      width: 300px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 999;
+    }
+    .numpad-row {
+      display: flex;
+      margin-bottom: 8px;
+    }
+    .numpad-btn {
+      flex: 1;
+      margin: 3px;
+      padding: 12px 0;
+      text-align: center;
+      background: #e7e9ee;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .numpad-btn:active {
+      background: #cfd2da;
+    }
+    .numpad-btn.red {
+      background: #ffcccc;
+    }
+    .numpad-btn.red:active {
+      background: #ffb3b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>手續費計算器</h2>
+
+    <label>單價（元）：</label>
+    <input type="number" id="price" placeholder="例如：1000" onfocus="showPad(this)" oninput="calculateFee()">
+
+    <label>數量：</label>
+    <input type="number" id="quantity" placeholder="例如：5" onfocus="showPad(this)" oninput="calculateFee()">
+
+    <label>手續費%：</label>
+    <input type="number" id="feeRate" placeholder="例如：2" onfocus="showPad(this)" oninput="calculateFee()">
+
+    <div class="result-box">
+      <div class="result-line"><span class="label">總金額：</span><span id="showTotal" class="value">0 元</span></div>
+      <div class="result-line"><span class="label">手續費金額：</span><span id="showFee" class="value">0 元</span></div>
+      <div class="result-line"><span class="label">實收金額：</span><span id="showNet" class="value">0 元</span></div>
+    </div>
+  </div>
+
+  <!-- === 虛擬鍵盤 === -->
+  <div class="numpad" id="numpad">
+    <div class="numpad-row">
+      <div class="numpad-btn" onclick="pressKey('1')">1</div>
+      <div class="numpad-btn" onclick="pressKey('2')">2</div>
+      <div class="numpad-btn" onclick="pressKey('3')">3</div>
+    </div>
+    <div class="numpad-row">
+      <div class="numpad-btn" onclick="pressKey('4')">4</div>
+      <div class="numpad-btn" onclick="pressKey('5')">5</div>
+      <div class="numpad-btn" onclick="pressKey('6')">6</div>
+    </div>
+    <div class="numpad-row">
+      <div class="numpad-btn" onclick="pressKey('7')">7</div>
+      <div class="numpad-btn" onclick="pressKey('8')">8</div>
+      <div class="numpad-btn" onclick="pressKey('9')">9</div>
+    </div>
+    <div class="numpad-row">
+      <div class="numpad-btn red" onclick="pressKey('del')">刪除</div>
+      <div class="numpad-btn" onclick="pressKey('0')">0</div>
+      <div class="numpad-btn red" onclick="pressKey('clear')">清除</div>
+    </div>
+  </div>
+
+  <script>
+    let activeInput = null;
+
+    function showPad(input) {
+      activeInput = input;
+      document.getElementById("numpad").style.display = "block";
+    }
+
+    function pressKey(value) {
+      if (!activeInput) return;
+
+      if (value === "clear") {
+        activeInput.value = "";
+      } else if (value === "del") {
+        activeInput.value = activeInput.value.slice(0, -1);
+      } else {
+        activeInput.value += value;
+      }
+
+      activeInput.dispatchEvent(new Event("input"));
+    }
+
+    function calculateFee() {
+      const price = parseFloat(document.getElementById("price").value) || 0;
+      const quantity = parseFloat(document.getElementById("quantity").value) || 0;
+      const feeRate = parseFloat(document.getElementById("feeRate").value) || 0;
+
+      const total = price * quantity;
+      const fee = total * (feeRate / 100);
+      const net = total - fee;
+
+      document.getElementById("showTotal").textContent = `${total.toFixed(2)} 元`;
+      document.getElementById("showFee").textContent = `${fee.toFixed(2)} 元`;
+      document.getElementById("showNet").textContent = `${net.toFixed(2)} 元`;
+    }
+
+    // 點擊輸入框以外區域 → 隱藏鍵盤
+    document.addEventListener("click", function(e) {
+      const pad = document.getElementById("numpad");
+
+      if (!pad.contains(e.target) && e.target.tagName !== "INPUT") {
+        pad.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
