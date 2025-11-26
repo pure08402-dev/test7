@@ -5,42 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 <title>手續費計算</title>
 <style>
-body { font-family: "Microsoft JhengHei", sans-serif; background: #f0f2f5; color: #111; padding: 10px; margin: 0; transition: 0.3s; }
-body.dark { background: #111; color: #e6e6e6; }
-
-.card { background: #fff; padding: 20px; border-radius: 24px; max-width: 420px; width: 95%; margin: 20px auto; box-shadow: 0 6px 20px rgba(0,0,0,0.2); transition: 0.3s; }
-body.dark .card { background: rgba(30,30,30,0.95); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-
-h2 { text-align: center; margin-bottom: 20px; font-size: 24px; }
-label { display: block; margin-top: 12px; font-weight: bold; font-size: 16px; }
-input { width: 100%; padding: 12px; margin-top: 6px; font-size: 18px; border-radius: 12px; border: 1px solid #ccc; box-sizing: border-box; text-align: left; background: #fafafa; transition: 0.2s; }
-input:focus { outline: 2px solid #4f8ef7; }
-body.dark input { background: #2a2a2a; border: 1px solid #444; color: #fff; }
-input[readonly] { caret-color: transparent; }
-
-.toggle-buttons { display: flex; margin-top: 10px; gap: 10px; }
-.toggle-buttons button { flex: 1; padding: 12px 0; font-size: 16px; border-radius: 12px; border: none; cursor: pointer; background: #e7e7e7; transition: 0.2s; color: #111; }
-.toggle-buttons button.active { background: #4f8ef7; color: #fff; font-weight: bold; }
-body.dark .toggle-buttons button { background: #333; color: #ccc; }
-body.dark .toggle-buttons button.active { background: #4f8ef7; color: #fff; }
-
-.keyboard { margin-top: 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.key { padding: 16px 0; border-radius: 12px; text-align: center; font-size: 20px; border: none; background: #e7e7e7; cursor: pointer; transition: 0.2s; }
-.key:active { background: #4f8ef7; color: #fff; }
-body.dark .key { background: #2a2a2a; color: #fff; }
-body.dark .key:active { background: #4f8ef7; color: #fff; }
-
-.result-box { margin-top: 20px; background: #eef3ff; border-radius: 12px; padding: 15px; font-size: 16px; transition: 0.2s; }
-body.dark .result-box { background: #222; color: #ddd; }
-.result-line { display: flex; justify-content: space-between; margin-top: 8px; }
-.value { color: #007bff; }
-body.dark .value { color: #4da3ff; }
-
-.theme-btn { width: 100%; margin-top: 18px; padding: 12px; border-radius: 12px; border: none; background: #4f8ef7; color: #fff; font-size: 18px; cursor: pointer; }
-
-html, body {
-  overflow-x: hidden;
-}  
+<link rel="stylesheet" href="static/css/style_time.css">
 </style>
 </head>
 
