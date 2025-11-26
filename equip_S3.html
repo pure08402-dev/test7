@@ -1,310 +1,656 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
-
+<html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>手續費計算</title>
-<style>
-  /* BODY & THEME */
-  body {
-    font-family: "Microsoft JhengHei", sans-serif;
-    background: #f0f2f5;
-    color: #111;
-    padding: 10px;
-    margin: 0;
-    transition: 0.3s;
-  }
-  body.dark {
-    background: #111;
-    color: #e6e6e6;
-  }
-
-  /* CARD */
-  .card {
-    background: #fff;
-    padding: 20px;
-    border-radius: 24px;
-    max-width: 420px;   /* 手機長形適配 */
-    width: 95%;
-    margin: 20px auto;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    transition: 0.3s;
-  }
-  body.dark .card {
-    background: rgba(30,30,30,0.95);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-  }
-
-  /* HEADINGS */
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-  }
-
-  /* LABEL & INPUT */
-  label {
-    display: block;
-    margin-top: 12px;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    font-size: 18px;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    text-align: left;
-    background: #fafafa;
-    transition: 0.2s;
-  }
-  input:focus {
-    outline: 2px solid #4f8ef7;
-  }
-  body.dark input {
-    background: #2a2a2a;
-    border: 1px solid #444;
-    color: #fff;
-  }
-  input[readonly] {
-    caret-color: transparent;
-  }
-
-  /* 數量模式切換 */
-  .toggle-buttons {
-    display: flex;
-    margin-top: 10px;
-    gap: 10px;
-  }
-  .toggle-buttons button {
-    flex: 1;
-    padding: 12px 0;
-    font-size: 16px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    background: #e7e7e7;
-    transition: 0.2s;
-    color: #111;
-  }
-  .toggle-buttons button.active {
-    background: #4f8ef7;
-    color: #fff;
-    font-weight: bold;
-  }
-  body.dark .toggle-buttons button {
-    background: #333;
-    color: #ccc;
-  }
-  body.dark .toggle-buttons button.active {
-    background: #4f8ef7;
-    color: #fff;
-  }
-
-  /* 虛擬鍵盤 */
-  .keyboard {
-    margin-top: 12px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-  .key {
-    padding: 16px 0;
-    border-radius: 12px;
-    text-align: center;
-    font-size: 20px;
-    border: none;
-    background: #e7e7e7;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  .key:active {
-    background: #4f8ef7;
-    color: #fff;
-  }
-  body.dark .key {
-    background: #2a2a2a;
-    color: #fff;
-  }
-  body.dark .key:active {
-    background: #4f8ef7;
-    color: #fff;
-  }
-
-  /* 結果顯示 */
-  .result-box {
-    margin-top: 20px;
-    background: #eef3ff;
-    border-radius: 12px;
-    padding: 15px;
-    font-size: 16px;
-    transition: 0.2s;
-  }
-  body.dark .result-box {
-    background: #222;
-    color: #ddd;
-  }
-  .result-line {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-  }
-  .value {
-    color: #007bff;
-  }
-  body.dark .value {
-    color: #4da3ff;
-  }
-
-  /* 暗色切換按鈕 */
-  .theme-btn {
-    width: 100%;
-    margin-top: 18px;
-    padding: 12px;
-    border-radius: 12px;
-    border: none;
-    background: #4f8ef7;
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>S3升級素材計算</title>
+<link rel="stylesheet" href="static/css/style_equip.css">
 </head>
+<body>
 
-<body class="light">
+	<!-- 🌠 魔幻滑鼠星光拖尾效果 -->
+<canvas id="starCanvas"></canvas>
 
+<script>
+const canvas = document.getElementById("starCanvas");
+const ctx = canvas.getContext("2d");
+let stars = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+document.addEventListener("mousemove", (e) => {
+  for (let i = 0; i < 3; i++) {
+    stars.push({
+      x: e.clientX,
+      y: e.clientY,
+      size: Math.random() * 3 + 1,
+      alpha: 1,
+      color: `hsl(${Math.random() * 360}, 100%, 80%)`,
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2 - 1,
+    });
+  }
+});
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach((s, i) => {
+    s.x += s.vx;
+    s.y += s.vy;
+    s.alpha -= 0.02;
+    if (s.alpha <= 0) stars.splice(i, 1);
+    ctx.globalAlpha = s.alpha;
+    ctx.fillStyle = s.color;
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(animate);
+}
+animate();
+
+// 讓 Canvas 蓋在最上層並點擊穿透
+Object.assign(canvas.style, {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  pointerEvents: "none",
+  zIndex: 9999
+});
+</script>
+	<h2>S3升級素材計算</h2>
   <div class="card">
-    <h2>手續費計算</h2>
-
-    <label>單價（元）：</label>
-    <input id="price" readonly onclick="setInput('price')">
-
-    <label>數量：</label>
-    <input id="quantity" readonly onclick="setInput('quantity')">
-
-    <!-- 數量模式切換 -->
-    <div class="toggle-buttons">
-      <button id="mode1" class="active" onclick="setQtyMode(1)">1 個</button>
-      <button id="mode10" onclick="setQtyMode(10)">1 組 (10 個)</button>
-    </div>
-
-    <label>手續費%：</label>
-    <input id="feeRate" readonly onclick="setInput('feeRate')">
-
-    <!-- 虛擬鍵盤 -->
-    <div class="keyboard">
-      <div class="key" onclick="press('1')">1</div>
-      <div class="key" onclick="press('2')">2</div>
-      <div class="key" onclick="press('3')">3</div>
-      <div class="key" onclick="press('del')">⌫</div>
-
-      <div class="key" onclick="press('4')">4</div>
-      <div class="key" onclick="press('5')">5</div>
-      <div class="key" onclick="press('6')">6</div>
-      <div class="key" onclick="press('clear')">清空</div>
-
-      <div class="key" onclick="press('7')">7</div>
-      <div class="key" onclick="press('8')">8</div>
-      <div class="key" onclick="press('9')">9</div>
-      <div class="key" onclick="press('0')">0</div>
-    </div>
-
-    <!-- 結果 -->
-    <div class="result-box">
-      <div class="result-line"><span class="label">總金額：</span><span id="showTotal" class="value">0 元</span></div>
-      <div class="result-line"><span class="label">手續費金額：</span><span id="showFee" class="value">0 元</span></div>
-      <div class="result-line"><span class="label">實收金額：</span><span id="showNet" class="value">0 元</span></div>
-    </div>
-
-    <!-- 暗色模式按鈕 -->
-    <button class="theme-btn" onclick="toggleTheme()">切換暗色 / 亮色模式</button>
-
+    <h3>素材計算</h3>
+    <label>開始等級：</label>
+    <input type="number" id="start" value="160" min="160" max="300" style="width:80px; padding:5px; font-size:14px;">
+    <label>結束等級：</label>
+    <input type="number" id="end" value="250" min="161" max="300" style="width:80px; padding:5px; font-size:14px;">
+	<h3>古遺物計算</h3>
+	<label>開始等級：</label>
+    <input type="number" id="start1" value="16" min="16" max="30" style="width:80px; padding:5px; font-size:14px;">
+    <label>結束等級：</label>
+    <input type="number" id="end1" value="25" min="17" max="30" style="width:80px; padding:5px; font-size:14px;">
+    <button onclick="calculateAll()">計算</button>
+	<button onclick="clearAll()" style="margin-top:8px; background:#f44336;">重新計算</button>
+    <div class="result" id="result">請輸入範圍並按下計算</div>
   </div>
 
   <script>
-    let activeInput = null;
-    let qtyMode = 1;
+    // 裝備資料
+const equip = {
+  160: { stone: 26000, gold: 52000, refine: 0 },
+  161: { stone: 26260, gold: 52520, refine: 0 },
+  162: { stone: 26520, gold: 53040, refine: 0 },
+  163: { stone: 26780, gold: 53560, refine: 0 },
+  164: { stone: 27040, gold: 54080, refine: 540 },
+  165: { stone: 27300, gold: 54600, refine: 0 },
+  166: { stone: 27560, gold: 55120, refine: 0 },
+  167: { stone: 27820, gold: 55640, refine: 0 },
+  168: { stone: 28080, gold: 56160, refine: 0 },
+  169: { stone: 28340, gold: 56680, refine: 540 },
+  170: { stone: 28600, gold: 57200, refine: 0 },
+  171: { stone: 28860, gold: 57720, refine: 0 },
+  172: { stone: 29120, gold: 58240, refine: 0 },
+  173: { stone: 29380, gold: 58760, refine: 0 },
+  174: { stone: 29640, gold: 59280, refine: 540 },
+  175: { stone: 29900, gold: 59800, refine: 0 },
+  176: { stone: 30160, gold: 60320, refine: 0 },
+  177: { stone: 30420, gold: 60840, refine: 0 },
+  178: { stone: 30680, gold: 61360, refine: 0 },
+  179: { stone: 30940, gold: 61880, refine: 540 },
+  180: { stone: 31200, gold: 62400, refine: 0 },
+  181: { stone: 31460, gold: 62920, refine: 0 },
+  182: { stone: 31720, gold: 63440, refine: 0 },
+  183: { stone: 31980, gold: 63960, refine: 0 },
+  184: { stone: 32240, gold: 64480, refine: 540 },
+  185: { stone: 32500, gold: 65000, refine: 0 },
+  186: { stone: 32760, gold: 65520, refine: 0 },
+  187: { stone: 33020, gold: 66040, refine: 0 },
+  188: { stone: 33280, gold: 66560, refine: 0 },
+  189: { stone: 33540, gold: 67080, refine: 540 },
+  190: { stone: 33800, gold: 67600, refine: 0 },
+  191: { stone: 34060, gold: 68120, refine: 0 },
+  192: { stone: 34320, gold: 68640, refine: 0 },
+  193: { stone: 34580, gold: 69160, refine: 0 },
+  194: { stone: 34840, gold: 69680, refine: 540 },
+  195: { stone: 35100, gold: 70200, refine: 0 },
+  196: { stone: 35360, gold: 70720, refine: 0 },
+  197: { stone: 35620, gold: 71240, refine: 0 },
+  198: { stone: 35880, gold: 71760, refine: 0 },
+  199: { stone: 36140, gold: 72280, refine: 540 },
+  200: { stone: 36400, gold: 72800, refine: 0 },
+  201: { stone: 36660, gold: 73320, refine: 0 },
+  202: { stone: 36920, gold: 73840, refine: 0 },
+  203: { stone: 37180, gold: 74360, refine: 0 },
+  204: { stone: 37440, gold: 74880, refine: 540 },
+  205: { stone: 37700, gold: 75400, refine: 0 },
+  206: { stone: 37960, gold: 75920, refine: 0 },
+  207: { stone: 38220, gold: 76440, refine: 0 },
+  208: { stone: 38480, gold: 76960, refine: 0 },
+  209: { stone: 38740, gold: 77480, refine: 540 },
+  210: { stone: 39000, gold: 78000, refine: 0 },
+  211: { stone: 39260, gold: 78520, refine: 0 },
+  212: { stone: 39520, gold: 79040, refine: 0 },
+  213: { stone: 39780, gold: 79560, refine: 0 },
+  214: { stone: 40040, gold: 80080, refine: 540 },
+  215: { stone: 40300, gold: 80600, refine: 0 },
+  216: { stone: 40560, gold: 81120, refine: 0 },
+  217: { stone: 40820, gold: 81640, refine: 0 },
+  218: { stone: 41080, gold: 82160, refine: 0 },
+  219: { stone: 41340, gold: 82680, refine: 540 },
+  220: { stone: 41600, gold: 83200, refine: 0 },
+  221: { stone: 41860, gold: 83720, refine: 0 },
+  222: { stone: 42120, gold: 84240, refine: 0 },
+  223: { stone: 42380, gold: 84760, refine: 0 },
+  224: { stone: 42640, gold: 85280, refine: 540 },
+  225: { stone: 42900, gold: 85800, refine: 0 },
+  226: { stone: 43160, gold: 86320, refine: 0 },
+  227: { stone: 43420, gold: 86840, refine: 0 },
+  228: { stone: 43680, gold: 87360, refine: 0 },
+  229: { stone: 43940, gold: 87880, refine: 540 },
+  230: { stone: 44200, gold: 88400, refine: 0 },
+  231: { stone: 44460, gold: 88920, refine: 0 },
+  232: { stone: 44720, gold: 89440, refine: 0 },
+  233: { stone: 44980, gold: 89960, refine: 0 },
+  234: { stone: 45240, gold: 90480, refine: 540 },
+  235: { stone: 45500, gold: 91000, refine: 0 },
+  236: { stone: 45760, gold: 91520, refine: 0 },
+  237: { stone: 46020, gold: 92040, refine: 0 },
+  238: { stone: 46280, gold: 92560, refine: 0 },
+  239: { stone: 46540, gold: 93080, refine: 540 },
+  240: { stone: 46800, gold: 93600, refine: 0 },
+  241: { stone: 47060, gold: 94120, refine: 0 },
+  242: { stone: 47320, gold: 94640, refine: 0 },
+  243: { stone: 47580, gold: 95160, refine: 0 },
+  244: { stone: 47840, gold: 95680, refine: 540 },
+  245: { stone: 48100, gold: 96200, refine: 0 },
+  246: { stone: 48360, gold: 96720, refine: 0 },
+  247: { stone: 48620, gold: 97240, refine: 0 },
+  248: { stone: 48880, gold: 97760, refine: 0 },
+  249: { stone: 49140, gold: 98280, refine: 540 },
+  250: { stone: 49400, gold: 98800, refine: 0 },
+  251: { stone: 49660, gold: 99320, refine: 0 },
+  252: { stone: 49920, gold: 99840, refine: 0 },
+  253: { stone: 50180, gold: 100360, refine: 0 },
+  254: { stone: 50440, gold: 100880, refine: 540 },
+  255: { stone: 50700, gold: 101400, refine: 0 },
+  256: { stone: 50960, gold: 101920, refine: 0 },
+  257: { stone: 51220, gold: 102440, refine: 0 },
+  258: { stone: 51480, gold: 102960, refine: 0 },
+  259: { stone: 51740, gold: 103480, refine: 540 },
+  260: { stone: 52000, gold: 104000, refine: 0 },
+  261: { stone: 52260, gold: 104520, refine: 0 },
+  262: { stone: 52520, gold: 105040, refine: 0 },
+  263: { stone: 52780, gold: 105560, refine: 0 },
+  264: { stone: 53040, gold: 106080, refine: 540 },
+  265: { stone: 53300, gold: 106600, refine: 0 },
+  266: { stone: 53560, gold: 107120, refine: 0 },
+  267: { stone: 53820, gold: 107640, refine: 0 },
+  268: { stone: 54080, gold: 108160, refine: 0 },
+  269: { stone: 54340, gold: 108680, refine: 540 },
+  270: { stone: 54600, gold: 109200, refine: 0 },
+  271: { stone: 54860, gold: 109720, refine: 0 },
+  272: { stone: 55120, gold: 110240, refine: 0 },
+  273: { stone: 55380, gold: 110760, refine: 0 },
+  274: { stone: 55640, gold: 111280, refine: 540 },
+  275: { stone: 55900, gold: 111800, refine: 0 },
+  276: { stone: 56160, gold: 112320, refine: 0 },
+  277: { stone: 56420, gold: 112840, refine: 0 },
+  278: { stone: 56680, gold: 113360, refine: 0 },
+  279: { stone: 56940, gold: 113880, refine: 540 },
+  280: { stone: 57200, gold: 114400, refine: 0 },
+  281: { stone: 57460, gold: 114920, refine: 0 },
+  282: { stone: 57720, gold: 115440, refine: 0 },
+  283: { stone: 57980, gold: 115960, refine: 0 },
+  284: { stone: 58240, gold: 116480, refine: 540 },
+  285: { stone: 58500, gold: 117000, refine: 0 },
+  286: { stone: 58760, gold: 117520, refine: 0 },
+  287: { stone: 59020, gold: 118040, refine: 0 },
+  288: { stone: 59280, gold: 118560, refine: 0 },
+  289: { stone: 59540, gold: 119080, refine: 540 },
+  290: { stone: 59800, gold: 119600, refine: 0 },
+  291: { stone: 60060, gold: 120120, refine: 0 },
+  292: { stone: 60320, gold: 120640, refine: 0 },
+  293: { stone: 60580, gold: 121160, refine: 0 },
+  294: { stone: 60840, gold: 121680, refine: 540 },
+  295: { stone: 61100, gold: 122200, refine: 0 },
+  296: { stone: 61360, gold: 122720, refine: 0 },
+  297: { stone: 61620, gold: 123240, refine: 0 },
+  298: { stone: 61880, gold: 123760, refine: 0 },
+  299: { stone: 62140, gold: 124280, refine: 540 },
+  300: { stone: 62400, gold: 124800, refine: 0 },
+};
 
-    function setInput(id) {
-      activeInput = document.getElementById(id);
+    // 技能精華表
+const skill = {
+  160: 19000,
+  161: 19200,
+  162: 19400,
+  163: 19600,
+  164: 19800,
+  165: 20000,
+  166: 20200,
+  167: 20400,
+  168: 20600,
+  169: 20800,
+  170: 21000,
+  171: 21200,
+  172: 21400,
+  173: 21600,
+  174: 21800,
+  175: 22000,
+  176: 22200,
+  177: 22400,
+  178: 22600,
+  179: 22800,
+  180: 23000,
+  181: 23200,
+  182: 23400,
+  183: 23600,
+  184: 23800,
+  185: 24000,
+  186: 24200,
+  187: 24400,
+  188: 24600,
+  189: 24800,
+  190: 25000,
+  191: 25200,
+  192: 25400,
+  193: 25600,
+  194: 25800,
+  195: 26000,
+  196: 26200,
+  197: 26400,
+  198: 26600,
+  199: 26800,
+  200: 27000,
+  201: 27200,
+  202: 27400,
+  203: 27600,
+  204: 27800,
+  205: 28000,
+  206: 28200,
+  207: 28400,
+  208: 28600,
+  209: 28800,
+  210: 29000,
+  211: 29200,
+  212: 29400,
+  213: 29600,
+  214: 29800,
+  215: 30000,
+  216: 30200,
+  217: 30400,
+  218: 30600,
+  219: 30800,
+  220: 31000,
+  221: 31200,
+  222: 31400,
+  223: 31600,
+  224: 31800,
+  225: 32000,
+  226: 32200,
+  227: 32400,
+  228: 32600,
+  229: 32800,
+  230: 33000,
+  231: 33200,
+  232: 33400,
+  233: 33600,
+  234: 33800,
+  235: 34000,
+  236: 34200,
+  237: 34400,
+  238: 34600,
+  239: 34800,
+  240: 35000,
+  241: 35200,
+  242: 35400,
+  243: 35600,
+  244: 35800,
+  245: 36000,
+  246: 36200,
+  247: 36400,
+  248: 36600,
+  249: 36800,
+  250: 37000,
+  251: 37200,
+  252: 37400,
+  253: 37600,
+  254: 37800,
+  255: 38000,
+  256: 38200,
+  257: 38400,
+  258: 38600,
+  259: 38800,
+  260: 39000,
+  261: 39200,
+  262: 39400,
+  263: 39600,
+  264: 39800,
+  265: 40000,
+  266: 40200,
+  267: 40400,
+  268: 40600,
+  269: 40800,
+  270: 41000,
+  271: 41200,
+  272: 41400,
+  273: 41600,
+  274: 41800,
+  275: 42000,
+  276: 42200,
+  277: 42400,
+  278: 42600,
+  279: 42800,
+  280: 43000,
+  281: 43200,
+  282: 43400,
+  283: 43600,
+  284: 43800,
+  285: 44000,
+  286: 44200,
+  287: 44400,
+  288: 44600,
+  289: 44800,
+  290: 45000,
+  291: 45200,
+  292: 45400,
+  293: 45600,
+  294: 45800,
+  295: 46000,
+  296: 46200,
+  297: 46400,
+  298: 46600,
+  299: 46800,
+  300: 47000
+};
+
+// 幻寵飼料表
+const pet = {
+  160: 177000,
+  161: 180500,
+  162: 184100,
+  163: 187600,
+  164: 191200,
+  165: 194700,
+  166: 198300,
+  167: 201800,
+  168: 205400,
+  169: 208900,
+  170: 212500,
+  171: 216000,
+  172: 219600,
+  173: 223100,
+  174: 226700,
+  175: 230200,
+  176: 233800,
+  177: 237300,
+  178: 240900,
+  179: 244400,
+  180: 248000,
+  181: 251500,
+  182: 255100,
+  183: 258600,
+  184: 262200,
+  185: 265700,
+  186: 269300,
+  187: 272800,
+  188: 276400,
+  189: 279900,
+  190: 283500,
+  191: 287000,
+  192: 290600,
+  193: 294100,
+  194: 297700,
+  195: 301200,
+  196: 304800,
+  197: 308300,
+  198: 311900,
+  199: 315400,
+  200: 319000,
+  201: 322500,
+  202: 326100,
+  203: 329600,
+  204: 333200,
+  205: 336700,
+  206: 340300,
+  207: 343800,
+  208: 347400,
+  209: 350900,
+  210: 354500,
+  211: 358000,
+  212: 361600,
+  213: 365100,
+  214: 368700,
+  215: 372200,
+  216: 375800,
+  217: 379300,
+  218: 382900,
+  219: 386400,
+  220: 390000,
+  221: 393500,
+  222: 397100,
+  223: 400600,
+  224: 404200,
+  225: 407700,
+  226: 411300,
+  227: 414800,
+  228: 418400,
+  229: 421900,
+  230: 425500,
+  231: 429000,
+  232: 432600,
+  233: 436100,
+  234: 439700,
+  235: 443200,
+  236: 446800,
+  237: 450300,
+  238: 453900,
+  239: 457400,
+  240: 461000,
+  241: 464500,
+  242: 468100,
+  243: 471600,
+  244: 475200,
+  245: 478700,
+  246: 482300,
+  247: 485800,
+  248: 489400,
+  249: 492900,
+  250: 496500,
+  251: 500000,
+  252: 503600,
+  253: 507100,
+  254: 510700,
+  255: 514200,
+  256: 517800,
+  257: 521300,
+  258: 524900,
+  259: 528400,
+  260: 532000,
+  261: 535500,
+  262: 539100,
+  263: 542600,
+  264: 546200,
+  265: 549700,
+  266: 553300,
+  267: 556800,
+  268: 560400,
+  269: 563900,
+  270: 567500,
+  271: 571000,
+  272: 574600,
+  273: 578100,
+  274: 581700,
+  275: 585200,
+  276: 588800,
+  277: 592300,
+  278: 595900,
+  279: 599400,
+  280: 603000,
+  281: 606500,
+  282: 610100,
+  283: 613600,
+  284: 617200,
+  285: 620700,
+  286: 624300,
+  287: 627800,
+  288: 631400,
+  289: 634900,
+  290: 638500,
+  291: 642000,
+  292: 645600,
+  293: 649100,
+  294: 652700,
+  295: 656200,
+  296: 659800,
+  297: 663300,
+  298: 666900,
+  299: 670400,
+  300: 674000
+};
+
+// 等級資源庫
+const relics = {
+  16: { stone1: 2300, gold1: 102000, white: 57500, blue: 11500, purple: 2300 },
+  17: { stone1: 2530, gold1: 113000, white: 63250, blue: 12650, purple: 2530 },
+  18: { stone1: 2760, gold1: 124000, white: 69000, blue: 13800, purple: 2760 },
+  19: { stone1: 2990, gold1: 135000, white: 74750, blue: 14950, purple: 2990 },
+  20: { stone1: 3220, gold1: 146000, white: 80500, blue: 16100, purple: 3220 },
+  21: { stone1: 3450, gold1: 157000, white: 86250, blue: 17250, purple: 3450 },
+  22: { stone1: 3680, gold1: 168000, white: 92000, blue: 18400, purple: 3680 },
+  23: { stone1: 3910, gold1: 179000, white: 97750, blue: 19550, purple: 3910 },
+  24: { stone1: 4140, gold1: 190000, white: 103500, blue: 20700, purple: 4140 },
+  25: { stone1: 4370, gold1: 201000, white: 109250, blue: 21850, purple: 4370 },
+  26: { stone1: 4600, gold1: 212000, white: 115000, blue: 23000, purple: 4600 },
+  27: { stone1: 4830, gold1: 223000, white: 120750, blue: 24150, purple: 4830 },
+  28: { stone1: 5060, gold1: 234000, white: 126500, blue: 25300, purple: 5060 },
+  29: { stone1: 5290, gold1: 245000, white: 132250, blue: 26450, purple: 5290 },
+  30: { stone1: 5520, gold1: 256000, white: 138000, blue: 27600, purple: 5520 },
+};
+	
+	function calculateAll() {
+  const equipResult = calculate();
+  calculate1(equipResult); // 將 equipResult 傳給 calculate1
+}
+	
+	
+  function calculate() {
+  const start = parseInt(document.getElementById("start").value);
+  const end = parseInt(document.getElementById("end").value);
+
+  if (start < 130 || end > 250 || start >= end) {
+    alert("請輸入有效範圍 (130~250)");
+    return;
+  }
+
+  let stone = 0, gold = 0, refine = 0, skillTotal = 0, petTotal = 0;
+
+  // 這裡改成 "< end"
+  for (let lvl = start; lvl < end; lvl++) {
+    if (equip[lvl]) {
+      stone += equip[lvl].stone;
+      gold += equip[lvl].gold;
+	  refine += equip[lvl].refine;
     }
-
-    function setQtyMode(m) {
-      qtyMode = m;
-      document.getElementById("mode1").classList.toggle("active", m === 1);
-      document.getElementById("mode10").classList.toggle("active", m === 10);
-
-      localStorage.setItem("qtyMode", m);
-
-      calculateFee();
+    if (skill[lvl]) {
+      skillTotal += skill[lvl];
     }
-
-    function press(key) {
-      if (!activeInput) return;
-
-      if (key === "del") {
-        activeInput.value = activeInput.value.slice(0, -1);
-      } else if (key === "clear") {
-        activeInput.value = "";
-      } else {
-        activeInput.value += key;
-      }
-
-      saveData();
-      calculateFee();
+    if (pet[lvl]) {
+      petTotal += pet[lvl];
     }
+  }
+  // 回傳計算結果給 calculate1() 使用
+  return { stone, gold, refine, skillTotal, petTotal };
+}
 
-    function calculateFee() {
-      const price = parseFloat(document.getElementById("price").value) || 0;
-      const quantity = (parseFloat(document.getElementById("quantity").value) || 0) * qtyMode;
-      const rate = parseFloat(document.getElementById("feeRate").value) || 0;
+function calculate1() {
+  const start1 = parseInt(document.getElementById("start1").value);
+  const end1 = parseInt(document.getElementById("end1").value);
 
-      const total = price * quantity;
-      const fee = total * (rate / 100);
-      const net = total - fee;
+  if (start1 < 13 || end1 > 25 || start1 >= end1) {
+    alert("請輸入有效範圍 (13~25)");
+    return;
+  }
 
-      document.getElementById("showTotal").textContent = total.toFixed(2) + " 元";
-      document.getElementById("showFee").textContent = fee.toFixed(2) + " 元";
-      document.getElementById("showNet").textContent = net.toFixed(2) + " 元";
+  let stone1 = 0, gold1 = 0, white = 0, blue = 0, purple = 0;
+
+  for (let lvl = start1; lvl < end1; lvl++) {
+    if (relics[lvl]) {
+      stone1 += relics[lvl].stone1;
+      gold1 += relics[lvl].gold1;
+      white += relics[lvl].white;
+      blue += relics[lvl].blue;
+      purple += relics[lvl].purple;
     }
+  }
 
-    /* 儲存資料 */
-    function saveData() {
-      localStorage.setItem("price", document.getElementById("price").value);
-      localStorage.setItem("quantity", document.getElementById("quantity").value);
-      localStorage.setItem("feeRate", document.getElementById("feeRate").value);
-    }
+  // 先計算裝備
+  const equipResult = calculate();
 
-    /* 載入資料 */
-    function loadData() {
-      document.getElementById("price").value = localStorage.getItem("price") || "";
-      document.getElementById("quantity").value = localStorage.getItem("quantity") || "";
-      document.getElementById("feeRate").value = localStorage.getItem("feeRate") || "";
+  // 顯示結果
+  document.getElementById("result").innerHTML = `
+    <div class="section"><b>裝備 (單件)</b><br>
+      粗煉石：${Math.floor(equipResult.stone / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.stone.toLocaleString()}</span>)<br>	  
+      金幣：${Math.floor(equipResult.gold / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.gold.toLocaleString()}</span>)<br>
+	  精鍛石：${Math.floor(equipResult.refine / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.refine.toLocaleString()}</span>)
+	</div>
 
-      const savedQtyMode = parseInt(localStorage.getItem("qtyMode"));
-      if (savedQtyMode === 10) setQtyMode(10);
+    <div class="section" ><b style="color: red;">裝備 (5件)</b><br>
+      粗煉石：${Math.floor((equipResult.stone*5) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.stone*5).toLocaleString()}</span>)<br>
+      金幣：${Math.floor((equipResult.gold*5) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.gold*5).toLocaleString()}</span>)<br>
+	  精鍛石：${Math.floor((equipResult.refine*5) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.refine*5).toLocaleString()}</span>)
+	</div>
+    <div class="section"><b>技能精華 (單技能)</b><br>
+      精華：${Math.floor(equipResult.skillTotal / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.skillTotal.toLocaleString()}</span>)
+	</div>
+    <div class="section"><b style="color: red;">技能精華 (8技能)</b><br>
+      精華：${Math.floor((equipResult.skillTotal*8) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.skillTotal*8).toLocaleString()}</span>)
+	</div>
+    <div class="section"><b>幻寵飼料 (單寵)</b><br>
+      飼料：${Math.floor(equipResult.petTotal / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${equipResult.petTotal.toLocaleString()}</span>)
+    </div>
+    <div class="section"><b style="color: red;">幻寵飼料 (4隻)</b><br>
+      飼料：${Math.floor((equipResult.petTotal*4) / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${(equipResult.petTotal*4).toLocaleString()}</span>)
+	</div>
+    <div class="section"><b>遺物 (單個)</b><br>
+      白砂：${Math.floor(white / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${white.toLocaleString()}</span>)<br>
+      藍砂：${Math.floor(blue / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${blue.toLocaleString()}</span>)<br>
+      紫砂：${Math.floor(purple / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${purple.toLocaleString()}</span>)<br>
+      金幣：${Math.floor(gold1 / 10000*100)/100}萬&nbsp; (<span style="color: purple;">${gold1.toLocaleString()}</span>)
+    </div>
 
-      const theme = localStorage.getItem("theme");
-      if (theme === "dark") document.body.classList.add("dark");
+    <div class="section"><b style="color: red;">遺物 (20個)</b><br>
+	  白砂：${Math.floor((white*20) / 10000*100)/100}萬&nbsp;  (<span style="color: purple;">${(white*20).toLocaleString()}</span>)<br>
+      藍砂：${Math.floor((blue*20) / 10000*100)/100}萬&nbsp;  (<span style="color: purple;">${(blue*20).toLocaleString()}</span>)<br>
+      紫砂：${Math.floor((purple*20) / 10000*100)/100}萬&nbsp;  (<span style="color: purple;">${(purple*20).toLocaleString()}</span>)<br>
+	  金幣：${Math.floor((gold1*20) / 10000*100)/100}萬&nbsp;  (<span style="color: purple;">${(gold1*20).toLocaleString()}</span>)
+    </div>
+  `;
+  
+  
+}
 
-      calculateFee();
-    }
+function clearAll() {
+  // 重置輸入欄位
+  document.getElementById("start").value = 160;
+  document.getElementById("end").value = 250;
+  document.getElementById("start1").value = 16;
+  document.getElementById("end1").value = 25;
 
-    /* 暗色模式 */
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("theme",
-        document.body.classList.contains("dark") ? "dark" : "light"
-      );
-    }
-
-    loadData();  // 啟動載入
+  // 清空結果
+  document.getElementById("result").innerHTML = "請輸入範圍並按下計算";
+}
   </script>
-
+  <button onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
 </body>
-
 </html>
