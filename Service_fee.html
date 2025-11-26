@@ -18,13 +18,14 @@ html, body {
   justify-content: center;
   align-items: flex-start;
   box-sizing: border-box;
+  transition: 0.3s;
 }
 
 /* 卡片 */
 .card {
   max-width: 420px;
   width: 95%;
-  margin: 20px auto;
+  margin: 20px auto 80px; /* 預留 footer 空間 */
   padding: 20px;
   border-radius: 16px;
   background: #fff;
@@ -147,6 +148,80 @@ body.dark .value { color: #4da3ff; }
   cursor: pointer;
 }
 
+/* 底部固定 footer */
+#footerInfo {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.4;
+  background: #f0f2f5;
+  padding: 6px 0;
+  transition: 0.3s;
+}
+#footerInfo a {
+  color: black;
+  font-weight: bold;
+  text-decoration: underline;
+}
+body.dark #footerInfo {
+  background: #111;
+  color: #ddd;
+}
+body.dark #footerInfo a {
+  color: #4da3ff;
+}
+/* 暗色模式 */
+body.dark { 
+  background: #111; 
+  color: #e6e6e6; 
+}
+body.dark .card { 
+  background: rgba(30,30,30,0.95); 
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4); 
+}
+/* 暗色模式下標題顏色 */
+body.dark h2 {
+  color: #fff;
+}
+body.dark .toggle-buttons button { 
+  background: #333; 
+  color: #ccc; 
+}
+body.dark .toggle-buttons button.active { 
+  background: #4f8ef7; 
+  color: #fff; 
+}
+body.dark input { 
+  background: #2a2a2a; 
+  border: 1px solid #444; 
+  color: #fff; 
+}
+body.dark .key { 
+  background: #2a2a2a; 
+  color: #fff; 
+}
+body.dark .key:active { 
+  background: #4f8ef7; 
+  color: #fff; 
+}
+body.dark .result-box { 
+  background: #222; 
+  color: #ddd; 
+}
+body.dark .value { 
+  color: #4da3ff; 
+}
+body.dark #footerInfo { 
+  background: #111; 
+  color: #ddd; 
+}
+body.dark #footerInfo a { 
+  color: #4da3ff; 
+}
 /* 手機優化 */
 @media (max-width: 500px) {
   h2 { font-size: 22px; }
@@ -205,8 +280,14 @@ body.dark .value { color: #4da3ff; }
 <button class="theme-btn" onclick="toggleTheme()">切換暗色 / 亮色模式</button>
 </div>
 
+<!-- Footer -->
+<div id="footerInfo">
+  製作@小咕  版本: 1.0  日期: 2025/11/25<br>
+  <a href="mailto:totpure@duck.com">問題回饋</a>
+</div>
+
 <script>
-// JS 內容與之前相同，保持手續費記憶、暗色模式、1個/組切換功能
+// JS 功能保持原樣
 let activeInput = null;
 let qtyMode = 1;
 let marketMode = 'market';
@@ -294,27 +375,6 @@ function toggleTheme(){
   saveData();
 }
 </script>
-
-
-
-
-<div style="
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
-  color: #555;
-  line-height: 1.4;
-  background: #f0f2f5;
-  padding: 6px 0;
-">
-  製作@小咕  版本: 1.0  日期: 2025/11/25<br>
-  <a href="mailto:totpure@duck.com" style="color: black; font-weight: bold; text-decoration: underline;">
-    問題回饋
-  </a>
-</div>
 
 </body>
 </html>
