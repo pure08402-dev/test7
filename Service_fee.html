@@ -1,318 +1,214 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>手續費計算</title>
 <style>
-  /* BODY & THEME */
-  body {
-    font-family: "Microsoft JhengHei", sans-serif;
-    background: #f0f2f5;
-    color: #111;
-    padding: 10px;
-    margin: 0;
-    transition: 0.3s;
-  }
-  body.dark {
-    background: #111;
-    color: #e6e6e6;
-  }
+body { font-family: "Microsoft JhengHei", sans-serif; background: #f0f2f5; color: #111; padding: 10px; margin: 0; transition: 0.3s; }
+body.dark { background: #111; color: #e6e6e6; }
 
-  /* CARD */
-  .card {
-    background: #fff;
-    padding: 20px;
-    border-radius: 24px;
-    max-width: 420px;   /* 手機長形適配 */
-    width: 95%;
-    margin: 20px auto;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-    transition: 0.3s;
-  }
-  body.dark .card {
-    background: rgba(30,30,30,0.95);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-  }
+.card { background: #fff; padding: 20px; border-radius: 24px; max-width: 420px; width: 95%; margin: 20px auto; box-shadow: 0 6px 20px rgba(0,0,0,0.2); transition: 0.3s; }
+body.dark .card { background: rgba(30,30,30,0.95); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
 
-  /* HEADINGS */
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-  }
+h2 { text-align: center; margin-bottom: 20px; font-size: 24px; }
+label { display: block; margin-top: 12px; font-weight: bold; font-size: 16px; }
+input { width: 100%; padding: 12px; margin-top: 6px; font-size: 18px; border-radius: 12px; border: 1px solid #ccc; box-sizing: border-box; text-align: left; background: #fafafa; transition: 0.2s; }
+input:focus { outline: 2px solid #4f8ef7; }
+body.dark input { background: #2a2a2a; border: 1px solid #444; color: #fff; }
+input[readonly] { caret-color: transparent; }
 
-  /* LABEL & INPUT */
-  label {
-    display: block;
-    margin-top: 12px;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  input {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    font-size: 18px;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    text-align: left;
-    background: #fafafa;
-    transition: 0.2s;
-  }
-  input:focus {
-    outline: 2px solid #4f8ef7;
-  }
-  body.dark input {
-    background: #2a2a2a;
-    border: 1px solid #444;
-    color: #fff;
-  }
-  input[readonly] {
-    caret-color: transparent;
-  }
+.toggle-buttons { display: flex; margin-top: 10px; gap: 10px; }
+.toggle-buttons button { flex: 1; padding: 12px 0; font-size: 16px; border-radius: 12px; border: none; cursor: pointer; background: #e7e7e7; transition: 0.2s; color: #111; }
+.toggle-buttons button.active { background: #4f8ef7; color: #fff; font-weight: bold; }
+body.dark .toggle-buttons button { background: #333; color: #ccc; }
+body.dark .toggle-buttons button.active { background: #4f8ef7; color: #fff; }
 
-  /* 數量模式切換 */
-  .toggle-buttons {
-    display: flex;
-    margin-top: 10px;
-    gap: 10px;
-  }
-  .toggle-buttons button {
-    flex: 1;
-    padding: 12px 0;
-    font-size: 16px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    background: #e7e7e7;
-    transition: 0.2s;
-    color: #111;
-  }
-  .toggle-buttons button.active {
-    background: #4f8ef7;
-    color: #fff;
-    font-weight: bold;
-  }
-  body.dark .toggle-buttons button {
-    background: #333;
-    color: #ccc;
-  }
-  body.dark .toggle-buttons button.active {
-    background: #4f8ef7;
-    color: #fff;
-  }
+.keyboard { margin-top: 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.key { padding: 16px 0; border-radius: 12px; text-align: center; font-size: 20px; border: none; background: #e7e7e7; cursor: pointer; transition: 0.2s; }
+.key:active { background: #4f8ef7; color: #fff; }
+body.dark .key { background: #2a2a2a; color: #fff; }
+body.dark .key:active { background: #4f8ef7; color: #fff; }
 
-  /* 虛擬鍵盤 */
-  .keyboard {
-    margin-top: 12px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-  }
-  .key {
-    padding: 16px 0;
-    border-radius: 12px;
-    text-align: center;
-    font-size: 20px;
-    border: none;
-    background: #e7e7e7;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  .key:active {
-    background: #4f8ef7;
-    color: #fff;
-  }
-  body.dark .key {
-    background: #2a2a2a;
-    color: #fff;
-  }
-  body.dark .key:active {
-    background: #4f8ef7;
-    color: #fff;
-  }
+.result-box { margin-top: 20px; background: #eef3ff; border-radius: 12px; padding: 15px; font-size: 16px; transition: 0.2s; }
+body.dark .result-box { background: #222; color: #ddd; }
+.result-line { display: flex; justify-content: space-between; margin-top: 8px; }
+.value { color: #007bff; }
+body.dark .value { color: #4da3ff; }
 
-  /* 結果顯示 */
-  .result-box {
-    margin-top: 20px;
-    background: #eef3ff;
-    border-radius: 12px;
-    padding: 15px;
-    font-size: 16px;
-    transition: 0.2s;
-  }
-  body.dark .result-box {
-    background: #222;
-    color: #ddd;
-  }
-  .result-line {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-  }
-  .value {
-    color: #007bff;
-  }
-  body.dark .value {
-    color: #4da3ff;
-  }
-
-  /* 暗色切換按鈕 */
-  .theme-btn {
-    width: 100%;
-    margin-top: 18px;
-    padding: 12px;
-    border-radius: 12px;
-    border: none;
-    background: #4f8ef7;
-    color: #fff;
-    font-size: 18px;
-    cursor: pointer;
-  }
+.theme-btn { width: 100%; margin-top: 18px; padding: 12px; border-radius: 12px; border: none; background: #4f8ef7; color: #fff; font-size: 18px; cursor: pointer; }
 </style>
 </head>
 
 <body class="light">
+<div class="card">
+<h2>手續費計算</h2>
 
-  <div class="card">
-    <h2>手續費計算</h2>
+<!-- 交易行 / 拍賣行 -->
+<div class="toggle-buttons">
+  <button id="market" class="active" onclick="setMarket('market')">交易行</button>
+  <button id="auction" onclick="setMarket('auction')">拍賣行</button>
+</div>
 
-    <label>單價（元）：</label>
-    <input id="price" readonly onclick="setInput('price')">
+<label id="priceLabel">單價（元）：</label>
+<input id="price" readonly onclick="setInput('price')">
 
-    <label>數量：</label>
-    <input id="quantity" readonly onclick="setInput('quantity')">
+<label id="quantityLabel">數量（個）：</label>
+<input id="quantity" readonly onclick="setInput('quantity')">
 
-    <!-- 數量模式切換 -->
-    <div class="toggle-buttons">
-      <button id="mode1" class="active" onclick="setQtyMode(1)">1 個</button>
-      <button id="mode10" onclick="setQtyMode(10)">1 組 (10 個)</button>
-    </div>
+<!-- 交易行數量切換按鈕 -->
+<div class="toggle-buttons" id="qtyToggle" style="margin-top:10px;">
+  <button id="btn1" class="active" onclick="setQtyMode(1)">1 個</button>
+  <button id="btn10" onclick="setQtyMode(10)">1 組 (10個)</button>
+</div>
 
-    <label>手續費%：</label>
-    <input id="feeRate" readonly onclick="setInput('feeRate')">
+<label>手續費%：</label>
+<input id="feeRate" readonly onclick="setInput('feeRate')">
 
-    <!-- 虛擬鍵盤 -->
-    <div class="keyboard">
-      <div class="key" onclick="press('1')">1</div>
-      <div class="key" onclick="press('2')">2</div>
-      <div class="key" onclick="press('3')">3</div>
-      <div class="key" onclick="press('del')">⌫</div>
+<!-- 虛擬鍵盤 -->
+<div class="keyboard">
+  <div class="key" onclick="press('1')">1</div>
+  <div class="key" onclick="press('2')">2</div>
+  <div class="key" onclick="press('3')">3</div>
+  <div class="key" onclick="press('del')">⌫</div>
 
-      <div class="key" onclick="press('4')">4</div>
-      <div class="key" onclick="press('5')">5</div>
-      <div class="key" onclick="press('6')">6</div>
-      <div class="key" onclick="press('clear')">清空</div>
+  <div class="key" onclick="press('4')">4</div>
+  <div class="key" onclick="press('5')">5</div>
+  <div class="key" onclick="press('6')">6</div>
+  <div class="key" onclick="press('clear')">清空</div>
 
-      <div class="key" onclick="press('7')">7</div>
-      <div class="key" onclick="press('8')">8</div>
-      <div class="key" onclick="press('9')">9</div>
-      <div class="key" onclick="press('0')">0</div>
-    </div>
+  <div class="key" onclick="press('7')">7</div>
+  <div class="key" onclick="press('8')">8</div>
+  <div class="key" onclick="press('9')">9</div>
+  <div class="key" onclick="press('0')">0</div>
+</div>
 
-    <!-- 結果 -->
-    <div class="result-box">
-      <div class="result-line"><span class="label">總金額：</span><span id="showTotal" class="value">0 元</span></div>
-      <div class="result-line"><span class="label">手續費金額：</span><span id="showFee" class="value">0 元</span></div>
-      <div class="result-line"><span class="label">實收金額：</span><span id="showNet" class="value">0 元</span></div>
-    </div>
+<!-- 結果 -->
+<div class="result-box">
+  <div class="result-line"><span class="label">總金額：</span><span id="showTotal" class="value">0 元</span></div>
+  <div class="result-line"><span class="label">手續費金額：</span><span id="showFee" class="value">0 元</span></div>
+  <div class="result-line"><span class="label">實收金額：</span><span id="showNet" class="value">0 元</span></div>
+</div>
 
-    <!-- 暗色模式按鈕 -->
-    <button class="theme-btn" onclick="toggleTheme()">切換暗色 / 亮色模式</button>
+<button class="theme-btn" onclick="toggleTheme()">切換暗色 / 亮色模式</button>
+</div>
 
-  </div>
+<script>
+let activeInput = null;
+let qtyMode = 1;
+let marketMode = 'market';
 
-  <script>
-    let activeInput = null;
-    let qtyMode = 1;
+function setInput(id){ activeInput=document.getElementById(id); }
 
-    function setInput(id) {
-      activeInput = document.getElementById(id);
-    }
+function updatePriceLabel(){
+  const label = document.getElementById('priceLabel');
+  if(marketMode==='auction'){
+    label.textContent = '單價（元，單個價格）：';
+  } else {
+    label.textContent = qtyMode===1 ? '單價（元，單個價格）：' : '單價（元，每組價格）：';
+  }
+}
 
-    function setQtyMode(m) {
-      qtyMode = m;
-      document.getElementById("mode1").classList.toggle("active", m === 1);
-      document.getElementById("mode10").classList.toggle("active", m === 10);
+function updateQuantityLabel(){
+  const label = document.getElementById('quantityLabel');
+  label.textContent = (qtyMode===1) ? '數量（個）：' : '數量（組）：';
+}
 
-      localStorage.setItem("qtyMode", m);
+function setMarket(m){
+  marketMode = m;
+  document.getElementById("market").classList.toggle("active", m==='market');
+  document.getElementById("auction").classList.toggle("active", m==='auction');
 
-      calculateFee();
-    }
+  document.getElementById("qtyToggle").style.display = (m==='market') ? 'flex':'none';
+  qtyMode = 1;
+  setQtyMode(qtyMode);
+  updatePriceLabel();
+  calculate();
+  saveData();
+}
 
-    function press(key) {
-      if (!activeInput) return;
+function setQtyMode(m){
+  qtyMode = m;
+  document.getElementById("btn1").classList.toggle("active", m===1);
+  document.getElementById("btn10").classList.toggle("active", m===10);
 
-      if (key === "del") {
-        activeInput.value = activeInput.value.slice(0, -1);
-      } else if (key === "clear") {
-        activeInput.value = "";
-      } else {
-        activeInput.value += key;
-      }
+  // 切換模式時單價與數量歸零，但手續費不變
+  document.getElementById("price").value = '';
+  document.getElementById("quantity").value = '';
 
-      saveData();
-      calculateFee();
-    }
+  updatePriceLabel();
+  updateQuantityLabel();
+  calculate();
+  saveData();
+}
 
-    function calculateFee() {
-      const price = parseFloat(document.getElementById("price").value) || 0;
-      const quantity = (parseFloat(document.getElementById("quantity").value) || 0) * qtyMode;
-      const rate = parseFloat(document.getElementById("feeRate").value) || 0;
+function press(key){
+  if(!activeInput) return;
+  if(key==='del') activeInput.value = activeInput.value.slice(0,-1);
+  else if(key==='clear') activeInput.value = '';
+  else activeInput.value += key;
 
-      const total = price * quantity;
-      const fee = total * (rate / 100);
-      const net = total - fee;
+  calculate();
+  saveData();
+}
 
-      document.getElementById("showTotal").textContent = total.toFixed(2) + " 元";
-      document.getElementById("showFee").textContent = fee.toFixed(2) + " 元";
-      document.getElementById("showNet").textContent = net.toFixed(2) + " 元";
-    }
+function calculate(){
+  const priceInput = parseFloat(document.getElementById("price").value) || 0;
+  const quantity = parseFloat(document.getElementById("quantity").value) || 0;
+  const feeRate = parseFloat(document.getElementById("feeRate").value) || 0;
 
-    /* 儲存資料 */
-    function saveData() {
-      localStorage.setItem("price", document.getElementById("price").value);
-      localStorage.setItem("quantity", document.getElementById("quantity").value);
-      localStorage.setItem("feeRate", document.getElementById("feeRate").value);
-    }
+  const unitPrice = (qtyMode===1) ? priceInput : priceInput/10;
+  const realQty = (marketMode==='market') ? quantity*qtyMode : quantity;
 
-    /* 載入資料 */
-    function loadData() {
-      document.getElementById("price").value = localStorage.getItem("price") || "";
-      document.getElementById("quantity").value = localStorage.getItem("quantity") || "";
-      document.getElementById("feeRate").value = localStorage.getItem("feeRate") || "";
+  const total = unitPrice * realQty;
+  const fee = total * (feeRate/100);
+  const net = total - fee;
 
-      const savedQtyMode = parseInt(localStorage.getItem("qtyMode"));
-      if (savedQtyMode === 10) setQtyMode(10);
+  document.getElementById("showTotal").textContent = total.toFixed(2)+' 元';
+  document.getElementById("showFee").textContent = fee.toFixed(2)+' 元';
+  document.getElementById("showNet").textContent = net.toFixed(2)+' 元';
+}
 
-      const theme = localStorage.getItem("theme");
-      if (theme === "dark") document.body.classList.add("dark");
+// 儲存資料
+function saveData(){
+  localStorage.setItem("price", document.getElementById("price").value);
+  localStorage.setItem("quantity", document.getElementById("quantity").value);
+  localStorage.setItem("feeRate", document.getElementById("feeRate").value);
+  localStorage.setItem("marketMode", marketMode);
+  localStorage.setItem("qtyMode", qtyMode);
+  localStorage.setItem("theme", document.body.classList.contains("dark") ? 'dark':'light');
+}
 
-      calculateFee();
-    }
+// 載入資料
+function loadData(){
+  document.getElementById("price").value = localStorage.getItem("price") || '';
+  document.getElementById("quantity").value = localStorage.getItem("quantity") || '';
+  document.getElementById("feeRate").value = localStorage.getItem("feeRate") || '';
+  const savedMarket = localStorage.getItem("marketMode") || 'market';
+  const savedQty = parseInt(localStorage.getItem("qtyMode")) || 1;
+  const savedTheme = localStorage.getItem("theme") || 'light';
 
-    /* 暗色模式 */
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("theme",
-        document.body.classList.contains("dark") ? "dark" : "light"
-      );
-    }
+  setMarket(savedMarket);
+  setQtyMode(savedQty);
+  if(savedTheme==='dark') document.body.classList.add('dark');
 
-    loadData();  // 啟動載入
-  </script>
+  updatePriceLabel();
+  calculate();
+}
 
+// 初始化
+loadData();
+
+// 暗色模式
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+  saveData();
+}
+</script>
 
 <div style="max-width:500px;margin:15px auto;text-align:center;font-size:12px;color:#555;line-height:1.4;">
   製作@小咕  版本: 1.0  日期: 2025/11/25<br>
   <a href="mailto:totpure@duck.com" style="color: black; font-weight: bold; text-decoration: underline;">
     問題回饋
-  </a>
-</div>
-  
 </body>
-
 </html>
