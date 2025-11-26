@@ -2,61 +2,164 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>手續費計算</title>
 <style>
-body { font-family: "Microsoft JhengHei", sans-serif; background: #f0f2f5; color: #111; padding: 10px; margin: 0; transition: 0.3s; }
-body.dark { background: #111; color: #e6e6e6; }
+/* 全局樣式 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  font-family: "Microsoft JhengHei", sans-serif;
+  background: linear-gradient(to bottom, #f8fbff, #e9f2ff);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
 
-.card { background: #fff; padding: 20px; border-radius: 24px; max-width: 420px; width: 95%; margin: 20px auto; box-shadow: 0 6px 20px rgba(0,0,0,0.2); transition: 0.3s; }
+/* 卡片 */
+.card {
+  max-width: 420px;
+  width: 95%;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+/* 暗色模式 */
+body.dark { background: #111; color: #e6e6e6; }
 body.dark .card { background: rgba(30,30,30,0.95); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
 
-h2 { text-align: center; margin-bottom: 20px; font-size: 24px; }
-label { display: block; margin-top: 12px; font-weight: bold; font-size: 16px; }
-input { width: 100%; padding: 12px; margin-top: 6px; font-size: 18px; border-radius: 12px; border: 1px solid #ccc; box-sizing: border-box; text-align: left; background: #fafafa; transition: 0.2s; }
+/* 標題 */
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* 標籤 */
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* 輸入欄位 */
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  text-align: left;
+  background: #fafafa;
+  transition: 0.2s;
+}
 input:focus { outline: 2px solid #4f8ef7; }
 body.dark input { background: #2a2a2a; border: 1px solid #444; color: #fff; }
 input[readonly] { caret-color: transparent; }
 
-.toggle-buttons { display: flex; margin-top: 10px; gap: 10px; }
-.toggle-buttons button { flex: 1; padding: 12px 0; font-size: 16px; border-radius: 12px; border: none; cursor: pointer; background: #e7e7e7; transition: 0.2s; color: #111; }
-.toggle-buttons button.active { background: #4f8ef7; color: #fff; font-weight: bold; }
+/* 按鈕切換 */
+.toggle-buttons {
+  display: flex;
+  margin-top: 10px;
+  gap: 10px;
+}
+.toggle-buttons button {
+  flex: 1;
+  padding: 12px 0;
+  font-size: 16px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  background: #e7e7e7;
+  color: #111;
+  transition: 0.2s;
+}
+.toggle-buttons button.active {
+  background: #4f8ef7;
+  color: #fff;
+  font-weight: bold;
+}
 body.dark .toggle-buttons button { background: #333; color: #ccc; }
 body.dark .toggle-buttons button.active { background: #4f8ef7; color: #fff; }
 
-.keyboard { margin-top: 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.key { padding: 16px 0; border-radius: 12px; text-align: center; font-size: 20px; border: none; background: #e7e7e7; cursor: pointer; transition: 0.2s; }
+/* 虛擬鍵盤 */
+.keyboard {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.key {
+  padding: 14px 0;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 20px;
+  border: none;
+  background: #e7e7e7;
+  cursor: pointer;
+  transition: 0.2s;
+}
 .key:active { background: #4f8ef7; color: #fff; }
 body.dark .key { background: #2a2a2a; color: #fff; }
 body.dark .key:active { background: #4f8ef7; color: #fff; }
 
-.result-box { margin-top: 20px; background: #eef3ff; border-radius: 12px; padding: 15px; font-size: 16px; transition: 0.2s; }
+/* 結果盒 */
+.result-box {
+  margin-top: 20px;
+  background: #eef3ff;
+  border-radius: 12px;
+  padding: 15px;
+  font-size: 16px;
+  transition: 0.2s;
+}
 body.dark .result-box { background: #222; color: #ddd; }
-.result-line { display: flex; justify-content: space-between; margin-top: 8px; }
+.result-line {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
 .value { color: #007bff; }
 body.dark .value { color: #4da3ff; }
 
-.theme-btn { width: 100%; margin-top: 18px; padding: 12px; border-radius: 12px; border: none; background: #4f8ef7; color: #fff; font-size: 18px; cursor: pointer; }
-
-html, body {
-  overflow-x: hidden;        /* 不允許左右滑動 */
+/* 暗色切換按鈕 */
+.theme-btn {
   width: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-  justify-content: center;    /* 水平置中 */
-  align-items: flex-start;    /* 頂部對齊，避免鍵盤遮住 */
-  background: #f0f2f5;
-  box-sizing: border-box;
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #4f8ef7;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* 手機優化 */
+@media (max-width: 500px) {
+  h2 { font-size: 22px; }
+  input, .toggle-buttons button, .key, .theme-btn { font-size: 18px; padding: 12px; }
+  .card { padding: 16px; }
 }
 </style>
 </head>
-
 <body class="light">
+
 <div class="card">
 <h2>手續費計算</h2>
 
-<!-- 交易行 / 拍賣行 -->
 <div class="toggle-buttons">
   <button id="market" class="active" onclick="setMarket('market')">交易行</button>
   <button id="auction" onclick="setMarket('auction')">拍賣行</button>
@@ -68,7 +171,6 @@ html, body {
 <label id="quantityLabel">數量（個）：</label>
 <input id="quantity" readonly onclick="setInput('quantity')">
 
-<!-- 交易行數量切換按鈕 -->
 <div class="toggle-buttons" id="qtyToggle" style="margin-top:10px;">
   <button id="btn1" class="active" onclick="setQtyMode(1)">1 個</button>
   <button id="btn10" onclick="setQtyMode(10)">1 組 (10個)</button>
@@ -77,7 +179,6 @@ html, body {
 <label>手續費%：</label>
 <input id="feeRate" readonly onclick="setInput('feeRate')">
 
-<!-- 虛擬鍵盤 -->
 <div class="keyboard">
   <div class="key" onclick="press('1')">1</div>
   <div class="key" onclick="press('2')">2</div>
@@ -95,7 +196,6 @@ html, body {
   <div class="key" onclick="press('0')">0</div>
 </div>
 
-<!-- 結果 -->
 <div class="result-box">
   <div class="result-line"><span class="label">總金額：</span><span id="showTotal" class="value">0 元</span></div>
   <div class="result-line"><span class="label">手續費金額：</span><span id="showFee" class="value">0 元</span></div>
@@ -106,12 +206,12 @@ html, body {
 </div>
 
 <script>
+// JS 內容與之前相同，保持手續費記憶、暗色模式、1個/組切換功能
 let activeInput = null;
 let qtyMode = 1;
 let marketMode = 'market';
 
 function setInput(id){ activeInput=document.getElementById(id); }
-
 function updatePriceLabel(){
   const label = document.getElementById('priceLabel');
   if(marketMode==='auction'){
@@ -120,17 +220,14 @@ function updatePriceLabel(){
     label.textContent = qtyMode===1 ? '單價（元，單個價格）：' : '單價（元，每組價格）：';
   }
 }
-
 function updateQuantityLabel(){
   const label = document.getElementById('quantityLabel');
   label.textContent = (qtyMode===1) ? '數量（個）：' : '數量（組）：';
 }
-
 function setMarket(m){
   marketMode = m;
   document.getElementById("market").classList.toggle("active", m==='market');
   document.getElementById("auction").classList.toggle("active", m==='auction');
-
   document.getElementById("qtyToggle").style.display = (m==='market') ? 'flex':'none';
   qtyMode = 1;
   setQtyMode(qtyMode);
@@ -138,50 +235,38 @@ function setMarket(m){
   calculate();
   saveData();
 }
-
 function setQtyMode(m){
   qtyMode = m;
   document.getElementById("btn1").classList.toggle("active", m===1);
   document.getElementById("btn10").classList.toggle("active", m===10);
-
-  // 切換模式時單價與數量歸零，但手續費不變
   document.getElementById("price").value = '';
   document.getElementById("quantity").value = '';
-
   updatePriceLabel();
   updateQuantityLabel();
   calculate();
   saveData();
 }
-
 function press(key){
   if(!activeInput) return;
   if(key==='del') activeInput.value = activeInput.value.slice(0,-1);
   else if(key==='clear') activeInput.value = '';
   else activeInput.value += key;
-
   calculate();
   saveData();
 }
-
 function calculate(){
   const priceInput = parseFloat(document.getElementById("price").value) || 0;
   const quantity = parseFloat(document.getElementById("quantity").value) || 0;
   const feeRate = parseFloat(document.getElementById("feeRate").value) || 0;
-
   const unitPrice = (qtyMode===1) ? priceInput : priceInput/10;
   const realQty = (marketMode==='market') ? quantity*qtyMode : quantity;
-
   const total = unitPrice * realQty;
   const fee = total * (feeRate/100);
   const net = total - fee;
-
   document.getElementById("showTotal").textContent = total.toFixed(2)+' 元';
   document.getElementById("showFee").textContent = fee.toFixed(2)+' 元';
   document.getElementById("showNet").textContent = net.toFixed(2)+' 元';
 }
-
-// 儲存資料
 function saveData(){
   localStorage.setItem("price", document.getElementById("price").value);
   localStorage.setItem("quantity", document.getElementById("quantity").value);
@@ -190,8 +275,6 @@ function saveData(){
   localStorage.setItem("qtyMode", qtyMode);
   localStorage.setItem("theme", document.body.classList.contains("dark") ? 'dark':'light');
 }
-
-// 載入資料
 function loadData(){
   document.getElementById("price").value = localStorage.getItem("price") || '';
   document.getElementById("quantity").value = localStorage.getItem("quantity") || '';
@@ -199,28 +282,39 @@ function loadData(){
   const savedMarket = localStorage.getItem("marketMode") || 'market';
   const savedQty = parseInt(localStorage.getItem("qtyMode")) || 1;
   const savedTheme = localStorage.getItem("theme") || 'light';
-
   setMarket(savedMarket);
   setQtyMode(savedQty);
   if(savedTheme==='dark') document.body.classList.add('dark');
-
   updatePriceLabel();
   calculate();
 }
-
-// 初始化
 loadData();
-
-// 暗色模式
 function toggleTheme(){
   document.body.classList.toggle("dark");
   saveData();
 }
 </script>
 
-<div style="max-width:500px;margin:15px auto;text-align:center;font-size:12px;color:#555;line-height:1.4;">
+
+
+
+<div style="
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.4;
+  background: #f0f2f5;
+  padding: 6px 0;
+">
   製作@小咕  版本: 1.0  日期: 2025/11/25<br>
   <a href="mailto:totpure@duck.com" style="color: black; font-weight: bold; text-decoration: underline;">
     問題回饋
+  </a>
+</div>
+
 </body>
 </html>
