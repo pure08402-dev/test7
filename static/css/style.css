@@ -1,9 +1,9 @@
-
 /* 👆 專用手指按鈕設計 */
 .nav-btn {
-  display: inline-block;
-  width: 85%;
-  margin: 8px auto;
+  display: block;            /* 手機適合單欄顯示 */
+  width: 90%;                /* 手機自適應寬度 */
+  max-width: 400px;          /* 大螢幕不過大 */
+  margin: 10px auto;         /* 置中 */
   padding: 14px;
   font-size: 17px;
   font-weight: bold;
@@ -26,9 +26,8 @@
   background: linear-gradient(90deg, #357abd, #5b8fd8);
   box-shadow: 0 6px 14px rgba(0,0,0,0.2);
 }
-	
 
-
+/* 全局樣式 */
 body { 
   font-family: "Microsoft JhengHei", sans-serif; 
   margin: 0; 
@@ -39,6 +38,7 @@ body {
 h1 { 
   text-align: center; 
   margin-bottom: 15px; 
+  font-size: 22px;          /* 手機上更大易讀 */
 }
 
 .card {
@@ -69,19 +69,19 @@ label {
 }
 
 input { 
-  width: 100%;              /* 佔滿全寬 */
-  padding: 12px;            /* 手機上更好點擊 */
-  font-size: 16px;          /* 字體放大 */
+  width: 100%;              
+  padding: 12px;            
+  font-size: 16px;          
   border: 1px solid #ccc; 
   border-radius: 6px; 
-  box-sizing: border-box;   /* 避免超出容器 */
+  box-sizing: border-box;   
 }
 
 button {
-  width: 100%;              /* 佔滿全寬 */
-  padding: 12px;            /* 提高可點擊範圍 */
-  font-size: 16px;          /* 字體放大 */
-  font-weight: bold;        /* 手機上更清晰 */
+  width: 100%;              
+  padding: 14px;            
+  font-size: 16px;          
+  font-weight: bold;        
   border: none; 
   border-radius: 8px;
   cursor: pointer; 
@@ -94,50 +94,52 @@ button:hover {
   background: #357abd; 
 }
 
-    .arrow {
-      display: inline-block;
-      transition: transform 0.3s ease;
-    }
-    .rotate {
-      transform: rotate(180deg);
-    }
-    /* 卡片收合動畫 */
-    #multiplierCard {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease, padding 0.3s ease;
-      background: #fff;
-      border-radius: 12px;
-      margin-top: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 0 15px;
-    }
-    #multiplierCard.show {
-      max-height: 1000px; /* 足夠展開 */
-      padding: 15px;
-    }
-    .btn-group {
-      margin-top: 15px;
-      text-align: right;
-    }
-    .btn-group button:nth-child(2) {
-      background-color: #28a745; /* 綠色 恢復 */
-    }
-    .btn-group button:nth-child(2):hover {
-      background-color: #1e7e34;
-    }
-    .btn-group button:nth-child(3) {
-      background-color: #dc3545; /* 紅色 清除 */
-    }
-    .btn-group button:nth-child(3):hover {
-      background-color: #a71d2a;
-    }	
-	
+/* 箭頭旋轉 */
+.arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.rotate {
+  transform: rotate(180deg);
+}
+
+/* 卡片收合動畫 */
+#multiplierCard {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  background: #fff;
+  border-radius: 12px;
+  margin-top: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 0 15px;
+}
+#multiplierCard.show {
+  max-height: 1000px; 
+  padding: 15px;
+}
+
+/* 按鈕群組 */
+.btn-group {
+  margin-top: 15px;
+  text-align: right;
+}
+.btn-group button:nth-child(2) {
+  background-color: #28a745; 
+}
+.btn-group button:nth-child(2):hover {
+  background-color: #1e7e34;
+}
+.btn-group button:nth-child(3) {
+  background-color: #dc3545; 
+}
+.btn-group button:nth-child(3):hover {
+  background-color: #a71d2a;
+}
 
 .clear-btn { 
   background: #d9534f; 
 }
-
 .clear-btn:hover { 
   background: #b52b27; 
 }
@@ -159,7 +161,6 @@ button:hover {
   display: inline-block; 
   cursor: pointer; 
 }
-
 .tooltip .tiptext {
   visibility: hidden; 
   width: 160px; 
@@ -175,7 +176,6 @@ button:hover {
   left: 105%; 
   font-size: 12px;
 }
-
 .tooltip:hover .tiptext { 
   visibility: visible; 
 }
@@ -183,19 +183,20 @@ button:hover {
 /* 表格樣式 */
 .table-container {
   width: 100%;
-  overflow-x: hidden;  /* 不橫向滑動 */
+  overflow-x: auto;  /* 手機可橫向滑動 */
 }
 
 table {
   border-collapse: collapse;
-  width: 100%;         /* 自動填滿容器 */
-  table-layout: auto;  /* 自動調整欄位寬度 */
+  width: 100%;         
+  table-layout: auto;  
 }
 
 th, td {
   border: 1px solid #ddd;
   text-align: center;
-  word-break: break-word; /* 避免文字溢出 */
+  word-break: break-word; 
+  padding: 8px;         /* 增加觸控範圍 */
 }
 
 th {
@@ -213,10 +214,17 @@ tr:nth-child(even) {
 }
 
 /* 手機螢幕適配 */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   h2 { font-size: 18px; }
   input, button { font-size: 16px; padding: 14px; }
   .result { font-size: 14px; }
+  .nav-btn { width: 95%; }
+  table th, table td { font-size: 14px; padding: 6px; }
 }
-
-
+@media (max-width: 480px) {
+  h2 { font-size: 16px; }
+  input, button { font-size: 15px; padding: 12px; }
+  .result { font-size: 13px; }
+  .nav-btn { width: 100%; }
+  table th, table td { font-size: 12px; padding: 4px; }
+}
