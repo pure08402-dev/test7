@@ -3,377 +3,244 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>手續費計算</title>
+<title>手續費計算器</title>
 <style>
 /* 全局樣式 */
 html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100%;
-  overflow-x: hidden;
+  margin: 0; padding: 0; width: 100%; min-height: 100%;
   font-family: "Microsoft JhengHei", sans-serif;
   background: linear-gradient(to bottom, #f8fbff, #e9f2ff);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  box-sizing: border-box;
-  transition: 0.3s;
+  display: flex; justify-content: center; align-items: flex-start;
+  box-sizing: border-box; transition: 0.3s;
 }
+.card { max-width: 420px; width: 95%; margin: 20px auto 80px; padding: 20px; border-radius:16px; background:#fff; box-shadow:0 6px 20px rgba(0,0,0,0.2); transition:0.3s; }
+body.dark { background:#111; color:#e6e6e6; }
+body.dark .card { background: rgba(30,30,30,0.95); box-shadow:0 6px 20px rgba(0,0,0,0.4); }
 
-/* 卡片 */
-.card {
-  max-width: 420px;
-  width: 95%;
-  margin: 20px auto 80px; /* 預留 footer 空間 */
-  padding: 20px;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-  transition: 0.3s;
-}
-
-/* 暗色模式 */
-body.dark { background: #111; color: #e6e6e6; }
-body.dark .card { background: rgba(30,30,30,0.95); box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-
-/* 標題 */
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 24px;
-  font-weight: 700;
-  color: #333;
-}
-
-/* 標籤 */
-label {
-  display: block;
-  margin-top: 12px;
-  font-weight: bold;
-  font-size: 16px;
-}
+/* 標題與標籤 */
+h2 { text-align:center; margin-bottom:20px; font-size:24px; font-weight:700; color:#333; }
+body.dark h2 { color:#fff; }
+label { display:block; margin-top:12px; font-weight:bold; font-size:16px; }
 
 /* 輸入欄位 */
-input {
-  width: 100%;
-  padding: 12px;
-  margin-top: 6px;
-  font-size: 18px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  text-align: left;
-  background: #fafafa;
-  transition: 0.2s;
-}
-input:focus { outline: 2px solid #4f8ef7; }
-body.dark input { background: #2a2a2a; border: 1px solid #444; color: #fff; }
+input { width:100%; padding:12px; margin-top:6px; font-size:18px; border-radius:12px; border:1px solid #ccc; background:#fafafa; box-sizing:border-box; transition:0.2s; text-align:left; }
+input:focus { outline:2px solid #4f8ef7; }
 input[readonly] { caret-color: transparent; }
+body.dark input { background:#2a2a2a; border:1px solid #444; color:#fff; }
 
 /* 按鈕切換 */
-.toggle-buttons {
-  display: flex;
-  margin-top: 10px;
-  gap: 10px;
-}
-.toggle-buttons button {
-  flex: 1;
-  padding: 12px 0;
-  font-size: 16px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  background: #e7e7e7;
-  color: #111;
-  transition: 0.2s;
-}
-.toggle-buttons button.active {
-  background: #4f8ef7;
-  color: #fff;
-  font-weight: bold;
-}
-body.dark .toggle-buttons button { background: #333; color: #ccc; }
-body.dark .toggle-buttons button.active { background: #4f8ef7; color: #fff; }
+.toggle-buttons { display:flex; margin-top:10px; gap:10px; }
+.toggle-buttons button { flex:1; padding:12px 0; font-size:16px; border-radius:12px; border:none; cursor:pointer; background:#e7e7e7; color:#111; transition:0.2s; }
+.toggle-buttons button.active { background:#4f8ef7; color:#fff; font-weight:bold; }
+body.dark .toggle-buttons button { background:#333; color:#ccc; }
+body.dark .toggle-buttons button.active { background:#4f8ef7; color:#fff; }
 
 /* 虛擬鍵盤 */
-.keyboard {
-  margin-top: 12px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-.key {
-  padding: 14px 0;
-  border-radius: 12px;
-  text-align: center;
-  font-size: 20px;
-  border: none;
-  background: #e7e7e7;
-  cursor: pointer;
-  transition: 0.2s;
-}
-.key:active { background: #4f8ef7; color: #fff; }
-body.dark .key { background: #2a2a2a; color: #fff; }
-body.dark .key:active { background: #4f8ef7; color: #fff; }
+.keyboard { margin-top:12px; display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.key { padding:14px 0; border-radius:12px; text-align:center; font-size:20px; border:none; background:#e7e7e7; cursor:pointer; transition:0.2s; }
+.key:active { background:#4f8ef7; color:#fff; }
+body.dark .key { background:#2a2a2a; color:#fff; }
+body.dark .key:active { background:#4f8ef7; color:#fff; }
 
 /* 結果盒 */
-.result-box {
-  margin-top: 20px;
-  background: #eef3ff;
-  border-radius: 12px;
-  padding: 15px;
-  font-size: 16px;
-  transition: 0.2s;
-}
-body.dark .result-box { background: #222; color: #ddd; }
-.result-line {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 8px;
-}
-.value { color: #007bff; }
-body.dark .value { color: #4da3ff; }
+.result-box { margin-top:20px; background:#eef3ff; border-radius:12px; padding:15px; font-size:16px; transition:0.2s; }
+body.dark .result-box { background:#222; color:#ddd; }
+.result-line { display:flex; justify-content:space-between; margin-top:8px; }
+.value { color:#007bff; }
+body.dark .value { color:#4da3ff; }
 
-/* 暗色切換按鈕 */
-.theme-btn {
-  width: 100%;
-  margin-top: 18px;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: #4f8ef7;
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
-}
+/* 主按鈕 */
+.theme-btn { width:100%; margin-top:18px; padding:12px; border-radius:12px; border:none; background:#4f8ef7; color:#fff; font-size:18px; cursor:pointer; }
 
-/* 底部固定 footer */
-#footerInfo {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
-  color: #555;
-  line-height: 1.4;
-  background: #f0f2f5;
-  padding: 6px 0;
-  transition: 0.3s;
-}
-#footerInfo a {
-  color: black;
-  font-weight: bold;
-  text-decoration: underline;
-}
-body.dark #footerInfo {
-  background: #111;
-  color: #ddd;
-}
-body.dark #footerInfo a {
-  color: #4da3ff;
-}
-/* 暗色模式 */
-body.dark { 
-  background: #111; 
-  color: #e6e6e6; 
-}
-body.dark .card { 
-  background: rgba(30,30,30,0.95); 
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4); 
-}
-/* 暗色模式下標題顏色 */
-body.dark h2 {
-  color: #fff;
-}
-body.dark .toggle-buttons button { 
-  background: #333; 
-  color: #ccc; 
-}
-body.dark .toggle-buttons button.active { 
-  background: #4f8ef7; 
-  color: #fff; 
-}
-body.dark input { 
-  background: #2a2a2a; 
-  border: 1px solid #444; 
-  color: #fff; 
-}
-body.dark .key { 
-  background: #2a2a2a; 
-  color: #fff; 
-}
-body.dark .key:active { 
-  background: #4f8ef7; 
-  color: #fff; 
-}
-body.dark .result-box { 
-  background: #222; 
-  color: #ddd; 
-}
-body.dark .value { 
-  color: #4da3ff; 
-}
-body.dark #footerInfo { 
-  background: #111; 
-  color: #ddd; 
-}
-body.dark #footerInfo a { 
-  color: #4da3ff; 
-}
+/* Footer */
+#footerInfo { position:fixed; bottom:0; left:0; width:100%; text-align:center; font-size:12px; color:#555; line-height:1.4; background:#f0f2f5; padding:6px 0; transition:0.3s; }
+#footerInfo a { color:black; font-weight:bold; text-decoration:underline; }
+body.dark #footerInfo { background:#111; color:#ddd; }
+body.dark #footerInfo a { color:#4da3ff; }
+
 /* 手機優化 */
-@media (max-width: 500px) {
-  h2 { font-size: 22px; }
-  input, .toggle-buttons button, .key, .theme-btn { font-size: 18px; padding: 12px; }
-  .card { padding: 16px; }
+@media (max-width:500px) {
+  h2 { font-size:22px; }
+  input, .toggle-buttons button, .key, .theme-btn { font-size:18px; padding:12px; }
+  .card { padding:16px; }
 }
 </style>
 </head>
-<body class="light">
+<body>
 
-<div class="card">
-<h2>手續費計算</h2>
+<!-- 手續費模式 -->
+<div class="card" id="feeCard">
+  <h2>手續費計算</h2>
 
-<div class="toggle-buttons">
-  <button id="market" class="active" onclick="setMarket('market')">交易行</button>
-  <button id="auction" onclick="setMarket('auction')">拍賣行</button>
+  <div class="toggle-buttons">
+    <button id="market" class="active" onclick="setMarket('market')">交易行</button>
+    <button id="auction" onclick="setMarket('auction')">拍賣行</button>
+  </div>
+
+  <label id="priceLabel">單價（元）：</label>
+  <input id="price" readonly onclick="setInput('price')">
+
+  <label id="quantityLabel">數量（個）：</label>
+  <input id="quantity" readonly onclick="setInput('quantity')">
+
+  <div class="toggle-buttons" id="qtyToggle" style="margin-top:10px;">
+    <button id="btn1" class="active" onclick="setQtyMode(1)">1 個</button>
+    <button id="btn10" onclick="setQtyMode(10)">1 組 (10個)</button>
+  </div>
+
+  <label>手續費%：</label>
+  <input id="feeRate" readonly onclick="setInput('feeRate')">
+
+  <div class="keyboard">
+    <div class="key" onclick="press('1')">1</div>
+    <div class="key" onclick="press('2')">2</div>
+    <div class="key" onclick="press('3')">3</div>
+    <div class="key" onclick="press('del')">⌫</div>
+
+    <div class="key" onclick="press('4')">4</div>
+    <div class="key" onclick="press('5')">5</div>
+    <div class="key" onclick="press('6')">6</div>
+    <div class="key" onclick="press('clear')">清空</div>
+
+    <div class="key" onclick="press('7')">7</div>
+    <div class="key" onclick="press('8')">8</div>
+    <div class="key" onclick="press('9')">9</div>
+    <div class="key" onclick="press('0')">0</div>
+  </div>
+
+  <div class="result-box">
+    <div class="result-line"><span class="label">總金額：</span><span id="showTotal" class="value">0 元</span></div>
+    <div class="result-line"><span class="label">手續費金額：</span><span id="showFee" class="value">0 元</span></div>
+    <div class="result-line"><span class="label">實收金額：</span><span id="showNet" class="value">0 元</span></div>
+  </div>
+
+  <button class="theme-btn" onclick="toggleCalc()">切換到計算機模式</button>
+  <button class="theme-btn" onclick="toggleTheme()">切換暗色 / 亮色模式</button>
 </div>
 
-<label id="priceLabel">單價（元）：</label>
-<input id="price" readonly onclick="setInput('price')">
+<!-- 計算機模式 -->
+<div class="card" id="calcCard" style="display:none;">
+  <h2>計算機</h2>
+  <button class="theme-btn" onclick="toggleCalc()">返回手續費模式</button>
+  <input id="calcDisplay" readonly style="font-size:26px; margin-bottom:12px;">
+  <div class="keyboard">
+    <div class="key" onclick="calcPress('7')">7</div>
+    <div class="key" onclick="calcPress('8')">8</div>
+    <div class="key" onclick="calcPress('9')">9</div>
+    <div class="key" onclick="calcPress('/')">÷</div>
 
-<label id="quantityLabel">數量（個）：</label>
-<input id="quantity" readonly onclick="setInput('quantity')">
+    <div class="key" onclick="calcPress('4')">4</div>
+    <div class="key" onclick="calcPress('5')">5</div>
+    <div class="key" onclick="calcPress('6')">6</div>
+    <div class="key" onclick="calcPress('*')">×</div>
 
-<div class="toggle-buttons" id="qtyToggle" style="margin-top:10px;">
-  <button id="btn1" class="active" onclick="setQtyMode(1)">1 個</button>
-  <button id="btn10" onclick="setQtyMode(10)">1 組 (10個)</button>
-</div>
+    <div class="key" onclick="calcPress('1')">1</div>
+    <div class="key" onclick="calcPress('2')">2</div>
+    <div class="key" onclick="calcPress('3')">3</div>
+    <div class="key" onclick="calcPress('-')">−</div>
 
-<label>手續費%：</label>
-<input id="feeRate" readonly onclick="setInput('feeRate')">
+    <div class="key" onclick="calcPress('0')">0</div>
+    <div class="key" onclick="calcPress('.')">.</div>
+    <div class="key" onclick="calcPress('clear')">清空</div>
+    <div class="key" onclick="calcPress('+')">＋</div>
 
-<div class="keyboard">
-  <div class="key" onclick="press('1')">1</div>
-  <div class="key" onclick="press('2')">2</div>
-  <div class="key" onclick="press('3')">3</div>
-  <div class="key" onclick="press('del')">⌫</div>
-
-  <div class="key" onclick="press('4')">4</div>
-  <div class="key" onclick="press('5')">5</div>
-  <div class="key" onclick="press('6')">6</div>
-  <div class="key" onclick="press('clear')">清空</div>
-
-  <div class="key" onclick="press('7')">7</div>
-  <div class="key" onclick="press('8')">8</div>
-  <div class="key" onclick="press('9')">9</div>
-  <div class="key" onclick="press('0')">0</div>
-</div>
-
-<div class="result-box">
-  <div class="result-line"><span class="label">總金額：</span><span id="showTotal" class="value">0 元</span></div>
-  <div class="result-line"><span class="label">手續費金額：</span><span id="showFee" class="value">0 元</span></div>
-  <div class="result-line"><span class="label">實收金額：</span><span id="showNet" class="value">0 元</span></div>
-</div>
-
-<button class="theme-btn" onclick="toggleTheme()">切換暗色 / 亮色模式</button>
+    <div class="key" onclick="calcEqual()" style="grid-column:span 4; background:#4f8ef7; color:white;">＝</div>
+  </div>
 </div>
 
 <!-- Footer -->
 <div id="footerInfo">
-  製作@小咕  版本: 1.0  日期: 2025/11/25<br>
+  製作@小咕 版本:1.1 日期:2025/12/04<br>
   <a href="mailto:totpure@duck.com">問題回饋</a>
 </div>
 
 <script>
-// JS 功能保持原樣
-let activeInput = null;
-let qtyMode = 1;
-let marketMode = 'market';
+let activeInput = null, calcModeOpen=false, qtyMode=1, marketMode='market', calcExpression='';
 
 function setInput(id){ activeInput=document.getElementById(id); }
-function updatePriceLabel(){
-  const label = document.getElementById('priceLabel');
-  if(marketMode==='auction'){
-    label.textContent = '單價（元，單個價格）：';
-  } else {
-    label.textContent = qtyMode===1 ? '單價（元，單個價格）：' : '單價（元，每組價格）：';
-  }
-}
-function updateQuantityLabel(){
-  const label = document.getElementById('quantityLabel');
-  label.textContent = (qtyMode===1) ? '數量（個）：' : '數量（組）：';
-}
+function updatePriceLabel(){ document.getElementById('priceLabel').textContent = (marketMode==='auction')?'單價（元，單個價格）：':(qtyMode===1?'單價（元，單個價格）':'單價（元，每組價格）：'); }
+function updateQuantityLabel(){ document.getElementById('quantityLabel').textContent = (qtyMode===1)?'數量（個）：':'數量（組）：'; }
+
 function setMarket(m){
   marketMode = m;
   document.getElementById("market").classList.toggle("active", m==='market');
   document.getElementById("auction").classList.toggle("active", m==='auction');
-  document.getElementById("qtyToggle").style.display = (m==='market') ? 'flex':'none';
-  qtyMode = 1;
-  setQtyMode(qtyMode);
-  updatePriceLabel();
-  calculate();
-  saveData();
+  document.getElementById("qtyToggle").style.display = (m==='market')?'flex':'none';
+  qtyMode=1; setQtyMode(qtyMode); updatePriceLabel(); calculate(); saveData();
 }
+
 function setQtyMode(m){
   qtyMode = m;
   document.getElementById("btn1").classList.toggle("active", m===1);
   document.getElementById("btn10").classList.toggle("active", m===10);
-  document.getElementById("price").value = '';
-  document.getElementById("quantity").value = '';
-  updatePriceLabel();
-  updateQuantityLabel();
-  calculate();
-  saveData();
+  document.getElementById("price").value=''; document.getElementById("quantity").value='';
+  updatePriceLabel(); updateQuantityLabel(); calculate(); saveData();
 }
+
 function press(key){
   if(!activeInput) return;
-  if(key==='del') activeInput.value = activeInput.value.slice(0,-1);
-  else if(key==='clear') activeInput.value = '';
+  if(key==='del') activeInput.value=activeInput.value.slice(0,-1);
+  else if(key==='clear') activeInput.value='';
   else activeInput.value += key;
-  calculate();
-  saveData();
+  calculate(); saveData();
 }
+
 function calculate(){
-  const priceInput = parseFloat(document.getElementById("price").value) || 0;
-  const quantity = parseFloat(document.getElementById("quantity").value) || 0;
-  const feeRate = parseFloat(document.getElementById("feeRate").value) || 0;
-  const unitPrice = (qtyMode===1) ? priceInput : priceInput/10;
-  const realQty = (marketMode==='market') ? quantity*qtyMode : quantity;
-  const total = unitPrice * realQty;
-  const fee = total * (feeRate/100);
-  const net = total - fee;
-  document.getElementById("showTotal").textContent = total.toFixed(2)+' 元';
-  document.getElementById("showFee").textContent = fee.toFixed(2)+' 元';
-  document.getElementById("showNet").textContent = net.toFixed(2)+' 元';
+  const price=parseFloat(document.getElementById("price").value)||0;
+  const qty=parseFloat(document.getElementById("quantity").value)||0;
+  const feeRate=parseFloat(document.getElementById("feeRate").value)||0;
+  const unitPrice=(qtyMode===1)?price:price/10;
+  const realQty=(marketMode==='market')?qty*qtyMode:qty;
+  const total=unitPrice*realQty;
+  const fee=Math.floor(total*(feeRate/100)*100)/100;
+  const net=total-fee;
+  document.getElementById("showTotal").textContent=total.toFixed(2)+' 元';
+  document.getElementById("showFee").textContent=fee.toFixed(2)+' 元';
+  document.getElementById("showNet").textContent=net.toFixed(2)+' 元';
 }
+
 function saveData(){
   localStorage.setItem("price", document.getElementById("price").value);
   localStorage.setItem("quantity", document.getElementById("quantity").value);
   localStorage.setItem("feeRate", document.getElementById("feeRate").value);
   localStorage.setItem("marketMode", marketMode);
   localStorage.setItem("qtyMode", qtyMode);
-  localStorage.setItem("theme", document.body.classList.contains("dark") ? 'dark':'light');
+  localStorage.setItem("theme", document.body.classList.contains("dark")?"dark":"light");
 }
+
 function loadData(){
-  document.getElementById("price").value = localStorage.getItem("price") || '';
-  document.getElementById("quantity").value = localStorage.getItem("quantity") || '';
-  document.getElementById("feeRate").value = localStorage.getItem("feeRate") || '';
-  const savedMarket = localStorage.getItem("marketMode") || 'market';
-  const savedQty = parseInt(localStorage.getItem("qtyMode")) || 1;
-  const savedTheme = localStorage.getItem("theme") || 'light';
-  setMarket(savedMarket);
-  setQtyMode(savedQty);
-  if(savedTheme==='dark') document.body.classList.add('dark');
-  updatePriceLabel();
+  document.getElementById("price").value = localStorage.getItem("price")||"";
+  document.getElementById("quantity").value = localStorage.getItem("quantity")||"";
+  document.getElementById("feeRate").value = localStorage.getItem("feeRate")||"";
+  marketMode = localStorage.getItem("marketMode")||'market';
+  qtyMode = Number(localStorage.getItem("qtyMode"))||1;
+  setMarket(marketMode); setQtyMode(qtyMode);
+  document.body.classList.toggle("dark", localStorage.getItem("theme")==='dark');
   calculate();
 }
-loadData();
-function toggleTheme(){
-  document.body.classList.toggle("dark");
-  saveData();
+
+function toggleTheme(){ document.body.classList.toggle("dark"); saveData(); }
+
+function toggleCalc(){
+  calcModeOpen = !calcModeOpen;
+  document.getElementById("feeCard").style.display = calcModeOpen?'none':'block';
+  document.getElementById("calcCard").style.display = calcModeOpen?'block':'none';
+  document.getElementById("calcDisplay").value=''; calcExpression='';
 }
+
+function calcPress(val){
+  const disp=document.getElementById("calcDisplay");
+  if(val==='clear'){ calcExpression=''; disp.value=''; return; }
+  calcExpression += val; disp.value=calcExpression;
+}
+
+function calcEqual(){
+  const disp=document.getElementById("calcDisplay");
+  try{ const res = Number(eval(calcExpression)); disp.value=res; calcExpression=String(res); }
+  catch(e){ disp.value='錯誤'; calcExpression=''; }
+}
+
+window.onload = loadData;
 </script>
 
 </body>
