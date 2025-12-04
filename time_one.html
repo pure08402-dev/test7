@@ -69,7 +69,7 @@ Object.assign(canvas.style, {
 
 	
 <div class="card">
-  <h2>⭐ 原初之星達標計算 </h2>
+  <h2>⭐原初之星達標計算</h2>
 
   <label>選擇加成方案：</label>
   <select id="scheme" onchange="changeScheme(); calculateStar();">
@@ -109,6 +109,7 @@ Object.assign(canvas.style, {
     <button class="btn-main" style="background:#673AB7;" onclick="simulateMultiBoost()">🔮 計算結果</button>
     <div id="boostResult" class="result" style="display:none;"></div>
   </div>
+   <button class="btn-save" onclick="window.location.href='https://pure08402-dev.github.io/test7/'">返回首頁</button>
 </div>
 
 <script>
@@ -180,6 +181,7 @@ function calculateStar() {
 
   document.getElementById("result").innerHTML = html;
 }
+
 
 function simulateMultiBoost() {
   const score = parseFloat(document.getElementById("score").value) || 0;
