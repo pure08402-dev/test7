@@ -367,49 +367,52 @@ window.addEventListener("DOMContentLoaded", () => {
   </span>
 </footer>
 
-<!-- 🔘 右上角快捷按鈕 -->
+<!-- 🔘 左上角快捷按鈕容器 -->
 <div id="quickMenu" style="
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 1000;
+  position: fixed;   /* 固定在視窗，不隨捲動移動 */
+  top: 12px;         /* 距離頂部 12px */
+  left: 12px;        /* 距離左側 12px */
+  z-index: 1000;     /* 確保在最上層 */
 ">
-  <!-- 主按鈕 -->
-  <button id="toggleMenu" style="
-    width: 50px; height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #4a90e2, #357abd);
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  ">☰</button>
 
-  <!-- 展開的選單面板 -->
+  <!-- 主按鈕 (點擊展開/收合選單) -->
+  <button id="toggleMenu" style="
+    width: 60px; height: 60px;                    /* 圓形按鈕尺寸 */
+    border-radius: 50%;                           /* 完全圓形 */
+    background: linear-gradient(135deg, #4a90e2, #357abd); /* 漸層背景 */
+    color: white;                                 /* 字體顏色 */
+    font-size: 24px;                              /* 字體大小 */
+    font-weight: bold;                             /* 粗體 */
+    border: none;                                 /* 無邊框 */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);     /* 陰影效果 */
+    cursor: pointer;                              /* 滑鼠手勢 */
+    transition: transform 0.3s ease;              /* 點擊動畫過渡 */
+  ">☰</button>  <!-- 主按鈕圖示：漢堡選單 -->
+
+  <!-- 展開的選單面板 (左上展開) -->
   <div id="menuPanel" style="
-    position: absolute;
-    top: 60px;
-    right: 0;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    overflow: hidden;
-    display: none;
-    flex-direction: column;
-    min-width: 180px;
+      position: absolute;       /* 相對於 quickMenu 定位 */
+      top: 60px;               /* 面板距離主按鈕底部 60px */
+      left: 0;                 /* 面板靠左對齊 */
+      background: #fff;        /* 背景白色 */
+      border-radius: 12px;     /* 圓角 */
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* 面板陰影 */
+      overflow: hidden;        /* 超出內容隱藏 */
+      display: none;           /* 預設隱藏 */
+      flex-direction: column;  /* 直列排列選單項目 */
+      min-width: 180px;        /* 面板最小寬度 */
   ">
- 
-    <a href="https://pure08402-dev.github.io/test7/equip" style="padding: 12px 16px; display: block; text-decoration: none; color: #333;">👆 S2素材計算</a>
-	<a href="https://pure08402-dev.github.io/test7/equip_S3" style="padding: 12px 16px; display: block; text-decoration: none; color: #333;">👆 S3素材計算</a>
-    <a href="https://pure08402-dev.github.io/test7/Trolley" style="padding: 12px 16px; display: block; text-decoration: none; color: #333;">🛒 小推車計算</a>
-	<a href="https://pure08402-dev.github.io/test7/Service_fee" style="padding: 12px 16px; display: block; text-decoration: none; color: #333;">🛒 手續費計算</a>
-	<a href="https://pure08402-dev.github.io/test7/time_one" style="padding: 12px 16px; display: block; text-decoration: none; color: #333; border-bottom: 1px solid #eee;">⭐ 原初之星達標計算</a>
-	<a href="mailto:totpure@duck.com" style="padding: 12px 16px; display: block; text-decoration: none; color: #333; border-bottom: 1px solid #eee;">📮 問題回饋</a>
+      <!-- 選單連結項目 -->
+      <a href="https://pure08402-dev.github.io/test7/equip" style="padding: 12px 16px; display: block; text-decoration: none; color: #333;">👆 S2素材計算</a>
+      <a href="https://pure08402-dev.github.io/test7/equip_S3" style="padding: 12px 16px; display: block; text-decoration: none; color: #333;">👆 S3素材計算</a>
+      <a href="https://pure08402-dev.github.io/test7/Trolley" style="padding: 12px 16px; display: block; text-decoration: none; color: #333;">🛒 小推車計算</a>
+      <a href="https://pure08402-dev.github.io/test7/Service_fee" style="padding: 12px 16px; display: block; text-decoration: none; color: #333;">🛒 手續費計算</a>
+      <a href="https://pure08402-dev.github.io/test7/time_one" style="padding: 12px 16px; display: block; text-decoration: none; color: #333; border-bottom: 1px solid #eee;">⭐ 原初之星達標計算</a>
+      <a href="mailto:totpure@duck.com" style="padding: 12px 16px; display: block; text-decoration: none; color: #333; border-bottom: 1px solid #eee;">📮 問題回饋</a>
   </div>
+
 </div>
+
 
 
 		
