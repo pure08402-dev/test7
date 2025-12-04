@@ -389,6 +389,9 @@ body.dark .hint {
     </div>
 
     <button type="submit" disabled>✨ 正在載入經驗表… ✨</button>
+    <div style="display:flex; gap:10px; margin-top:10px;">
+  <button id="clearInputsBtn" type="button" style="flex:1;">🗑 清除儲存</button>
+</div>
   </form>
 
   <section id="results" class="results" hidden>
@@ -647,7 +650,69 @@ document.getElementById("ephImageModal").addEventListener("click", () => {
   document.getElementById("ephImageModal").style.display = "none";
 });
 
+const inputIds = [
+  "currentLevel",
+  "currentExp",
+  "targetLevel",
+  "expPerHour",
+  "dailyBoosts",
+  "stoneBoosts",
+  "expUnitToggle",
+  "ephUnitToggle",
+  "seasonSelect"
+];
 
+// ===== 自動儲存 =====
+inputIds.forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  const saveFn = () => {
+    const data = JSON.parse(localStorage.getItem("expCalcInputs") || "{}");
+    if(el.type === "checkbox") data[id] = el.checked;
+    else data[id] = el.value;
+    localStorage.setItem("expCalcInputs", JSON.stringify(data));
+  };
+
+  el.addEventListener("input", saveFn);
+  if(el.type === "checkbox") el.addEventListener("change", saveFn);
+});
+
+// ===== 清除按鈕 =====
+document.getElementById("clearInputsBtn").addEventListener("click", () => {
+  localStorage.removeItem("expCalcInputs");
+  inputIds.forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    if(el.type === "checkbox") el.checked = false;
+    else el.value = "";
+  });
+  // 更新單位標籤
+  expInTenThousands = false;
+  ephInTenThousands = false;
+  expUnitLabel.textContent = "";
+  ephUnitLabel.textContent = "";
+  alert("已清除儲存的輸入資料！");
+});
+
+// ===== 頁面載入時自動讀取 =====
+window.addEventListener("load", () => {
+  const saved = JSON.parse(localStorage.getItem("expCalcInputs") || "{}");
+  inputIds.forEach(id => {
+    const el = document.getElementById(id);
+    if(el && saved[id] !== undefined){
+      if(el.type === "checkbox") el.checked = saved[id];
+      else el.value = saved[id];
+    }
+  });
+
+  // 更新單位標籤
+  expInTenThousands = document.getElementById("expUnitToggle").checked;
+  ephInTenThousands = document.getElementById("ephUnitToggle").checked;
+  expUnitLabel.textContent = expInTenThousands ? "萬" : "";
+  ephUnitLabel.textContent = ephInTenThousands ? "萬" : "";
+});
+  
 </script>
 </body>
 </html>
