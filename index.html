@@ -412,34 +412,27 @@ window.addEventListener("DOMContentLoaded", () => {
 
 		
 <script>
-// =====================================================
-// 基礎設定
-// =====================================================
-let basePersonLevel = 130;  // 人物等級基底
-let baseRelicLevel = 13;    // 遺物等級基底
+// 開合選單
+const toggleBtn = document.getElementById("toggleMenu");
+const menuPanel = document.getElementById("menuPanel");
 
-// 預設倍率設定
-const defaultValues = { 
-  basePersonLevel:130, 
-  baseRelicLevel:13, 
-  person:100,       // 人物倍率
-  equip:18,         // 裝備倍率
-  illusion:8,       // 幻獸倍率
-  skill:7,          // 技能倍率
-  relic:33,         // 遺物倍率
-  star_div:27,      // 星數除數
-  star_base:45      // 星數基底
-};
+toggleBtn.addEventListener("click", () => {
+  const isOpen = menuPanel.style.display === "flex";
+  menuPanel.style.display = isOpen ? "none" : "flex";
+  toggleBtn.textContent = isOpen ? "☰" : "✖"; // 切換圖示
+});
+</script>
+		
 
-// S2 與 S3 特殊模式倍率
+
+<script>
+let basePersonLevel = 130;
+let baseRelicLevel = 13;
+
+const defaultValues = { basePersonLevel:130, baseRelicLevel:13, person:100, equip:18, illusion:8, skill:7, relic:33, star_div:27, star_base:45 };
 const s2Values = {...defaultValues};
-const s3Values = { 
-  basePersonLevel:160, 
-  baseRelicLevel:16, 
-  person:100, equip:14, illusion:5, skill:6, relic:26, star_div:13, star_base:65 
-};
+const s3Values = { basePersonLevel:160, baseRelicLevel:16, person:100, equip:14, illusion:5, skill:6, relic:26, star_div:13, star_base:65 };
 
-// 對應到 HTML 中倍率輸入框
 const inputs = {
   person: document.getElementById('mul_person'),
   equip: document.getElementById('mul_equip'),
@@ -450,11 +443,10 @@ const inputs = {
   star_base: document.getElementById('mul_star_base')
 };
 
-// S2、S3 勾選框
 const s2Checkbox = document.getElementById("mul_s2");
 const s3Checkbox = document.getElementById("mul_s3");
 
-// 需要同步填入等級的輸入框
+// 需要同步調整的輸入框
 const levelInputs = [
   "person","weapon1","weapon","assistant","headgear","clothes","shoes",
   "skill","illusion5","illusion1","illusion2","illusion3","illusion4"
@@ -462,27 +454,14 @@ const levelInputs = [
 
 const relicLevel = document.getElementById("relic_level");
 
-// =====================================================
-// 套用倍率數值
-// =====================================================
+// 套用倍率
 function applyValues(values){
-  for(let key in values){ 
-    if(inputs[key]) inputs[key].value = values[key]; 
-  }
+  for(let key in values){ if(inputs[key]) inputs[key].value = values[key]; }
   basePersonLevel = values.basePersonLevel;
   baseRelicLevel = values.baseRelicLevel;
-
-  // 更新倍率顯示
-  document.getElementById("personMulDisplay").innerText   = values.person;
-  document.getElementById("equipMulDisplay").innerText    = values.equip;
-  document.getElementById("illusionMulDisplay").innerText = values.illusion;
-  document.getElementById("skillMulDisplay").innerText    = values.skill;
-  document.getElementById("relicMulDisplay").innerText    = values.relic;
 }
 
-// =====================================================
-// 套用人物/裝備等級
-// =====================================================
+// 套用等級
 function applyDefaultLevel(mode){
   if(mode === "S2"){
     levelInputs.forEach(input => input.value = 130);
@@ -496,13 +475,11 @@ function applyDefaultLevel(mode){
   }
 }
 
-// =====================================================
-// 勾選 S2 / S3 選項時同步處理
-// =====================================================
+// 勾選切換
 function onCheckboxChange(option){
   if(option === "S2"){
     if(s2Checkbox.checked){
-      s3Checkbox.checked = false; // 關閉 S3
+      s3Checkbox.checked = false;
       applyValues(s2Values);
       applyDefaultLevel("S2");
     }else{
@@ -511,7 +488,7 @@ function onCheckboxChange(option){
     }
   }else if(option === "S3"){
     if(s3Checkbox.checked){
-      s2Checkbox.checked = false; // 關閉 S2
+      s2Checkbox.checked = false;
       applyValues(s3Values);
       applyDefaultLevel("S3");
     }else{
@@ -521,83 +498,48 @@ function onCheckboxChange(option){
   }
 }
 
-// 綁定事件
 s2Checkbox.addEventListener("change", ()=>onCheckboxChange("S2"));
 s3Checkbox.addEventListener("change", ()=>onCheckboxChange("S3"));
 
-// =====================================================
-// 展開 / 收合倍率設定卡片
-// =====================================================
 function toggleMultiplier(){
   let card = document.getElementById('multiplierCard');
   let arrow = document.getElementById('arrow');
   if(card.classList.contains('show')){
-    card.classList.remove('show'); 
-    arrow.classList.remove('rotate');
+    card.classList.remove('show'); arrow.classList.remove('rotate');
   }else{
-    card.classList.add('show'); 
-    arrow.classList.add('rotate');
+    card.classList.add('show'); arrow.classList.add('rotate');
   }
 }
 
-// =====================================================
-// 儲存、重置、清除倍率按鈕
-// =====================================================
 function saveMultiplier(){ alert("倍率已儲存 (暫存功能)"); }
 function resetMultiplier(){ applyValues(defaultValues); }
-function clearMultiplier(){ 
-  applyValues(defaultValues); 
-  s2Checkbox.checked=false; 
-  s3Checkbox.checked=false; 
-}
+function clearMultiplier(){ applyValues(defaultValues); s2Checkbox.checked=false; s3Checkbox.checked=false; }
 
-// =====================================================
-// 取得輸入數值（整數）
 function getVal(id){ return parseInt(document.getElementById(id).value)||0; }
 
-// =====================================================
-// 核心計算函數
-// =====================================================
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 function calculate(){
-  // 人物評分
-  let person_score = (getVal("person") - basePersonLevel) * getVal("mul_person");
+  let person_score=(getVal("person")-basePersonLevel)*getVal("mul_person");
+  let equip_score=((getVal("weapon")+getVal("assistant")+getVal("headgear")+getVal("clothes")+getVal("shoes")-(basePersonLevel*5))*getVal("mul_equip"));
+  let illusion_score=((getVal("illusion1")+getVal("illusion2")+getVal("illusion3")+getVal("illusion4")-(basePersonLevel*4))*getVal("mul_illusion"));
+  let skill_score=((getVal("skill")-basePersonLevel)*8+getVal("skill_count"))*getVal("mul_skill");
+  let relic_score=((getVal("relic_level")-baseRelicLevel)*20+getVal("relic_count"))*getVal("mul_relic");
+  let total_score=person_score+equip_score+illusion_score+skill_score+relic_score;
+  let star=Math.floor(total_score/getVal("mul_star_div")+getVal("mul_star_base"));
 
-  // 裝備評分 (5件總和)
-  let equip_score = ((getVal("weapon")+getVal("assistant")+getVal("headgear")+getVal("clothes")+getVal("shoes")-(basePersonLevel*5)) * getVal("mul_equip"));
-
-  // 幻獸評分 (4個總和)
-  let illusion_score = ((getVal("illusion1")+getVal("illusion2")+getVal("illusion3")+getVal("illusion4")-(basePersonLevel*4)) * getVal("mul_illusion"));
-
-  // 技能評分 (8個總和 + 額外增加)
-  let skill_score = ((getVal("skill")-basePersonLevel)*8 + getVal("skill_count")) * getVal("mul_skill");
-
-  // 遺物評分 (20個總和 + 額外增加)
-  let relic_score = ((getVal("relic_level")-baseRelicLevel)*20 + getVal("relic_count")) * getVal("mul_relic");
-
-  // 總評分
-  let total_score = person_score + equip_score + illusion_score + skill_score + relic_score;
-
-  // 原初之星計算
-  let star = Math.floor(total_score / getVal("mul_star_div") + getVal("mul_star_base"));
-
-  // 更新頁面顯示
-  document.getElementById("person_score").innerText = person_score;
-  document.getElementById("equip_score").innerText = equip_score;
-  document.getElementById("illusion_score").innerText = illusion_score;
-  document.getElementById("skill_score").innerText = skill_score;
-  document.getElementById("relic_score").innerText = relic_score;
-  document.getElementById("total_score").innerText = total_score;
-  document.getElementById("star").innerText = star;
+  document.getElementById("person_score").innerText=person_score;
+  document.getElementById("equip_score").innerText=equip_score;
+  document.getElementById("illusion_score").innerText=illusion_score;
+  document.getElementById("skill_score").innerText=skill_score;
+  document.getElementById("relic_score").innerText=relic_score;
+  document.getElementById("total_score").innerText=total_score;
+  document.getElementById("star").innerText=star;
 }
 
-// =====================================================
-// 清除所有輸入 / 重新計算
-// =====================================================
 function clearAll(){ location.reload(); }
 
-// =====================================================
-// 快速填入等級
-// =====================================================
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+// 快速填入
 document.getElementById("weapon1").addEventListener("input", function() {
   let val = parseInt(this.value) || "";
   ["weapon","assistant","headgear","clothes","shoes"].forEach(id => {
@@ -612,8 +554,7 @@ document.getElementById("illusion5").addEventListener("input", function() {
   });
 });
 
-// =====================================================
-// 展開 / 收合卡片 (裝備、幻獸)
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 function toggleSection(sectionId, arrowId, btnTextId, expandText, collapseText) {
   const section = document.getElementById(sectionId);
   const arrow = document.getElementById(arrowId);
@@ -630,23 +571,21 @@ function toggleSection(sectionId, arrowId, btnTextId, expandText, collapseText) 
   }
 }
 
-// =====================================================
-// 原初之星總和計算與高亮
-// =====================================================
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
 function highlightStar() {
   const s1 = parseInt(document.getElementById('s1value').value) || 0;
   const star = parseInt(document.getElementById('star').innerText) || 0;
   const total = s1 + star;
   document.getElementById('totalDisplay').innerText = "總和: " + total;
   
-  // 顯示星數表
+    // ✅ 顯示星數表
   document.getElementById('starTableContainer').style.display = 'block';
 
-  // 清除所有行背景色
   const rows = document.querySelectorAll('#starTable tr');
   rows.forEach(row => row.style.backgroundColor = "");
 
-  // 找出不超過總和的最大星數
   let maxRow = null;
   let maxValue = -Infinity;
   for (let row of rows) {
@@ -658,7 +597,6 @@ function highlightStar() {
       maxRow = row;
     }
   }
-  // 高亮該行並滾動至可見
   if (maxRow) {
     maxRow.style.backgroundColor = "#ffd1dc";
     maxRow.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -666,15 +604,78 @@ function highlightStar() {
   console.log("S1 + 原初之星總和:", total, "標示星數:", maxValue);
 }
 
-// =====================================================
-// 頁面載入時預設 S2 勾選
-// =====================================================
-window.addEventListener("DOMContentLoaded", () => {
-  s2Checkbox.checked = true;
-  onCheckboxChange("S2");
-});
-</script>
+  window.addEventListener("DOMContentLoaded", () => {
+    s2Checkbox.checked = true;
+    onCheckboxChange("S2");
+  });
+  
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////  
+function applyValues(values){
+  for(let key in values){ 
+    if(inputs[key]) inputs[key].value = values[key]; 
+  }
+  basePersonLevel = values.basePersonLevel;
+  baseRelicLevel = values.baseRelicLevel;
 
+  // 更新倍率顯示
+  document.getElementById("personMulDisplay").innerText   = values.person;
+  document.getElementById("equipMulDisplay").innerText    = values.equip;
+  document.getElementById("illusionMulDisplay").innerText = values.illusion;
+  document.getElementById("skillMulDisplay").innerText    = values.skill;
+  document.getElementById("relicMulDisplay").innerText    = values.relic;
+}
+
+inputs.person.addEventListener("input", () => {
+  document.getElementById("personMulDisplay").innerText = inputs.person.value;
+});
+inputs.equip.addEventListener("input", () => {
+  document.getElementById("equipMulDisplay").innerText = inputs.equip.value;
+});
+inputs.illusion.addEventListener("input", () => {
+  document.getElementById("illusionMulDisplay").innerText = inputs.illusion.value;
+});
+inputs.skill.addEventListener("input", () => {
+  document.getElementById("skillMulDisplay").innerText = inputs.skill.value;
+});
+inputs.relic.addEventListener("input", () => {
+  document.getElementById("relicMulDisplay").innerText = inputs.relic.value;
+});
+
+
+function updateFormulas() {
+  document.getElementById("personFormula").innerText   = `#(人物等級 - ${basePersonLevel}) × 倍率`;
+  document.getElementById("equipFormula").innerText    = `#(5件總和 - ${basePersonLevel*5}) × 倍率`;
+  document.getElementById("illusionFormula").innerText = `#(4個總和 - ${basePersonLevel*4}) × 倍率`;
+  document.getElementById("skillFormula").innerText    = `#(8個總和 - ${basePersonLevel*8}) × 倍率`;
+  document.getElementById("relicFormula").innerText    = `#(20個總和 - ${baseRelicLevel*20}) × 倍率`;
+}
+
+
+function onCheckboxChange(option){
+  if(option === "S2"){
+    if(s2Checkbox.checked){
+      s3Checkbox.checked = false;
+      applyValues(s2Values);
+      applyDefaultLevel("S2");
+    }else{
+      applyValues(defaultValues);
+      applyDefaultLevel("default");
+    }
+  }else if(option === "S3"){
+    if(s3Checkbox.checked){
+      s2Checkbox.checked = false;
+      applyValues(s3Values);
+      applyDefaultLevel("S3");
+    }else{
+      applyValues(defaultValues);
+      applyDefaultLevel("default");
+    }
+  }
+  updateFormulas(); // ✅ 更新灰色公式
+}
+  
+  
+</script>
 
 
 </body>
