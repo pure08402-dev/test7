@@ -1,209 +1,269 @@
-/* =====================================================
-   專用手指按鈕設計（主按鈕） - 手機友好
-   ===================================================== */
-.nav-btn {
-  display: block;                     /* 占滿一行，更好點擊 */
-  width: 90%;                         /* 按鈕寬度 90% */
-  max-width: 400px;                   /* 桌面最大寬度 */
-  margin: 10px auto;                  /* 上下間距 10px，水平置中 */
-  padding: 14px;                       /* 提高點擊範圍 */
-  font-size: 17px;                     /* 字體大小 */
-  font-weight: bold;                   /* 文字加粗 */
-  color: #fff;                         /* 白色文字 */
-  background: linear-gradient(90deg, #4a90e2, #6fa8dc); /* 漸層背景 */
-  border: none;                        /* 無邊框 */
-  border-radius: 12px;                 /* 圓角按鈕 */
-  cursor: pointer;                     /* 滑鼠變手型 */
-  transition: all 0.25s ease;          /* 平滑過渡 */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15); /* 投影效果 */
-}
-
-/* 按鈕點擊動畫：輕微上跳 */
-@keyframes tap {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
-}
-
-/* 按鈕懸停效果 */
-.nav-btn:hover {
-  animation: tap 0.35s ease-in-out;
-  background: linear-gradient(90deg, #357abd, #5b8fd8); /* 顏色變深 */
-  box-shadow: 0 6px 14px rgba(0,0,0,0.2);              /* 陰影加深 */
-}
-
-/* =====================================================
+<style> 
+	
+/* ==========================
    全局樣式
-   ===================================================== */
-body { 
-  font-family: "Microsoft JhengHei", sans-serif; /* 字體設定 */
-  margin: 0; 
-  padding: 10px; 
-  background: #f0f2f5; /* 淺灰背景 */
+========================== */
+body {
+    font-family: "Microsoft JhengHei", sans-serif;
+    margin: 0;
+    padding: 10px;
+    background: #f0f2f5;
 }
 
-h1 { 
-  text-align: center; 
-  margin-bottom: 15px; 
-  font-size: 22px; 
+h1 {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
-/* =====================================================
-   卡片樣式 - 可折疊內容
-   ===================================================== */
+/* ==========================
+   卡片樣式
+========================== */
 .card {
-  background: #fff; 
-  border-radius: 12px; 
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* 輕微陰影 */
-  padding: 16px; 
-  margin-bottom: 20px;
-  overflow: hidden;  /* 防止內容溢出 */
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    margin-bottom: 20px;
 }
 
-/* 卡片標題樣式 */
-.card-toggle {
-  display: flex;                     /* 左右排列標題與箭頭 */
-  justify-content: space-between;    /* 左右間距 */
-  align-items: center;               /* 垂直置中 */
-  cursor: pointer;                   /* 點擊手型 */
-  padding: 10px 0;
-  font-size: 17px;
-  font-weight: bold;
-  color: #333;
+.card h2 {
+    margin-top: 0;
+    font-size: 18px;
+    border-left: 5px solid #4a90e2;
+    padding-left: 8px;
+    color: #333;
 }
 
-/* 箭頭動畫 */
-.arrow {
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-.rotate {
-  transform: rotate(180deg); /* 點擊展開時旋轉180度 */
+/* ==========================
+   表單欄位樣式
+========================== */
+.field {
+    margin-bottom: 12px;
 }
 
-/* 卡片內容折疊效果 */
-.card-content {
-  max-height: 0;                     /* 預設收合 */
-  overflow: hidden;                  /* 隱藏多餘內容 */
-  transition: max-height 0.4s ease, padding 0.3s ease; /* 平滑動畫 */
-  padding: 0;                        /* 收合時無間距 */
-}
-.card-content.show {
-  max-height: 1000px;                /* 展開高度（足夠大） */
-  padding: 15px 0;                   /* 展開後內距 */
+label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
-/* =====================================================
-   按鈕群組樣式（右對齊） 
-   可用於操作按鈕：確認/取消/清除
-   ===================================================== */
+input {
+    width: 100%;           /* 佔滿全寬 */
+    padding: 12px;         /* 提高手機可點擊範圍 */
+    font-size: 16px;       /* 字體放大 */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box; /* 避免超出容器 */
+}
+
+/* ==========================
+   按鈕樣式
+========================== */
+button {
+    width: 100%;           /* 佔滿全寬 */
+    padding: 12px;         /* 提高可點擊範圍 */
+    font-size: 16px;       /* 字體放大 */
+    font-weight: bold;      /* 手機上更清晰 */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+    background: #4a90e2;
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #357abd;
+}
+
+/* ==========================
+   專用手指按鈕設計
+========================== */
+.nav-btn {
+    display: inline-block;
+    width: 85%;
+    margin: 8px auto;
+    padding: 14px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(90deg, #4a90e2, #6fa8dc);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* 按鈕動畫效果 */
+@keyframes tap {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+.nav-btn:hover {
+    animation: tap 0.35s ease-in-out;
+    background: linear-gradient(90deg, #357abd, #5b8fd8);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================
+   卡片收合動畫
+========================== */
+#multiplierCard {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+    background: #fff;
+    border-radius: 12px;
+    margin-top: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 0 15px;
+}
+
+#multiplierCard.show {
+    max-height: 1000px; /* 足夠展開 */
+    padding: 15px;
+}
+
+/* ==========================
+   按鈕群組樣式
+========================== */
 .btn-group {
-  margin-top: 15px;
-  text-align: right;                 /* 按鈕靠右 */
+    margin-top: 15px;
+    text-align: right;
 }
 
-.btn-group button:nth-child(1) {      /* 第一個按鈕 - 主操作 */
-  background-color: #4a90e2; 
-}
-.btn-group button:nth-child(1):hover {
-  background-color: #357abd;
+.btn-group button:nth-child(2) {
+    background-color: #28a745; /* 綠色 恢復 */
 }
 
-.btn-group button:nth-child(2) {      /* 第二個按鈕 - 綠色恢復 */
-  background-color: #28a745; 
-}
 .btn-group button:nth-child(2):hover {
-  background-color: #1e7e34;
+    background-color: #1e7e34;
 }
 
-.btn-group button:nth-child(3) {      /* 第三個按鈕 - 紅色清除 */
-  background-color: #dc3545; 
+.btn-group button:nth-child(3) {
+    background-color: #dc3545; /* 紅色 清除 */
 }
+
 .btn-group button:nth-child(3):hover {
-  background-color: #a71d2a;
+    background-color: #a71d2a;
 }
 
-.clear-btn { 
-  background: #d9534f; 
-}
-.clear-btn:hover { 
-  background: #b52b27; 
+.clear-btn {
+    background: #d9534f;
 }
 
-/* =====================================================
+.clear-btn:hover {
+    background: #b52b27;
+}
+
+/* ==========================
+   結果區塊樣式
+========================== */
+.result label {
+    font-size: 15px;
+    margin-top: 8px;
+    display: block;
+}
+
+.star {
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* ==========================
+   Tooltip 樣式
+========================== */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip .tiptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #ffffe0;
+    color: black;
+    text-align: left;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    padding: 6px;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 105%;
+    font-size: 12px;
+}
+
+.tooltip:hover .tiptext {
+    visibility: visible;
+}
+
+/* ==========================
    表格樣式
-   ===================================================== */
+========================== */
 .table-container {
-  width: 100%;
-  overflow-x: auto;  /* 手機橫向滑動 */
+    width: 100%;
+    overflow-x: hidden; /* 不橫向滑動 */
 }
 
 table {
-  border-collapse: collapse;
-  width: 100%;         
-  table-layout: auto;  
+    border-collapse: collapse;
+    width: 100%;       /* 自動填滿容器 */
+    table-layout: auto; /* 自動調整欄位寬度 */
 }
 
 th, td {
-  border: 1px solid #ddd;
-  text-align: center;
-  word-break: break-word; 
-  padding: 8px;         
+    border: 1px solid #ddd;
+    text-align: center;
+    word-break: break-word; /* 避免文字溢出 */
 }
 
 th {
-  background: #4a90e2;
-  color: white;
+    background: #4a90e2;
+    color: white;
 }
 
 tr:nth-child(even) {
-  background: #f9f9f9;
+    background: #f9f9f9;
 }
 
 .highlight {
-  background: #ffff99;
-  font-weight: bold;
+    background: #ffff99;
+    font-weight: bold;
 }
 
-/* =====================================================
-   Tooltip 提示文字
-   ===================================================== */
-.tooltip { 
-  position: relative; 
-  display: inline-block; 
-  cursor: pointer; 
-}
-.tooltip .tiptext {
-  visibility: hidden; 
-  width: 160px; 
-  background-color: #ffffe0; 
-  color: black;
-  text-align: left; 
-  border: 1px solid #aaa; 
-  border-radius: 6px; 
-  padding: 6px;
-  position: absolute; 
-  z-index: 1; 
-  top: -5px; 
-  left: 105%; 
-  font-size: 12px;
-}
-.tooltip:hover .tiptext { 
-  visibility: visible; 
+/* ==========================
+   箭頭旋轉動畫
+========================== */
+.arrow {
+    display: inline-block;
+    transition: transform 0.3s ease;
 }
 
-/* =====================================================
-   響應式適配
-   ===================================================== */
-@media (max-width: 768px) {  /* 平板尺寸 */
-  .nav-btn { width: 95%; }
-  h2, .card-toggle { font-size: 18px; }
-  input, button { font-size: 16px; padding: 14px; }
-  table th, table td { font-size: 14px; padding: 6px; }
+.rotate {
+    transform: rotate(180deg);
 }
 
-@media (max-width: 480px) {  /* 手機尺寸 */
-  .nav-btn { width: 100%; }
-  h2, .card-toggle { font-size: 16px; }
-  input, button { font-size: 15px; padding: 12px; }
-  table th, table td { font-size: 12px; padding: 4px; }
+/* ==========================
+   手機螢幕適配
+========================== */
+@media (max-width: 480px) {
+    h2 {
+        font-size: 18px;
+    }
+
+    input, button {
+        font-size: 16px;
+        padding: 14px;
+    }
+
+    .result {
+        font-size: 14px;
+    }
 }
+
+</style>
