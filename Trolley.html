@@ -83,7 +83,7 @@ Object.assign(canvas.style, {
 
   <label><input type="radio" name="option" value="S1" onchange="setDays();calculateResult()"> S1: 持續至 2025/08/30</label><br>
   <label><input type="radio" name="option" value="S2" onchange="setDays();calculateResult()"> S2: 持續至 2025/11/05</label><br>
-  <label><input type="radio" name="option" value="S3" onchange="setDays();calculateResult()"> S3: 持續至 2025/12/31(暫)</label><br>
+  <label><input type="radio" name="option" value="S3" onchange="setDays();calculateResult()"> S3: 持續至 2026/02/14(暫)</label><br>
   <label><input type="radio" name="option" value="manual" onchange="setDays();calculateResult()"> S4: 手動輸入</label><br><br>
 
     <!-- 每小時產出 -->
@@ -390,8 +390,8 @@ function setDays() {
       endDate = new Date("2025-11-05T08:00:00");
       labelText = "2025/11/05";
     } else if (selected === "S3") {
-      endDate = new Date("2025-12-31T08:00:00");
-      labelText = "2025/12/31";
+      endDate = new Date("2026-02-14T08:00:00");
+      labelText = "2026/02/14";
 	}
 
     const now = new Date();
