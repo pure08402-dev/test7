@@ -93,11 +93,11 @@ button{
 <div class="control">
     <div>
         神鑄石單價<br>
-        <input type="number" id="price">
+        <input type="number" id="price" min="0" step="1">
     </div>
     <div>
         稅率(%)<br>
-        <input type="number" id="tax">
+        <input type="number" id="tax" min="0" max="100" step="1">
     </div>
 </div>
 
@@ -114,16 +114,15 @@ button{
 </div>
 
 <script>
-
 const items = [
     {name:"金裝備", fragmentPerEquip:100, defaultBuy:400},
     {name:"紅裝備", fragmentPerEquip:150, defaultBuy:600},
     {name:"神印裝備", fragmentPerEquip:500, defaultBuy:2000}
 ];
 
+// 建立卡片
 function createCards(){
     const container = document.getElementById("cards");
-
     items.forEach((item,index)=>{
         container.innerHTML += `
         <div class="card" id="card${index}">
@@ -131,12 +130,12 @@ function createCards(){
 
             <div class="row">
                 <span>單件成本</span>
-                <input type="number" id="unit${index}">
+                <input type="number" id="unit${index}" min="0" step="1">
             </div>
 
             <div class="row">
                 <span>裝備數量</span>
-                <input type="number" id="equip${index}">
+                <input type="number" id="equip${index}" min="0" step="1">
             </div>
 
             <div class="row">
@@ -168,10 +167,18 @@ function createCards(){
     });
 }
 
+// 計算
 function calculate(){
+    // 強制填數字
+    let price = parseFloat(priceInput.value);
+    if(isNaN(price) || price < 0) price = 0;
+    priceInput.value = price;
 
-    const price = parseFloat(priceInput.value) || 0;
-    const taxRate = (parseFloat(taxInput.value) || 0) / 100;
+    let taxRate = parseFloat(taxInput.value);
+    if(isNaN(taxRate) || taxRate < 0) taxRate = 0;
+    if(taxRate > 100) taxRate = 100;
+    taxInput.value = taxRate;
+    taxRate = taxRate / 100;
 
     let totalBuy = 0;
     let totalReal = 0;
@@ -179,9 +186,13 @@ function calculate(){
     let bestIndex = -1;
 
     items.forEach((item,index)=>{
+        let unit = parseFloat(document.getElementById("unit"+index).value);
+        if(isNaN(unit) || unit < 0) unit = item.defaultBuy;
+        document.getElementById("unit"+index).value = unit;
 
-        const unit = parseFloat(document.getElementById("unit"+index).value) || 0;
-        const equip = parseFloat(document.getElementById("equip"+index).value) || 0;
+        let equip = parseFloat(document.getElementById("equip"+index).value);
+        if(isNaN(equip) || equip < 0) equip = 1;
+        document.getElementById("equip"+index).value = equip;
 
         const totalCost = unit * equip;
         const fragments = equip * item.fragmentPerEquip;
@@ -216,10 +227,8 @@ function calculate(){
     }
 
     const totalProfit = totalReal - totalBuy;
-
     document.getElementById("totalBuy").innerText = totalBuy;
     document.getElementById("totalReal").innerText = totalReal;
-
     const totalProfitEl = document.getElementById("totalProfit");
     totalProfitEl.innerText = totalProfit;
     totalProfitEl.className = "profit " + (totalProfit>=0 ? "green":"red");
@@ -227,30 +236,23 @@ function calculate(){
     saveData();
 }
 
+// 儲存與讀取
 function saveData(){
-    const data = {
-        price: priceInput.value,
-        tax: taxInput.value,
-        items:[]
-    };
-
+    const data = {price:priceInput.value,tax:taxInput.value,items:[]};
     items.forEach((item,index)=>{
         data.items.push({
-            unit: document.getElementById("unit"+index).value,
-            equip: document.getElementById("equip"+index).value
+            unit:document.getElementById("unit"+index).value,
+            equip:document.getElementById("equip"+index).value
         });
     });
-
-    localStorage.setItem("forgePanelPro", JSON.stringify(data));
+    localStorage.setItem("forgePanelPro",JSON.stringify(data));
 }
 
 function loadData(){
     const saved = JSON.parse(localStorage.getItem("forgePanelPro"));
-
     if(saved){
         priceInput.value = saved.price;
         taxInput.value = saved.tax;
-
         saved.items.forEach((item,index)=>{
             document.getElementById("unit"+index).value = item.unit;
             document.getElementById("equip"+index).value = item.equip;
@@ -258,7 +260,6 @@ function loadData(){
     }else{
         priceInput.value = 5;
         taxInput.value = 20;
-
         items.forEach((item,index)=>{
             document.getElementById("unit"+index).value = item.defaultBuy;
             document.getElementById("equip"+index).value = 1;
@@ -266,6 +267,7 @@ function loadData(){
     }
 }
 
+// 清空
 function resetData(){
     localStorage.removeItem("forgePanelPro");
     location.reload();
@@ -280,7 +282,6 @@ loadData();
 calculate();
 
 document.addEventListener("input", calculate);
-
 </script>
 
 </body>
