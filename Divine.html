@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>神鑄石交易面板</title>
+<title>買裝備賣神鑄石獲利計算</title>
 
 <style>
 body{
@@ -82,18 +82,17 @@ button{
     border-radius:8px;
     font-size:16px;
 }
-
 </style>
 </head>
 <body>
 
 <div class="container">
 
-<h2>📱 神鑄石交易面板</h2>
+<h2>📱 買裝備賣神鑄石獲利計算</h2>
 
 <div class="control">
     <div>
-        神鑄石販售單價<br>
+        神鑄石單價<br>
         <input type="number" id="price">
     </div>
     <div>
@@ -131,13 +130,18 @@ function createCards(){
             <h3>${item.name}</h3>
 
             <div class="row">
-                <span>購買價</span>
-                <input type="number" id="buy${index}">
+                <span>單件成本</span>
+                <input type="number" id="unit${index}">
             </div>
 
             <div class="row">
                 <span>裝備數量</span>
                 <input type="number" id="equip${index}">
+            </div>
+
+            <div class="row">
+                <span>總成本</span>
+                <span id="totalCost${index}" class="gray"></span>
             </div>
 
             <div class="row">
@@ -176,21 +180,23 @@ function calculate(){
 
     items.forEach((item,index)=>{
 
-        const buy = parseFloat(document.getElementById("buy"+index).value) || 0;
+        const unit = parseFloat(document.getElementById("unit"+index).value) || 0;
         const equip = parseFloat(document.getElementById("equip"+index).value) || 0;
 
+        const totalCost = unit * equip;
         const fragments = equip * item.fragmentPerEquip;
         const sale = fragments * price;
         const real = Math.floor(sale * (1 - taxRate));
-        const profit = real - buy;
-        const roi = buy > 0 ? ((profit / buy) * 100).toFixed(1) : 0;
+        const profit = real - totalCost;
+        const roi = totalCost > 0 ? ((profit / totalCost) * 100).toFixed(1) : 0;
 
+        document.getElementById("totalCost"+index).innerText = totalCost;
         document.getElementById("fragments"+index).innerText = fragments;
         document.getElementById("real"+index).innerText = real;
 
         const profitEl = document.getElementById("profit"+index);
         profitEl.innerText = profit;
-        profitEl.className = "profit " + (profit>=0 ? "green" : "red");
+        profitEl.className = "profit " + (profit>=0 ? "green":"red");
 
         document.getElementById("roi"+index).innerText = roi + "%";
 
@@ -201,7 +207,7 @@ function calculate(){
             bestIndex = index;
         }
 
-        totalBuy += buy;
+        totalBuy += totalCost;
         totalReal += real;
     });
 
@@ -230,23 +236,23 @@ function saveData(){
 
     items.forEach((item,index)=>{
         data.items.push({
-            buy: document.getElementById("buy"+index).value,
+            unit: document.getElementById("unit"+index).value,
             equip: document.getElementById("equip"+index).value
         });
     });
 
-    localStorage.setItem("forgePanel", JSON.stringify(data));
+    localStorage.setItem("forgePanelPro", JSON.stringify(data));
 }
 
 function loadData(){
-    const saved = JSON.parse(localStorage.getItem("forgePanel"));
+    const saved = JSON.parse(localStorage.getItem("forgePanelPro"));
 
     if(saved){
         priceInput.value = saved.price;
         taxInput.value = saved.tax;
 
         saved.items.forEach((item,index)=>{
-            document.getElementById("buy"+index).value = item.buy;
+            document.getElementById("unit"+index).value = item.unit;
             document.getElementById("equip"+index).value = item.equip;
         });
     }else{
@@ -254,14 +260,14 @@ function loadData(){
         taxInput.value = 20;
 
         items.forEach((item,index)=>{
-            document.getElementById("buy"+index).value = item.defaultBuy;
+            document.getElementById("unit"+index).value = item.defaultBuy;
             document.getElementById("equip"+index).value = 1;
         });
     }
 }
 
 function resetData(){
-    localStorage.removeItem("forgePanel");
+    localStorage.removeItem("forgePanelPro");
     location.reload();
 }
 
