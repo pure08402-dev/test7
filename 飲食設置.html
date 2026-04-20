@@ -84,6 +84,12 @@ input,button,select{width:auto}
 </div>
 
 <div class="card">
+<h3>喝水量</h3>
+<input type="number" id="water" placeholder="ml">
+<button onclick="saveWater()">儲存</button>
+</div>
+
+<div class="card">
 <h3>歷史紀錄</h3>
 <div id="history"></div>
 <button onclick="exportCSV()">匯出CSV</button>
@@ -97,7 +103,7 @@ let currentDate = today;
 datePicker.value = today;
 
 function ensureDay(d){
-    if(!data[d]) data[d] = {foods:[],weight:null,done:false};
+    if(!data[d]) data[d] = {foods:[],weight:null,water:null,done:false};
 }
 
 ensureDay(today);
@@ -132,6 +138,11 @@ function deleteFood(i){
 
 function saveWeight(){
     data[currentDate].weight = weight.value;
+    save();
+}
+
+function saveWater(){
+    data[currentDate].water = water.value;
     save();
 }
 
@@ -170,6 +181,7 @@ function update(){
     已攝取: ${t.cal}/${t.pro}<br>
     剩餘: <span class="${remainCal<0?'bad':'ok'}">${remainCal}</span> / <span class="${remainPro<0?'bad':'ok'}">${remainPro}</span><br>
     體重: ${data[currentDate].weight||'-'}<br>
+    喝水: ${data[currentDate].water||'-'} ml<br>
     達標: <span class="${data[currentDate].done?'ok':'bad'}">${data[currentDate].done?'✔':'✘'}</span>
     `;
 
@@ -182,16 +194,16 @@ function update(){
     let html='';
     for(let d in data){
         let t=getTotals(data[d]);
-        html+=`${d} | ${t.cal}kcal | ${t.pro}g | ${data[d].weight||'-'} | ${data[d].done?'✔':'✘'}<br>`;
+        html+=`${d} | ${t.cal}kcal | ${t.pro}g | 體重:${data[d].weight||'-'} | 喝水:${data[d].water||'-'}ml | ${data[d].done?'✔':'✘'}<br>`;
     }
     history.innerHTML=html;
 }
 
 function exportCSV(){
-    let csv='日期,熱量,蛋白,體重,達標\n';
+    let csv='日期,熱量,蛋白,體重,喝水,達標\n';
     for(let d in data){
         let t=getTotals(data[d]);
-        csv+=`${d},${t.cal},${t.pro},${data[d].weight||''},${data[d].done}\n`;
+        csv+=`${d},${t.cal},${t.pro},${data[d].weight||''},${data[d].water||''},${data[d].done}\n`;
     }
     let blob=new Blob([csv]);
     let a=document.createElement('a');
