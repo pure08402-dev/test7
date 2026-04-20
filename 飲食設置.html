@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飲食追蹤 PRO</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{font-family:Arial;background:#111;color:#fff;margin:0;padding:10px}
+input,button,select{margin:5px 0;padding:10px;border-radius:8px;border:none;width:100%;box-sizing:border-box}
+button{cursor:pointer;background:#4caf50;color:#fff}
+.card{background:#222;padding:12px;margin:10px 0;border-radius:12px}
+.ok{color:#4caf50}
+.bad{color:#f44336}
+
+h2{text-align:center}
+
+.row{display:flex;gap:10px}
+.row input{flex:1}
+
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{border-bottom:1px solid #444;padding:6px;text-align:center}
+
+@media (min-width:768px){
+body{max-width:600px;margin:auto}
+input,button,select{width:auto}
+.row input{width:100%}
+}
+</style>
+</head>
+<body>
+
+<h2>飲食追蹤 PRO</h2>
+
+<div class="card">
+<h3>今日狀態</h3>
+<div id="summary"></div>
+</div>
+
+<div class="card">
+<h3>每日目標</h3>
+<div class="row">
+<input type="number" id="targetCal" placeholder="大卡">
+<input type="number" id="targetPro" placeholder="蛋白質">
+</div>
+<button onclick="setTarget()">儲存</button>
+</div>
+
+<div class="card">
+<h3>新增紀錄</h3>
+<select id="meal">
+<option>早餐</option>
+<option>午餐</option>
+<option>晚餐</option>
+<option>加餐</option>
+</select>
+<div class="row">
+<input type="number" id="cal" placeholder="大卡">
+<input type="number" id="pro" placeholder="蛋白質">
+</div>
+<button onclick="addFood()">新增</button>
+</div>
+
+<div class="card">
+<h3>今日紀錄</h3>
+<div class="table-wrap">
+<table>
+<thead><tr><th>餐別</th><th>熱量</th><th>蛋白</th><th>刪除</th></tr></thead>
+<tbody id="todayList"></tbody>
+</table>
+</div>
+</div>
+
+<div class="card">
+<h3>今日體重</h3>
+<input type="number" id="weight" placeholder="體重">
+<button onclick="saveWeight()">儲存</button>
+</div>
+
+<div class="card">
+<h3>體重趨勢</h3>
+<canvas id="chart"></canvas>
+</div>
+
+<div class="card">
+<h3>歷史紀錄</h3>
+<div id="history"></div>
+<button onclick="exportCSV()">匯出CSV</button>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem('dietData')) || {};
+let today = new Date().toISOString().split('T')[0];
+
+if(!data[today]){
+    data[today] = {foods:[],weight:null,done:false};
+}
+
+function setTarget(){
+    localStorage.setItem('targetCal', targetCal.value);
+    localStorage.setItem('targetPro', targetPro.value);
+    update();
+}
+
+function addFood(){
+    let item = {
+        meal: meal.value,
+        cal: Number(cal.value),
+        pro: Number(pro.value)
+    };
+    data[today].foods.push(item);
+    save();
+    cal.value=''; pro.value='';
+}
+
+function deleteFood(i){
+    data[today].foods.splice(i,1);
+    save();
+}
+
+function saveWeight(){
+    data[today].weight = weight.value;
+    save();
+}
+
+function save(){
+    checkDone();
+    localStorage.setItem('dietData', JSON.stringify(data));
+    update();
+}
+
+function getTotals(day){
+    let cal=0,pro=0;
+    day.foods.forEach(f=>{cal+=f.cal;pro+=f.pro});
+    return {cal,pro};
+}
+
+function checkDone(){
+    let tCal = Number(localStorage.getItem('targetCal'))||0;
+    let tPro = Number(localStorage.getItem('targetPro'))||0;
+    let t = getTotals(data[today]);
+    data[today].done = (t.cal>=tCal && t.pro>=tPro);
+}
+
+function update(){
+    let tCal = Number(localStorage.getItem('targetCal'))||0;
+    let tPro = Number(localStorage.getItem('targetPro'))||0;
+    let t = getTotals(data[today]);
+
+    let remainCal = tCal - t.cal;
+    let remainPro = tPro - t.pro;
+
+    summary.innerHTML = `
+    目標: ${tCal}/${tPro}<br>
+    已攝取: ${t.cal}/${t.pro}<br>
+    剩餘: <span class="${remainCal<0?'bad':'ok'}">${remainCal}</span> / <span class="${remainPro<0?'bad':'ok'}">${remainPro}</span><br>
+    體重: ${data[today].weight||'-'}<br>
+    達標: <span class="${data[today].done?'ok':'bad'}">${data[today].done?'✔':'✘'}</span>
+    `;
+
+    let list='';
+    data[today].foods.forEach((f,i)=>{
+        list+=`<tr><td>${f.meal}</td><td>${f.cal}</td><td>${f.pro}</td><td><button onclick="deleteFood(${i})">X</button></td></tr>`;
+    });
+    todayList.innerHTML=list;
+
+    let html='';
+    let labels=[],weights=[];
+    for(let d in data){
+        let t=getTotals(data[d]);
+        html+=`${d} | ${t.cal}kcal | ${t.pro}g | ${data[d].weight||'-'} | ${data[d].done?'✔':'✘'}<br>`;
+        if(data[d].weight){labels.push(d);weights.push(data[d].weight);}        
+    }
+    history.innerHTML=html;
+
+    drawChart(labels,weights);
+}
+
+let chart;
+function drawChart(labels,dataArr){
+    if(chart) chart.destroy();
+    chart = new Chart(document.getElementById('chart'),{
+        type:'line',
+        data:{labels:labels,datasets:[{label:'體重',data:dataArr}]},
+        options:{responsive:true,maintainAspectRatio:false}
+    });
+}
+
+function exportCSV(){
+    let csv='日期,熱量,蛋白,體重,達標\n';
+    for(let d in data){
+        let t=getTotals(data[d]);
+        csv+=`${d},${t.cal},${t.pro},${data[d].weight||''},${data[d].done}\n`;
+    }
+    let blob=new Blob([csv]);
+    let a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='diet.csv';
+    a.click();
+}
+
+update();
+</script>
+
+</body>
+</html>
