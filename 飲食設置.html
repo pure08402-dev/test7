@@ -78,10 +78,7 @@ input,button,select{width:auto}
 <button onclick="saveWeight()">儲存</button>
 </div>
 
-<div class="card">
-<h3>體重趨勢</h3>
-<canvas id="chart"></canvas>
-</div>
+
 
 <div class="card">
 <h3>歷史紀錄</h3>
@@ -177,15 +174,8 @@ function update(){
     drawChart(labels,weights);
 }
 
-let chart;
-function drawChart(labels,dataArr){
-    if(chart) chart.destroy();
-    chart = new Chart(document.getElementById('chart'),{
-        type:'line',
-        data:{labels:labels,datasets:[{label:'體重',data:dataArr}]},
-        options:{responsive:true,maintainAspectRatio:false}
-    });
-}
+
+
 
 function exportCSV(){
     let csv='日期,熱量,蛋白,體重,達標\n';
