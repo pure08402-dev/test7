@@ -34,6 +34,11 @@ input,button,select{width:auto}
 <h2>飲食追蹤 PRO</h2>
 
 <div class="card">
+<h3>日期查詢</h3>
+<input type="date" id="datePicker" onchange="switchDate()">
+</div>
+
+<div class="card">
 <h3>今日狀態</h3>
 <div id="summary"></div>
 </div>
@@ -63,7 +68,7 @@ input,button,select{width:auto}
 </div>
 
 <div class="card">
-<h3>今日紀錄</h3>
+<h3>紀錄列表</h3>
 <div class="table-wrap">
 <table>
 <thead><tr><th>餐別</th><th>熱量</th><th>蛋白</th><th>刪除</th></tr></thead>
@@ -73,12 +78,10 @@ input,button,select{width:auto}
 </div>
 
 <div class="card">
-<h3>今日體重</h3>
+<h3>體重</h3>
 <input type="number" id="weight" placeholder="體重">
 <button onclick="saveWeight()">儲存</button>
 </div>
-
-
 
 <div class="card">
 <h3>歷史紀錄</h3>
@@ -89,9 +92,20 @@ input,button,select{width:auto}
 <script>
 let data = JSON.parse(localStorage.getItem('dietData')) || {};
 let today = new Date().toISOString().split('T')[0];
+let currentDate = today;
 
-if(!data[today]){
-    data[today] = {foods:[],weight:null,done:false};
+datePicker.value = today;
+
+function ensureDay(d){
+    if(!data[d]) data[d] = {foods:[],weight:null,done:false};
+}
+
+ensureDay(today);
+
+function switchDate(){
+    currentDate = datePicker.value;
+    ensureDay(currentDate);
+    update();
 }
 
 function setTarget(){
@@ -106,18 +120,18 @@ function addFood(){
         cal: Number(cal.value),
         pro: Number(pro.value)
     };
-    data[today].foods.push(item);
+    data[currentDate].foods.push(item);
     save();
     cal.value=''; pro.value='';
 }
 
 function deleteFood(i){
-    data[today].foods.splice(i,1);
+    data[currentDate].foods.splice(i,1);
     save();
 }
 
 function saveWeight(){
-    data[today].weight = weight.value;
+    data[currentDate].weight = weight.value;
     save();
 }
 
@@ -136,46 +150,42 @@ function getTotals(day){
 function checkDone(){
     let tCal = Number(localStorage.getItem('targetCal'))||0;
     let tPro = Number(localStorage.getItem('targetPro'))||0;
-    let t = getTotals(data[today]);
-    data[today].done = (t.cal>=tCal && t.pro>=tPro);
+    let t = getTotals(data[currentDate]);
+    data[currentDate].done = (t.cal>=tCal && t.pro>=tPro);
 }
 
 function update(){
+    ensureDay(currentDate);
+
     let tCal = Number(localStorage.getItem('targetCal'))||0;
     let tPro = Number(localStorage.getItem('targetPro'))||0;
-    let t = getTotals(data[today]);
+    let t = getTotals(data[currentDate]);
 
     let remainCal = tCal - t.cal;
     let remainPro = tPro - t.pro;
 
     summary.innerHTML = `
+    日期: ${currentDate}<br>
     目標: ${tCal}/${tPro}<br>
     已攝取: ${t.cal}/${t.pro}<br>
     剩餘: <span class="${remainCal<0?'bad':'ok'}">${remainCal}</span> / <span class="${remainPro<0?'bad':'ok'}">${remainPro}</span><br>
-    體重: ${data[today].weight||'-'}<br>
-    達標: <span class="${data[today].done?'ok':'bad'}">${data[today].done?'✔':'✘'}</span>
+    體重: ${data[currentDate].weight||'-'}<br>
+    達標: <span class="${data[currentDate].done?'ok':'bad'}">${data[currentDate].done?'✔':'✘'}</span>
     `;
 
     let list='';
-    data[today].foods.forEach((f,i)=>{
+    data[currentDate].foods.forEach((f,i)=>{
         list+=`<tr><td>${f.meal}</td><td>${f.cal}</td><td>${f.pro}</td><td><button onclick="deleteFood(${i})">X</button></td></tr>`;
     });
     todayList.innerHTML=list;
 
     let html='';
-    let labels=[],weights=[];
     for(let d in data){
         let t=getTotals(data[d]);
         html+=`${d} | ${t.cal}kcal | ${t.pro}g | ${data[d].weight||'-'} | ${data[d].done?'✔':'✘'}<br>`;
-        if(data[d].weight){labels.push(d);weights.push(data[d].weight);}        
     }
     history.innerHTML=html;
-
-    drawChart(labels,weights);
 }
-
-
-
 
 function exportCSV(){
     let csv='日期,熱量,蛋白,體重,達標\n';
