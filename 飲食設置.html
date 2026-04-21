@@ -44,8 +44,28 @@ input,button,select{width:auto}
 
 <div class="card">
 <h3>基礎代謝工具</h3>
-<button onclick="openBMR()">計算基礎代謝（BMR）</button>
+
+<input type="number" id="bmr_weight" placeholder="體重 kg">
+<input type="number" id="bmr_height" placeholder="身高 cm">
+<input type="number" id="bmr_age" placeholder="年齡">
+
+<select id="bmr_gender">
+<option value="male">男生</option>
+<option value="female">女生</option>
+</select>
+
+<select id="bmr_activity">
+<option value="1.2">久坐（幾乎不運動）</option>
+<option value="1.375">輕量運動（1-3天）</option>
+<option value="1.55">中度運動（3-5天）</option>
+<option value="1.725">高度運動（6-7天）</option>
+</select>
+
+<button onclick="calcBMR()">計算 BMR / TDEE</button>
+<button onclick="openBMR()">參考網站</button>
+<div id="bmr_result"></div>
 </div>
+
 
 <div class="card">
 <h3>目標設定</h3>
@@ -160,6 +180,45 @@ function deleteDay(){
 function openBMR(){
     window.open('https://tools.heho.com.tw/bmr/','_blank');
 }
+
+
+function calcBMR(){
+
+    let w = Number(document.getElementById("bmr_weight").value);
+    let h = Number(document.getElementById("bmr_height").value);
+    let a = Number(document.getElementById("bmr_age").value);
+    let gender = document.getElementById("bmr_gender").value;
+    let act = Number(document.getElementById("bmr_activity").value);
+
+    if(!w || !h || !a){
+        alert("請填完整資料");
+        return;
+    }
+
+    let bmr = 0;
+
+    // Mifflin-St Jeor
+    if(gender === "male"){
+        bmr = 10*w + 6.25*h - 5*a + 5;
+    }else{
+        bmr = 10*w + 6.25*h - 5*a - 161;
+    }
+
+    let tdee = bmr * act;
+
+    let cut = tdee * 0.8;
+    let bulk = tdee * 1.1;
+
+    document.getElementById("bmr_result").innerHTML = `
+        🔥 BMR：${bmr.toFixed(0)} kcal<br>
+        ⚡ TDEE：${tdee.toFixed(0)} kcal<br><br>
+
+        📉 減脂：${cut.toFixed(0)} kcal<br>
+        ⚖️ 維持：${tdee.toFixed(0)} kcal<br>
+        📈 增肌：${bulk.toFixed(0)} kcal<br>
+    `;
+}
+
 
 // =====================
 // 目標
