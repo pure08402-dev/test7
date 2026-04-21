@@ -42,6 +42,11 @@ input,button,select{width:auto}
 </div>
 
 <div class="card">
+<h3>基礎代謝工具</h3>
+<button onclick="openBMR()">計算基礎代謝（BMR）</button>
+</div>
+
+<div class="card">
 <h3>目標設定</h3>
 <div class="row">
 <input type="number" id="targetCal" placeholder="熱量">
@@ -119,6 +124,10 @@ function switchDate(){
     currentDate = datePicker.value;
     ensureDay(currentDate);
     update();
+}
+
+function openBMR(){
+    window.open('https://tools.heho.com.tw/bmr/','_blank');
 }
 
 function setTarget(){
