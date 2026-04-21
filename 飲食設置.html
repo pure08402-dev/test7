@@ -121,14 +121,21 @@ datePicker.value = today;
 function ensureDay(d){
     if(!data[d]) data[d]={foods:[],weight:null,water:null};
 }
+
 ensureDay(today);
 
+// =====================
+// 日期切換
+// =====================
 function switchDate(){
     currentDate = datePicker.value;
     ensureDay(currentDate);
     update();
 }
 
+// =====================
+// 刪除當天
+// =====================
 function deleteDay(){
     if(currentDate === today){
         alert("今天不能刪除");
@@ -146,42 +153,57 @@ function deleteDay(){
     alert("已刪除");
 }
 
-
+// =====================
+// BMR
+// =====================
 function openBMR(){
     window.open('https://tools.heho.com.tw/bmr/','_blank');
 }
 
+// =====================
+// 目標
+// =====================
 function setTarget(){
     localStorage.setItem('targetCal',targetCal.value);
     localStorage.setItem('targetPro',targetPro.value);
     localStorage.setItem('targetWater',targetWater.value);
-	
-	update();
+    update();
 }
 
+// =====================
+// 快速填入
+// =====================
 function quickFill(){
     let select = document.getElementById("foodSelect");
     let selected = select.options[select.selectedIndex];
 
-	// 自動填入名稱
     document.getElementById("name").value = selected.text;
-	
-	 // 自動填入熱量 & 蛋白
-	document.getElementById("cal").value = selected.dataset.cal || '';
+    document.getElementById("cal").value = selected.dataset.cal || '';
     document.getElementById("pro").value = selected.dataset.pro || '';
 }
 
+// =====================
+// 新增飲食（防錯版）
+// =====================
 function addFood(){
+
+    if(!isToday()){
+        alert("只能新增今天的紀錄");
+        return;
+    }
+	
     let nameEl = document.getElementById("name");
     let mealEl = document.getElementById("meal");
     let calEl = document.getElementById("cal");
     let proEl = document.getElementById("pro");
 
+    if(!nameEl.value) return;
+
     data[currentDate].foods.push({
         name: nameEl.value,
         meal: mealEl.value,
-        cal: Number(calEl.value),
-        pro: Number(proEl.value)
+        cal: Number(calEl.value) || 0,
+        pro: Number(proEl.value) || 0
     });
 
     save();
@@ -191,47 +213,84 @@ function addFood(){
     proEl.value = '';
 }
 
+// =====================
+// 體重
+// =====================
+
+function isToday(){
+    return currentDate === today;
+}
+
 function saveWeight(){
+
+    if(!isToday()){
+        alert("只能修改今天體重");
+        return;
+    }
+
+    if(!weight.value) return;
+
     data[currentDate].weight = Number(weight.value);
     save();
 }
 
+// =====================
+// 喝水
+// =====================
 function saveWater(){
+
+    if(!isToday()){
+        alert("只能修改今天喝水");
+        return;
+    }
+
+    if(!water.value) return;
+
     data[currentDate].water = Number(water.value);
     save();
 }
 
+// =====================
+// 存檔
+// =====================
 function save(){
     localStorage.setItem('dietData',JSON.stringify(data));
     update();
 }
 
+// =====================
+// 計算總和
+// =====================
 function getTotal(d){
     let cal=0,pro=0;
     d.foods.forEach(f=>{
-        cal+=f.cal;
-        pro+=f.pro;
+        cal += f.cal;
+        pro += f.pro;
     });
     return {cal,pro};
 }
 
+// =====================
+// 初始化 UI
+// =====================
 function init(){
     let d = data[currentDate];
 
-    // 體重回填
-    weight.value = d.weight || '';
+    weight.value = d?.weight || '';
+    water.value = d?.water || '';
 
-    // 喝水回填
-    water.value = d.water || '';
-
-    // 目標回填
     targetCal.value = localStorage.getItem('targetCal') || '';
     targetPro.value = localStorage.getItem('targetPro') || '';
     targetWater.value = localStorage.getItem('targetWater') || '';
 }
 
+// =====================
+// 更新畫面
+// =====================
 function update(){
-    let t=getTotal(data[currentDate]);
+    ensureDay(currentDate);
+
+    let t = getTotal(data[currentDate]);
 
     let tCal=Number(localStorage.getItem('targetCal'))||0;
     let tPro=Number(localStorage.getItem('targetPro'))||0;
@@ -256,29 +315,31 @@ function update(){
         html+=`${f.name} | ${f.meal} | ${f.cal}kcal | ${f.pro}g 
         <button onclick="del(${i})">X</button><br>`;
     });
+
     list.innerHTML=html;
 
     drawChart();
-	
-	targetCal.value = localStorage.getItem('targetCal') || '';
-    targetPro.value = localStorage.getItem('targetPro') || '';
-    targetWater.value = localStorage.getItem('targetWater') || '';
-	
-	
-	
+
+    init();
 }
 
+// =====================
+// 刪除食物
+// =====================
 function del(i){
     data[currentDate].foods.splice(i,1);
     save();
 }
 
+// =====================
+// 圖表
+// =====================
 function drawChart(){
     let labels=[];
     let weights=[];
 
     for(let d in data){
-        if(data[d].weight){
+        if(data[d].weight !== null){
             labels.push(d);
             weights.push(data[d].weight);
         }
@@ -295,6 +356,9 @@ function drawChart(){
     });
 }
 
+// =====================
+// LINE
+// =====================
 function exportLINE(){
     let d = data[currentDate];
     let t = getTotal(d);
@@ -313,20 +377,21 @@ function exportLINE(){
         text += `• ${f.name} (${f.meal}) ${f.cal} kcal / ${f.pro}g\n`;
     });
 
-    text += "\n────────────";
-
-    // 複製到剪貼簿
     navigator.clipboard.writeText(text);
-
-    alert("已複製到剪貼簿，可直接貼上");
+    alert("已複製");
 }
 
+// =====================
+// CSV
+// =====================
 function exportCSV(){
     let csv='日期,熱量,蛋白,體重,喝水\n';
+
     for(let d in data){
         let t=getTotal(data[d]);
         csv+=`${d},${t.cal},${t.pro},${data[d].weight||''},${data[d].water||''}\n`;
     }
+
     let blob=new Blob([csv]);
     let a=document.createElement('a');
     a.href=URL.createObjectURL(blob);
@@ -334,16 +399,9 @@ function exportCSV(){
     a.click();
 }
 
-setInterval(()=>{
-    let now=new Date().toISOString().split('T')[0];
-    if(now!==currentDate){
-        currentDate=now;
-        datePicker.value=now;
-        ensureDay(now);
-        update();
-    }
-},60000);
-
+// =====================
+// 初始化
+// =====================
 init();
 update();
 </script>
