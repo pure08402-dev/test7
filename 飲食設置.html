@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>飲食追蹤 PRO</title>
+<title>飲食追蹤 PRO MAX</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 body{font-family:Arial;background:#111;color:#fff;margin:0;padding:10px}
 input,button,select{margin:5px 0;padding:10px;border-radius:8px;border:none;width:100%;box-sizing:border-box}
@@ -12,15 +14,10 @@ button{cursor:pointer;background:#4caf50;color:#fff}
 .card{background:#222;padding:12px;margin:10px 0;border-radius:12px}
 .ok{color:#4caf50}
 .bad{color:#f44336}
-
 h2{text-align:center}
-
 .row{display:flex;gap:10px}
 .row input{flex:1}
-
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:14px}
-td,th{border-bottom:1px solid #444;padding:6px;text-align:center}
+canvas{background:#fff;border-radius:10px;margin-top:10px}
 
 @media (min-width:768px){
 body{max-width:600px;margin:auto}
@@ -29,75 +26,79 @@ input,button,select{width:auto}
 }
 </style>
 </head>
+
 <body>
 
-<h2>飲食追蹤 PRO</h2>
+<h2>飲食追蹤 PRO MAX</h2>
 
 <div class="card">
-<h3>日期查詢</h3>
+<h3>日期</h3>
 <input type="date" id="datePicker" onchange="switchDate()">
 </div>
 
 <div class="card">
-<h3>今日狀態</h3>
+<h3>今日分析</h3>
 <div id="summary"></div>
 </div>
 
 <div class="card">
-<h3>基礎代謝工具</h3>
-<button onclick="openBMR()">計算基礎代謝（BMR）</button>
-</div>
-
-<div class="card">
-<h3>每日目標</h3>
+<h3>目標設定</h3>
 <div class="row">
-<input type="number" id="targetCal" placeholder="大卡">
-<input type="number" id="targetPro" placeholder="蛋白質">
+<input type="number" id="targetCal" placeholder="熱量">
+<input type="number" id="targetPro" placeholder="蛋白">
 </div>
+<input type="number" id="targetWater" placeholder="喝水 ml">
 <button onclick="setTarget()">儲存</button>
 </div>
 
 <div class="card">
-<h3>新增紀錄</h3>
+<h3>新增飲食</h3>
+
+<select id="foodSelect" onchange="quickFill()">
+<option value="">快速選擇</option>
+<option data-cal="300" data-pro="20">雞胸肉</option>
+<option data-cal="250" data-pro="8">白飯</option>
+<option data-cal="150" data-pro="10">蛋</option>
+<option data-cal="120" data-pro="5">豆腐</option>
+</select>
+
+<input type="text" id="name" placeholder="食物名稱">
+
 <select id="meal">
 <option>早餐</option>
 <option>午餐</option>
 <option>晚餐</option>
 <option>加餐</option>
 </select>
+
 <div class="row">
-<input type="number" id="cal" placeholder="大卡">
-<input type="number" id="pro" placeholder="蛋白質">
+<input type="number" id="cal" placeholder="熱量">
+<input type="number" id="pro" placeholder="蛋白">
 </div>
+
 <button onclick="addFood()">新增</button>
 </div>
 
 <div class="card">
-<h3>紀錄列表</h3>
-<div class="table-wrap">
-<table>
-<thead><tr><th>餐別</th><th>熱量</th><th>蛋白</th><th>刪除</th></tr></thead>
-<tbody id="todayList"></tbody>
-</table>
-</div>
+<h3>紀錄</h3>
+<div id="list"></div>
 </div>
 
 <div class="card">
 <h3>體重</h3>
-<input type="number" id="weight" placeholder="體重">
+<input type="number" id="weight">
 <button onclick="saveWeight()">儲存</button>
+<canvas id="weightChart"></canvas>
 </div>
 
 <div class="card">
-<h3>喝水量</h3>
-<input type="number" id="water" placeholder="ml">
+<h3>喝水</h3>
+<input type="number" id="water">
 <button onclick="saveWater()">儲存</button>
 </div>
 
 <div class="card">
-<h3>歷史紀錄</h3>
-<div id="history"></div>
-<button onclick="exportCSV()">匯出CSV</button>
+<button onclick="exportCSV()">匯出 CSV</button>
 </div>
 
 <script>
@@ -108,9 +109,8 @@ let currentDate = today;
 datePicker.value = today;
 
 function ensureDay(d){
-    if(!data[d]) data[d] = {foods:[],weight:null,water:null,done:false};
+    if(!data[d]) data[d]={foods:[],weight:null,water:null};
 }
-
 ensureDay(today);
 
 function switchDate(){
@@ -120,99 +120,123 @@ function switchDate(){
 }
 
 function setTarget(){
-    localStorage.setItem('targetCal', targetCal.value);
-    localStorage.setItem('targetPro', targetPro.value);
-    update();
+    localStorage.setItem('targetCal',targetCal.value);
+    localStorage.setItem('targetPro',targetPro.value);
+    localStorage.setItem('targetWater',targetWater.value);
+	
+	update();
 }
 
-function openBMR(){
-    window.open('https://tools.heho.com.tw/bmr/','_blank');
+function quickFill(){
+    let opt = foodSelect.selectedOptions[0];
+    name.value = opt.text;
+    cal.value = opt.dataset.cal || '';
+    pro.value = opt.dataset.pro || '';
 }
 
 function addFood(){
-    let item = {
-        meal: meal.value,
-        cal: Number(cal.value),
-        pro: Number(pro.value)
-    };
-    data[currentDate].foods.push(item);
+    data[currentDate].foods.push({
+        name:name.value,
+        meal:meal.value,
+        cal:Number(cal.value),
+        pro:Number(pro.value)
+    });
     save();
-    cal.value=''; pro.value='';
-}
-
-function deleteFood(i){
-    data[currentDate].foods.splice(i,1);
-    save();
+    name.value=''; cal.value=''; pro.value='';
 }
 
 function saveWeight(){
-    data[currentDate].weight = weight.value;
+    data[currentDate].weight = Number(weight.value);
     save();
 }
 
 function saveWater(){
-    data[currentDate].water = water.value;
+    data[currentDate].water = Number(water.value);
     save();
 }
 
 function save(){
-    checkDone();
-    localStorage.setItem('dietData', JSON.stringify(data));
+    localStorage.setItem('dietData',JSON.stringify(data));
     update();
 }
 
-function getTotals(day){
+function getTotal(d){
     let cal=0,pro=0;
-    day.foods.forEach(f=>{cal+=f.cal;pro+=f.pro});
+    d.foods.forEach(f=>{
+        cal+=f.cal;
+        pro+=f.pro;
+    });
     return {cal,pro};
 }
 
-function checkDone(){
-    let tCal = Number(localStorage.getItem('targetCal'))||0;
-    let tPro = Number(localStorage.getItem('targetPro'))||0;
-    let t = getTotals(data[currentDate]);
-    data[currentDate].done = (t.cal>=tCal && t.pro>=tPro);
-}
-
 function update(){
-    ensureDay(currentDate);
+    let t=getTotal(data[currentDate]);
 
-    let tCal = Number(localStorage.getItem('targetCal'))||0;
-    let tPro = Number(localStorage.getItem('targetPro'))||0;
-    let t = getTotals(data[currentDate]);
+    let tCal=Number(localStorage.getItem('targetCal'))||0;
+    let tPro=Number(localStorage.getItem('targetPro'))||0;
+    let tWater=Number(localStorage.getItem('targetWater'))||0;
 
-    let remainCal = tCal - t.cal;
-    let remainPro = tPro - t.pro;
+    let remainCal=tCal-t.cal;
+    let remainPro=tPro-t.pro;
 
-    summary.innerHTML = `
-    日期: ${currentDate}<br>
-    目標: ${tCal}/${tPro}<br>
-    已攝取: ${t.cal}/${t.pro}<br>
-    剩餘: <span class="${remainCal<0?'bad':'ok'}">${remainCal}</span> / <span class="${remainPro<0?'bad':'ok'}">${remainPro}</span><br>
-    體重: ${data[currentDate].weight||'-'}<br>
-    喝水: ${data[currentDate].water||'-'} ml<br>
-    達標: <span class="${data[currentDate].done?'ok':'bad'}">${data[currentDate].done?'✔':'✘'}</span>
+    let mode = "維持";
+    if(remainCal>300) mode="減脂🔥";
+    if(remainCal<-300) mode="增脂⚠️";
+
+    summary.innerHTML=`
+    熱量: ${t.cal}/${tCal} (${remainCal})
+    <br>蛋白: ${t.pro}/${tPro}
+    <br>水: ${data[currentDate].water||0}/${tWater}
+    <br>模式: ${mode}
     `;
 
-    let list='';
-    data[currentDate].foods.forEach((f,i)=>{
-        list+=`<tr><td>${f.meal}</td><td>${f.cal}</td><td>${f.pro}</td><td><button onclick="deleteFood(${i})">X</button></td></tr>`;
-    });
-    todayList.innerHTML=list;
-
     let html='';
+    data[currentDate].foods.forEach((f,i)=>{
+        html+=`${f.name} | ${f.meal} | ${f.cal}kcal | ${f.pro}g 
+        <button onclick="del(${i})">X</button><br>`;
+    });
+    list.innerHTML=html;
+
+    drawChart();
+	
+	targetCal.value = localStorage.getItem('targetCal') || '';
+    targetPro.value = localStorage.getItem('targetPro') || '';
+    targetWater.value = localStorage.getItem('targetWater') || '';
+	
+}
+
+function del(i){
+    data[currentDate].foods.splice(i,1);
+    save();
+}
+
+function drawChart(){
+    let labels=[];
+    let weights=[];
+
     for(let d in data){
-        let t=getTotals(data[d]);
-        html+=`${d} | ${t.cal}kcal | ${t.pro}g | 體重:${data[d].weight||'-'} | 喝水:${data[d].water||'-'}ml | ${data[d].done?'✔':'✘'}<br>`;
+        if(data[d].weight){
+            labels.push(d);
+            weights.push(data[d].weight);
+        }
     }
-    history.innerHTML=html;
+
+    if(window.chart) window.chart.destroy();
+
+    window.chart = new Chart(weightChart,{
+        type:'line',
+        data:{
+            labels:labels,
+            datasets:[{label:'體重',data:weights}]
+        }
+    });
 }
 
 function exportCSV(){
-    let csv='日期,熱量,蛋白,體重,喝水,達標\n';
+    let csv='日期,熱量,蛋白,體重,喝水\n';
     for(let d in data){
-        let t=getTotals(data[d]);
-        csv+=`${d},${t.cal},${t.pro},${data[d].weight||''},${data[d].water||''},${data[d].done}\n`;
+        let t=getTotal(data[d]);
+        csv+=`${d},${t.cal},${t.pro},${data[d].weight||''},${data[d].water||''}\n`;
     }
     let blob=new Blob([csv]);
     let a=document.createElement('a');
@@ -220,6 +244,16 @@ function exportCSV(){
     a.download='diet.csv';
     a.click();
 }
+
+setInterval(()=>{
+    let now=new Date().toISOString().split('T')[0];
+    if(now!==currentDate){
+        currentDate=now;
+        datePicker.value=now;
+        ensureDay(now);
+        update();
+    }
+},60000);
 
 update();
 </script>
