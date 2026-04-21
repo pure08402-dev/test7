@@ -185,6 +185,21 @@ function getTotal(d){
     return {cal,pro};
 }
 
+function init(){
+    let d = data[currentDate];
+
+    // 體重回填
+    weight.value = d.weight || '';
+
+    // 喝水回填
+    water.value = d.water || '';
+
+    // 目標回填
+    targetCal.value = localStorage.getItem('targetCal') || '';
+    targetPro.value = localStorage.getItem('targetPro') || '';
+    targetWater.value = localStorage.getItem('targetWater') || '';
+}
+
 function update(){
     let t=getTotal(data[currentDate]);
 
@@ -219,6 +234,8 @@ function update(){
     targetPro.value = localStorage.getItem('targetPro') || '';
     targetWater.value = localStorage.getItem('targetWater') || '';
 	
+	
+	init();
 }
 
 function del(i){
@@ -271,6 +288,7 @@ setInterval(()=>{
     }
 },60000);
 
+init();
 update();
 </script>
 
