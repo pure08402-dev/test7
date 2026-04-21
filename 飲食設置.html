@@ -8,21 +8,110 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body{font-family:Arial;background:#111;color:#fff;margin:0;padding:10px}
-input,button,select{margin:5px 0;padding:10px;border-radius:8px;border:none;width:100%;box-sizing:border-box}
-button{cursor:pointer;background:#4caf50;color:#fff}
-.card{background:#222;padding:12px;margin:10px 0;border-radius:12px}
-.ok{color:#4caf50}
-.bad{color:#f44336}
-h2{text-align:center}
-.row{display:flex;gap:10px}
-.row input{flex:1}
-canvas{background:#fff;border-radius:10px;margin-top:10px}
+/* ===== 基本樣式 ===== */
+body{
+    font-family:Arial;
+    background:#111;
+    color:#fff;
+    margin:0;
+    padding:10px;
+}
 
+input,button,select{
+    margin:5px 0;
+    padding:10px;
+    border-radius:8px;
+    border:none;
+    width:100%;
+    box-sizing:border-box;
+}
+
+button{
+    cursor:pointer;
+    background:#4caf50; /* 預設 */
+    color:#fff;
+}
+
+/* ===== 卡片 ===== */
+.card{
+    background:#222;
+    padding:12px;
+    margin:10px 0;
+    border-radius:12px;
+}
+
+/* ===== 文字狀態 ===== */
+.ok{color:#4caf50;}
+.bad{color:#f44336;}
+
+h2{text-align:center;}
+
+/* ===== 排版 ===== */
+.row{
+    display:flex;
+    gap:10px;
+}
+
+.row input{
+    flex:1;
+}
+
+canvas{
+    background:#fff;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+/* ===== 按鈕系統 ===== */
+
+/* 成功（儲存） */
+.btn-success{
+    background:#4caf50;
+    font-weight:bold;
+}
+.btn-success:hover{
+    background:#388e3c;
+}
+
+/* 危險（刪除） */
+.btn-danger{
+    background:#f44336;
+}
+.btn-danger:hover{
+    background:#d32f2f;
+}
+
+/* 資訊（連結） */
+.btn-info{
+    background:#2196f3;
+}
+.btn-info:hover{
+    background:#1976d2;
+}
+
+/* 主功能（計算） */
+.btn-primary{
+    background:linear-gradient(45deg,#ff9800,#ff5722);
+    font-weight:bold;
+}
+.btn-primary:hover{
+    opacity:0.9;
+}
+
+/* ===== RWD ===== */
 @media (min-width:768px){
-body{max-width:600px;margin:auto}
-input,button,select{width:auto}
-.row input{width:100%}
+    body{
+        max-width:600px;
+        margin:auto;
+    }
+
+    input,button,select{
+        width:auto;
+    }
+
+    .row input{
+        width:100%;
+    }
 }
 </style>
 </head>
@@ -34,7 +123,7 @@ input,button,select{width:auto}
 <div class="card">
 <h3>日期</h3>
 <input type="date" id="datePicker" onchange="switchDate()">
-<button onclick="deleteDay()">刪除當天紀錄</button>
+<button class="btn-danger" onclick="deleteDay()">刪除當天紀錄</button>
 </div>
 
 <div class="card">
@@ -72,8 +161,8 @@ input,button,select{width:auto}
 <option value="1.725">高度運動（6-7天）</option>
 </select>
 
-<button onclick="calcBMR()">計算 BMR / TDEE</button>
-<button onclick="openBMR()">參考網站</button>
+<button class="btn-primary" onclick="calcBMR()">計算 BMR / TDEE</button>
+<button class="btn-info" onclick="openBMR()">參考網站</button>
 <div id="bmr_result"></div>
 </div>
 
@@ -94,7 +183,7 @@ input,button,select{width:auto}
 <span>喝水(ml)</span>
 <input type="number" id="targetWater" placeholder="ml">
 </div>
-<button onclick="setTarget()">儲存</button>
+<button class="btn-success" onclick="setTarget()">儲存</button>
 </div>
 
 <div class="card">
@@ -125,7 +214,7 @@ input,button,select{width:auto}
 <input type="number" id="pro" placeholder="蛋白">
 </div>
 
-<button onclick="addFood()">新增</button>
+<button class="btn-success" onclick="addFood()">新增</button>
 </div>
 
 <div class="card">
@@ -136,19 +225,19 @@ input,button,select{width:auto}
 <div class="card">
 <h3>今日體重(kg)</h3>
 <input type="number" id="weight" placeholder="kg">
-<button onclick="saveWeight()">儲存</button>
+<button  class="btn-success" onclick="saveWeight()">儲存</button>
 <canvas id="weightChart"></canvas>
 </div>
 
 <div class="card">
 <h3>今日喝水(ml)</h3>
 <input type="number" id="water" placeholder="ml">
-<button onclick="saveWater()">儲存</button>
+<button class="btn-success" onclick="saveWater()">儲存</button>
 </div>
 
 <div class="card">
-<button onclick="exportLINE()">複製結果</button>
-<button onclick="exportCSV()">匯出 CSV</button>
+<button class="btn-success" onclick="exportLINE()">複製結果</button>
+<button class="btn-success" onclick="exportCSV()">匯出 CSV</button>
 </div>
 
 
