@@ -105,8 +105,10 @@ input,button,select{width:auto}
 </div>
 
 <div class="card">
+<button onclick="exportLINE()">複製結果</button>
 <button onclick="exportCSV()">匯出 CSV</button>
 </div>
+
 
 <script>
 let data = JSON.parse(localStorage.getItem('dietData')) || {};
@@ -272,6 +274,32 @@ function drawChart(){
             datasets:[{label:'體重',data:weights}]
         }
     });
+}
+
+function exportLINE(){
+    let d = data[currentDate];
+    let t = getTotal(d);
+
+    let text =
+`📅 ${currentDate}
+────────────
+🔥 熱量：${t.cal}
+💪 蛋白：${t.pro}
+💧 喝水：${d.water || 0} ml
+
+🍽 飲食紀錄：
+`;
+
+    d.foods.forEach(f=>{
+        text += `• ${f.name} (${f.meal}) ${f.cal} kcal / ${f.pro}g\n`;
+    });
+
+    text += "\n────────────";
+
+    // 複製到剪貼簿
+    navigator.clipboard.writeText(text);
+
+    alert("已複製 LINE 格式，可直接貼上");
 }
 
 function exportCSV(){
