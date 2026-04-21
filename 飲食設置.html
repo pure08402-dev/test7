@@ -46,16 +46,18 @@ input,button,select{width:auto}
 <h3>基礎代謝工具</h3>
 
 <div class="input-unit">
-<input type="number" id="bmr_weight" placeholder="體重 kg">
-<span>kg</span>
+<span>體重</span>
+<input type="number" id="bmr_weight" placeholder="kg">
 </div>
 <div class="input-unit">
-<input type="number" id="bmr_height" placeholder="身高 cm">
-<span>cm</span>
+<span>身高</span>
+<input type="number" id="bmr_height" placeholder="cm">
+
 </div>
 <div class="input-unit">
-<input type="number" id="bmr_age" placeholder="年齡">
-<span>歲</span>
+<span>年齡</span>
+<input type="number" id="bmr_age" placeholder="歲">
+
 </div>
 
 <select id="bmr_gender">
@@ -79,10 +81,19 @@ input,button,select{width:auto}
 <div class="card">
 <h3>目標設定</h3>
 <div class="row">
-<input type="number" id="targetCal" placeholder="熱量">
-<input type="number" id="targetPro" placeholder="蛋白">
+<div class="input-unit">
+<span>熱量</span>
+<input type="number" id="targetCal" placeholder="kcal">
 </div>
-<input type="number" id="targetWater" placeholder="喝水 ml">
+<div class="input-unit">
+<span>蛋白</span>
+<input type="number" id="targetPro" placeholder="g">
+</div>
+</div>
+<div class="input-unit">
+<span>喝水</span>
+<input type="number" id="targetWater" placeholder="ml">
+</div>
 <button onclick="setTarget()">儲存</button>
 </div>
 
