@@ -384,9 +384,9 @@ function update(){
     if(remainCal<-300) mode="增脂⚠️";
 
     summary.innerHTML=`
-    熱量: ${t.cal}/${tCal} (${remainCal})
-    <br>蛋白: ${t.pro}/${tPro}
-    <br>水: ${data[currentDate].water||0}/${tWater}
+    熱量: ${t.cal}/${tCal} (${remainCal})kg
+    <br>蛋白: ${t.pro}/${tPro}g
+    <br>水: ${data[currentDate].water||0}/${tWater}ml
     <br>模式: ${mode}
     `;
 
