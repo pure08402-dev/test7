@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>飲食追蹤 PRO MAX</title>
+<title>飲食追蹤</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -29,11 +29,12 @@ input,button,select{width:auto}
 
 <body>
 
-<h2>飲食追蹤 PRO MAX</h2>
+<h2>飲食追蹤</h2>
 
 <div class="card">
 <h3>日期</h3>
 <input type="date" id="datePicker" onchange="switchDate()">
+<button onclick="deleteDay()">刪除當天紀錄</button>
 </div>
 
 <div class="card">
@@ -127,6 +128,24 @@ function switchDate(){
     ensureDay(currentDate);
     update();
 }
+
+function deleteDay(){
+    if(currentDate === today){
+        alert("今天不能刪除");
+        return;
+    }
+
+    if(!confirm("確定刪除這一天？")) return;
+
+    delete data[currentDate];
+    localStorage.setItem('dietData', JSON.stringify(data));
+
+    ensureDay(currentDate);
+    update();
+
+    alert("已刪除");
+}
+
 
 function openBMR(){
     window.open('https://tools.heho.com.tw/bmr/','_blank');
