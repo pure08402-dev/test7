@@ -130,21 +130,35 @@ function setTarget(){
 }
 
 function quickFill(){
-    let opt = foodSelect.selectedOptions[0];
-    name.value = opt.text;
-    cal.value = opt.dataset.cal || '';
-    pro.value = opt.dataset.pro || '';
+    let select = document.getElementById("foodSelect");
+    let selected = select.options[select.selectedIndex];
+
+	// 自動填入名稱
+    document.getElementById("name").value = selected.text;
+	
+	 // 自動填入熱量 & 蛋白
+	document.getElementById("cal").value = selected.dataset.cal || '';
+    document.getElementById("pro").value = selected.dataset.pro || '';
 }
 
 function addFood(){
+    let nameEl = document.getElementById("name");
+    let mealEl = document.getElementById("meal");
+    let calEl = document.getElementById("cal");
+    let proEl = document.getElementById("pro");
+
     data[currentDate].foods.push({
-        name:name.value,
-        meal:meal.value,
-        cal:Number(cal.value),
-        pro:Number(pro.value)
+        name: nameEl.value,
+        meal: mealEl.value,
+        cal: Number(calEl.value),
+        pro: Number(proEl.value)
     });
+
     save();
-    name.value=''; cal.value=''; pro.value='';
+
+    nameEl.value = '';
+    calEl.value = '';
+    proEl.value = '';
 }
 
 function saveWeight(){
