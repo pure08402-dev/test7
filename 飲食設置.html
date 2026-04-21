@@ -45,9 +45,18 @@ input,button,select{width:auto}
 <div class="card">
 <h3>基礎代謝工具</h3>
 
-<input type="number" id="bmr_weight" placeholder="體重 kg">kg
+<div class="input-unit">
+<input type="number" id="bmr_weight" placeholder="體重 kg">
+<span>kg</span>
+</div>
+<div class="input-unit">
 <input type="number" id="bmr_height" placeholder="身高 cm">
+<span>cm</span>
+</div>
+<div class="input-unit">
 <input type="number" id="bmr_age" placeholder="年齡">
+<span>歲</span>
+</div>
 
 <select id="bmr_gender">
 <option value="male">男生</option>
