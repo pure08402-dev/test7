@@ -238,6 +238,7 @@ canvas{
 <div class="card">
 <button class="btn-success" onclick="exportLINE()">複製結果</button>
 <button class="btn-success" onclick="exportCSV()">匯出 CSV</button>
+<button class="btn-success" onclick="exportTXT()">匯出 TXT</button>
 </div>
 
 
@@ -566,6 +567,44 @@ function exportCSV(){
     a.href=URL.createObjectURL(blob);
     a.download='diet.csv';
     a.click();
+}
+
+function exportTXT(){
+    let content = "";
+
+    for(let date in data){
+
+        content += `日期: ${date}\n`;
+
+        let day = data[date];
+        let foods = day.foods || [];
+
+        foods.forEach((item, index) => {
+            content += `${index+1}\t${item.name}\t${item.cal}kcal\t${item.pro}g\n`;
+        });
+
+        content += `體重: ${day.weight || ''}\n`;
+        content += `喝水: ${day.water || ''}\n`;
+
+        content += "\n";
+    }
+
+    if(!content){
+        alert("沒有資料");
+        return;
+    }
+
+    let blob = new Blob([content], { type: "text/plain;charset=utf-8;" });
+
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "飲食紀錄.txt";
+
+    document.body.appendChild(link); // ⭐ 保證觸發
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(link.href);
 }
 
 // =====================
