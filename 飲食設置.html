@@ -236,7 +236,7 @@ canvas{
 </div>
 
 <div class="card">
-<button class="btn-success" onclick="exportLINE()">複製結果</button>
+<button class="btn-success" onclick="exportLINE()">複製今日結果</button>
 <button class="btn-success" onclick="exportCSV()">匯出 CSV</button>
 <button class="btn-success" onclick="exportTXT()">匯出 TXT</button>
 </div>
@@ -244,16 +244,22 @@ canvas{
 
 <script>
 let data = JSON.parse(localStorage.getItem('dietData')) || {};
-let today = new Date().toISOString().split('T')[0];
-let currentDate = today;
 
-datePicker.value = today;
+function getToday(){
+    let d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().split('T')[0];
+}
+
+let currentDate = getToday();
+datePicker.value = currentDate;
+
 
 function ensureDay(d){
     if(!data[d]) data[d]={foods:[],weight:null,water:null};
 }
 
-ensureDay(today);
+ensureDay(getToday());
 
 // =====================
 // 日期切換
@@ -268,7 +274,7 @@ function switchDate(){
 // 刪除當天
 // =====================
 function deleteDay(){
-    if(currentDate === today){
+	if(currentDate === getToday()){
         alert("今天不能刪除");
         return;
     }
@@ -367,7 +373,10 @@ function addFood(){
     let calEl = document.getElementById("cal");
     let proEl = document.getElementById("pro");
 
-    if(!nameEl.value) return;
+    if(!nameEl.value){
+    alert("請輸入食物名稱");
+    return;
+}
 
     data[currentDate].foods.push({
         name: nameEl.value,
@@ -388,7 +397,7 @@ function addFood(){
 // =====================
 
 function isToday(){
-    return currentDate === today;
+    return currentDate === getToday();
 }
 
 function saveWeight(){
@@ -474,7 +483,7 @@ function update(){
     if(remainCal<-300) mode="增脂⚠️";
 
     summary.innerHTML=`
-    熱量: ${t.cal}/${tCal} (${remainCal})  kg
+    熱量: ${t.cal}/${tCal} (${remainCal > 0 ? '剩 ' : '超 '} ${Math.abs(remainCal)})  kcal
     <br>蛋白: ${t.pro}/${tPro}  g
     <br>水: ${data[currentDate].water||0}/${tWater}  ml
     <br>模式: ${mode}
@@ -487,6 +496,11 @@ function update(){
     });
 
     list.innerHTML=html;
+
+
+
+
+
 
     drawChart();
 
@@ -505,15 +519,24 @@ function del(i){
 // 圖表
 // =====================
 function drawChart(){
-    let labels=[];
-    let weights=[];
 
-    for(let d in data){
-        if(data[d].weight !== null){
-            labels.push(d);
-            weights.push(data[d].weight);
-        }
+    if(typeof Chart === "undefined"){
+        console.log("Chart.js 未載入");
+        return;
     }
+
+let labels = [];
+let weights = [];
+
+let sortedDates = Object.keys(data).sort((a,b)=> new Date(a) - new Date(b));
+
+sortedDates.forEach(d=>{
+    if(data[d] && data[d].weight != null){
+        labels.push(d);
+        weights.push(data[d].weight);
+    }
+});
+
 
     if(window.chart) window.chart.destroy();
 
@@ -612,6 +635,17 @@ function exportTXT(){
 // =====================
 init();
 update();
+setInterval(()=>{
+    let now = getToday();
+
+    if(currentDate !== now){
+        currentDate = now;
+        datePicker.value = now;
+        ensureDay(now);
+        update();
+        console.log("自動跳到新的一天");
+    }
+}, 60000);
 </script>
 
 </body>
