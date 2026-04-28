@@ -478,16 +478,34 @@ function update(){
     let remainCal=tCal-t.cal;
     let remainPro=tPro-t.pro;
 
-    let mode = "維持";
-    if(remainCal>300) mode="減脂🔥";
-    if(remainCal<-300) mode="增脂⚠️";
+	let deficit = tCal - t.cal; // 正數=還沒吃夠，負數=吃超
+	let ratio = tCal ? (deficit / tCal) : 0;
 
-    summary.innerHTML=`
-    熱量: ${t.cal}/${tCal} (${remainCal > 0 ? '剩 ' : '超 '} ${Math.abs(remainCal)})  kcal
-    <br>蛋白: ${t.pro}/${tPro}  g
-    <br>水: ${data[currentDate].water||0}/${tWater}  ml
-    <br>模式: ${mode}
-    `;
+	let mode = "";
+	let modeClass = "";
+
+	if(ratio > 0.15){
+		mode = "🔥 減脂過猛（容易掉肌肉）";
+		modeClass = "bad";
+	}
+	else if(ratio > 0.05){
+		mode = "✅ 健康減脂";
+		modeClass = "ok";
+	}
+	else if(ratio >= -0.05){
+		mode = "⚖️ 維持";
+	}
+	else{
+		mode = "⚠️ 熱量過高（可能增脂）";
+		modeClass = "bad";
+	}
+
+	summary.innerHTML=`
+	熱量: ${round2(t.cal)}/${round2(tCal)} (${remainCal > 0 ? '剩 ' : '超 '} ${round2(Math.abs(remainCal))}) kcal
+	<br>蛋白: ${round2(t.pro)}/${round2(tPro)} g
+	<br>水: ${round2(data[currentDate].water||0)}/${round2(tWater)} ml
+	<br>模式: <span class="${modeClass}">${mode}</span>
+	`;
 
     let html='';
     data[currentDate].foods.forEach((f,i)=>{
@@ -505,6 +523,10 @@ function update(){
     drawChart();
 
     init();
+}
+
+function round2(n){
+    return Math.round(n * 100) / 100;
 }
 
 // =====================
